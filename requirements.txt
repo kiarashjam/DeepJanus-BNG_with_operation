@@ -1,0 +1,9 @@
+Shapely
+similaritymeasures
+tensorflow
+keras
+deap
+opencv-python
+matplotlib
+msgpack
+jinja2
