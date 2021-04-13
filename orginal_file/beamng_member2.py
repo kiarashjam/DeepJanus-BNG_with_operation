@@ -102,20 +102,6 @@ class BeamNGMember(Member):
         h = hashlib.sha256(str([tuple(node) for node in self.control_nodes]).encode('UTF-8')).hexdigest()[-5:]
         return f'{self.name_ljust} h={h} b={eval_boundary}'
 
-class FogMutator:
-    NUM_UNDO_ATTEMPTS = 20
-    def __init__(self, road: BeamNGMember, lower_bound=-2, upper_bound=2):
-        self.road = road
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-    def mutate_gene(self):
-
-    def undo_mutation(self):
-
-    def mutate(self):
-        def next_gene_index() -> int:
-
-
 
 class RoadMutator:
     NUM_UNDO_ATTEMPTS = 20
