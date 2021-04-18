@@ -16,6 +16,8 @@ from self_driving.beamng_pose import BeamNGPose
 class BeamNGCamera:
 
     def __init__(self, beamng: BeamNGpy, name: str, camera: Camera = None):
+        print(
+            "BeamNGBrewer....................BeamNGCamera................... initial ...........................................")
         print("............phase 1q ................")
         self.name = name
         self.pose: BeamNGPose = BeamNGPose()
@@ -25,6 +27,8 @@ class BeamNGCamera:
         self.beamng = beamng
 
     def get_rgb_image(self):
+        print(
+            "BeamNGBrewer........................BeamNGCamera............... get_rgb_image ...........................................")
         self.camera.pos = self.pose.pos
         self.camera.direction = self.pose.rot
         cam = self.beamng.render_cameras()
@@ -34,31 +38,42 @@ class BeamNGCamera:
 
 class BeamNGBrewer:
     def __init__(self, road_nodes: List4DTuple = None, beamng_home=None):
+        print(
+            "BeamNGBrewer....................................... initial ...........................................")
         self.beamng = BeamNGpy('localhost', 64256, home=beamng_home)
         self.vehicle: Vehicle = None
         self.camera: BeamNGCamera = None
         if road_nodes:
+            print("here 1")
             self.setup_road_nodes(road_nodes)
         steps = 5
         self.params = SimulationParams(beamng_steps=steps, delay_msec=int(steps * 0.05 * 1000))
         self.vehicle_start_pose = BeamNGPose()
 
     def setup_road_nodes(self, road_nodes):
+        print(
+            "BeamNGBrewer....................................... setup_road_nodes ...........................................")
         self.road_nodes = road_nodes
         self.decal_road: DecalRoad = DecalRoad('street_1').add_4d_points(road_nodes)
         self.road_points = RoadPoints().add_middle_nodes(road_nodes)
 
     def setup_vehicle(self) -> Vehicle:
+        print(
+            "BeamNGBrewer....................................... setup_vehicle ...........................................")
         assert self.vehicle is None
         self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='new model', color='White')
         return self.vehicle
 
     def setup_scenario_camera(self, resolution=(1280, 1280), fov=120) -> BeamNGCamera:
+        print(
+            "BeamNGBrewer....................................... setup_scenario_camera ...........................................")
         assert self.camera is None
         self.camera = BeamNGCamera(self.beamng, 'brewer_camera')
         return self.camera
 
     def bring_up(self, type_operation, amount):
+        print(
+            "BeamNGBrewer....................................... bring_up ...........................................")
         self.scenario = Scenario('tig', 'tigscenario')
         if self.vehicle:
             self.scenario.add_vehicle(self.vehicle, pos=self.vehicle_start_pose.pos, rot=self.vehicle_start_pose.rot)
@@ -108,14 +123,18 @@ class BeamNGBrewer:
                 i = i + 30
 
     def __del__(self):
+
         if self.beamng:
             try:
+                print("__del__ #######################################################")
                 self.beamng.close()
             except:
                 pass
 
 
 if __name__ == '__main__':
+    print(
+        "BeamNGBrewer....................................... main ...........................................")
     config = BeamNGConfig()
     brewer = BeamNGBrewer()
     vehicle = brewer.setup_vehicle()
@@ -124,6 +143,7 @@ if __name__ == '__main__':
         seed_storage = SeedStorage('basic5')
         for i in range(1, 11):
             member = BeamNGMember.from_dict(seed_storage.load_json_by_index(i))
+            print("here 3")
             brewer.setup_road_nodes(member.sample_nodes)
             brewer.vehicle_start_pose = brewer.road_points.vehicle_start_pose()
             brewer.bring_up()

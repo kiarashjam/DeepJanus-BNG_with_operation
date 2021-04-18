@@ -8,7 +8,8 @@ from core.member import Member
 class Individual:
 
     def __init__(self, m1: Member, m2: Member):
-        print("............phase 1c ................")
+        print(
+            "Individual....................................... initial ...........................................")
         self.m1: Member = m1
         self.m2: Member = m2
         self.members_distance: float = None

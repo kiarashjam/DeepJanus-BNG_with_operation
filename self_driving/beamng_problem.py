@@ -25,6 +25,8 @@ log = get_logger(__file__)
 
 
 class BeamNGProblem(Problem):
+    print(
+        "BeamNGProblem....................................... initial ...........................................")
     def __init__(self, config: BeamNGConfig, archive: Archive, type_operation):
         print("............phase 4a ................")
         self.type_operation = type_operation
@@ -34,12 +36,29 @@ class BeamNGProblem(Problem):
         if self.config.generator_name == self.config.GEN_RANDOM:
             seed_pool = SeedPoolRandom(self, config.POPSIZE)
         else:
-            seed_pool = SeedPoolFolder(self, config.seed_folder)
+            if type_operation == "fog":
+                temp = self.config.FOG_DENSITY
+            elif type_operation == "rain":
+                temp = self.config.NUMBER_OF_DROP_RAIN
+            elif self.type_operation == "wet_foam":
+                temp = self.config.WET_FOAM
+            elif type_operation == "wet_ripple":
+                temp = self.config.WET_RIPPLE
+            elif type_operation == "default":
+                temp = 0
+            elif type_operation == "add_obstacle":
+                temp = self.config.NUMBER_BUMP
+            elif type_operation == "changing_illumination":
+                temp = self.config.ILLUMINATION_AMOUNT
+
+            seed_pool = SeedPoolFolder(self, config.seed_folder, type_operation, temp)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
         self.experiment_path = folders.experiments.joinpath(self.config.experiment_name)
         delete_folder_recursively(self.experiment_path)
 
     def deap_generate_individual(self):
+        print(
+            "BeamNGProblem....................................... deap_generate_individual ...........................................")
         seed = self._seed_pool_strategy.get_seed()
         road1 = seed.clone()
         road2 = seed.clone().mutate()
@@ -52,9 +71,13 @@ class BeamNGProblem(Problem):
         return individual
 
     def deap_evaluate_individual(self, individual: BeamNGIndividual):
+        print(
+            "BeamNGProblem....................................... deap_evaluate_individual ...........................................")
         return individual.evaluate()
 
     def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
+        print(
+            "BeamNGProblem....................................... on_iteration ...........................................")
         # self.archive.process_population(pop)
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
@@ -77,6 +100,8 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
     def generate_random_member(self) -> Member:
+        print(
+            "BeamNGProblem....................................... generate_random_member ...........................................")
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
         result.config = self.config
@@ -84,12 +109,18 @@ class BeamNGProblem(Problem):
         return result
 
     def deap_individual_class(self):
+        print(
+            "BeamNGProblem....................................... deap_individual_class ...........................................")
         return BeamNGIndividual
 
     def member_class(self):
+        print(
+            "BeamNGProblem....................................... member_class ...........................................")
         return BeamNGMember
 
     def reseed(self, pop, offspring):
+        print(
+            "BeamNGProblem....................................... reseed ...........................................")
         if len(self.archive) > 0:
             stop = self.config.RESEED_UPPER_BOUND + 1
             seed_range = min(random.randrange(0, stop), len(pop))
@@ -107,6 +138,8 @@ class BeamNGProblem(Problem):
                     pop[i] = ind1
 
     def _get_evaluator(self):
+        print(
+            "BeamNGProblem....................................... _get_evaluator ...........................................")
         if self._evaluator:
             return self._evaluator
         ev_name = self.config.beamng_evaluator
@@ -125,9 +158,14 @@ class BeamNGProblem(Problem):
         return self._evaluator
 
     def pre_evaluate_members(self, individuals: List[BeamNGIndividual]):
+        print(
+            "BeamNGProblem....................................... pre_evaluate_members ...........................................")
         # return
         # the following code does not work as wanted or expected!
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
-        log.info('----evaluation warmup')
-        self._get_evaluator().evaluate(all_members, self.type_operation)
-        log.info('----warmpup completed')
+        # log.info('----evaluation warmup')
+        print("start......................")
+        self._get_evaluator().evaluate(all_members)
+
+        print("finish......................")
+        # log.info('----warmpup completed')

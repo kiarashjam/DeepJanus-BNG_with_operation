@@ -7,11 +7,15 @@ from udacity_integration.udacity_utils import preprocess
 
 class NvidiaPrediction:
     def __init__(self, model, config: Config):
+        print(
+            "NvidiaPrediction....................................... initial ...........................................")
         self.model = model
         self.config = config
         self.speed_limit = config.MAX_SPEED
 
     def predict(self, image, car_state: SimulationDataRecord):
+        # print(
+        #     "NvidiaPrediction....................................... predict ...........................................")
         try:
             image = np.asarray(image)
 

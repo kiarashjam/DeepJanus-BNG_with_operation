@@ -5,6 +5,8 @@ import pylab as plt
 
 
 def catmull_rom_spline(p0, p1, p2, p3, num_points=20):
+    print(
+        "CatmullRom....................................... catmull_rom_spline ...........................................")
     """p0, p1, p2, and p3 should be (x,y) point pairs that define the Catmull-Rom spline.
     num_points is the number of points to include in this curve segment."""
     # Convert the points to numpy so that we can do array multiplication
@@ -44,6 +46,8 @@ def catmull_rom_spline(p0, p1, p2, p3, num_points=20):
 
 
 def catmull_rom_chain(points: List[tuple], num_spline_points=20) -> List:
+    print(
+        "CatmullRom....................................... catmull_rom_chain ...........................................")
     """Calculate Catmull-Rom for a chain of points and return the combined curve."""
     # The curve cr will contain an array of (x, y) points.
     cr = []
@@ -56,6 +60,8 @@ def catmull_rom_chain(points: List[tuple], num_spline_points=20) -> List:
 
 
 def catmull_rom_2d(points: List[tuple], num_points=20) -> List[tuple]:
+    print(
+        "CatmullRom....................................... catmull_rom_2d ...........................................")
     if len(points) < 4:
         raise ValueError("points should have at least 4 points")
     np_points_array = catmull_rom_chain(points, num_points)
@@ -63,6 +69,8 @@ def catmull_rom_2d(points: List[tuple], num_points=20) -> List[tuple]:
 
 
 def catmull_rom(points: List[tuple], num_spline_points=20) -> List[tuple]:
+    print(
+        "CatmullRom....................................... catmull_rom ...........................................")
     if len(points) < 4:
         raise ValueError("points should have at least 4 points")
     assert all(x[3] == points[0][3] for x in points)
@@ -73,6 +81,8 @@ def catmull_rom(points: List[tuple], num_spline_points=20) -> List[tuple]:
 
 
 def plot_catmull_rom(c, points):
+    print(
+        "CatmullRom....................................... plot_catmull_rom ...........................................")
     x, y = zip(*c)
     plt.plot(x, y, "bo", markersize=1)
     px, py = zip(*points)

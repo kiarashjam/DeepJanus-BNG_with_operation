@@ -5,7 +5,8 @@ from core.folder_storage import SeedStorage
 from self_driving.road_generator import RoadGenerator
 
 if __name__ == "__main__":
-    print("............phase 2q ................")
+    print("BeamNGGenerateSeed....................................... initial ...........................................")
+
     config = Config()
     seed_storage = SeedStorage(config.seed_folder)
     for i in range(1, 4):

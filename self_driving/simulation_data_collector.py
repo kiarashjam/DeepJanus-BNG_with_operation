@@ -14,6 +14,8 @@ class SimulationDataCollector:
                  vehicle_state_reader: VehicleStateReader = None,
                  camera: BeamNGCamera = None,
                  simulation_name: str = None, operation_type:str = None, amount:int = None):
+        print(
+            "SimulationDataCollector....................................... initial ...........................................")
         self.vehicle_state_reader = vehicle_state_reader if vehicle_state_reader \
             else VehicleStateReader(vehicle, beamng)
         self.oob_monitor = OutOfBoundsMonitor(RoadPolygon.from_nodes(road.nodes), self.vehicle_state_reader)
@@ -32,6 +34,8 @@ class SimulationDataCollector:
     def collect_current_data(self, oob_bb=True, wrt="right"):
         """If oob_bb is True, then the out-of-bound (OOB) examples are calculated
         using the bounding box of the car."""
+        print(
+            "SimulationDataCollector....................................... collect_current_data ...........................................")
         self.vehicle_state_reader.update_state()
         car_state = self.vehicle_state_reader.get_state()
 
@@ -45,9 +49,13 @@ class SimulationDataCollector:
         self.states.append(sim_data_record)
 
     def get_simulation_data(self) -> SimulationData:
+        print(
+            "SimulationDataCollector....................................... get_simulation_data ...........................................")
         return self.simulation_data
 
     def take_car_picture_if_needed(self):
+        print(
+            "SimulationDataCollector....................................... take_car_picture_if_needed ...........................................")
         last_state = self.states[-1]
         if last_state.is_oob:
             self.camera.pose.pos = tuple(last_state.pos[:2]) + (-5,)
@@ -58,4 +66,6 @@ class SimulationDataCollector:
                 self.camera.get_rgb_image().save(str(img_path))
 
     def save(self):
+        print(
+            "SimulationDataCollector....................................... save ...........................................")
         self.simulation_data.save(self.operation_type, self.amount)

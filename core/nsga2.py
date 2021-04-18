@@ -12,6 +12,8 @@ log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
+    print(
+        "NSGA2....................................... main ...........................................")
     print("............phase 7a ................")
     config = problem.config
     random.seed(seed)

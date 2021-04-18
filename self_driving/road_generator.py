@@ -27,6 +27,8 @@ class RoadGenerator:
     def __init__(self, num_control_nodes=15, max_angle=MAX_ANGLE, seg_length=SEG_LENGTH,
                  num_spline_nodes=NUM_SPLINE_NODES, initial_node=(0.0, 0.0, -28.0, 8.0),
                  bbox_size=(-250, 0, 250, 500)):
+        print(
+            "RoadGenerator....................................... initial ...........................................")
         assert num_control_nodes > 1 and num_spline_nodes > 0
         assert 0 <= max_angle <= 360
         assert seg_length > 0
@@ -141,6 +143,8 @@ class RoadGenerator:
 
 
 if __name__ == "__main__":
+    print(
+        "RoadGenerator....................................... main ...........................................")
     NODES = 10
     MAX_ANGLE = 130
     NUM_SPLINE_NODES = 20

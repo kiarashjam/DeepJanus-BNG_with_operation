@@ -10,6 +10,8 @@ class BeamNGConfig(Config):
 
     def __init__(self):
         print("............phase 3a ................")
+        print(
+            "BeamNGConfig....................................... initial ...........................................")
         super().__init__()
 
         self.num_control_nodes = 10

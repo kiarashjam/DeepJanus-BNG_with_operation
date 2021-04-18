@@ -3,7 +3,8 @@ from typing import Dict
 
 class Member:
     def __init__(self):
-        print("............phase 2c ................")
+        print(
+            "Member....................................... initial ...........................................")
         self.distance_to_boundary: float = None
 
     def distance(self, o: 'Member'):
@@ -25,5 +26,5 @@ class Member:
         raise NotImplemented()
 
     @classmethod
-    def from_dict(cls, dict: Dict):
+    def from_dict(cls, dict: Dict, type_operation, amount):
         raise NotImplemented()
