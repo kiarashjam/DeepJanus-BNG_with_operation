@@ -75,6 +75,11 @@ class BeamNGMember(Member):
         return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                 self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
 
+    ## try to understand the validity of the chosen amount
+    def is_valid_operation(self):
+
+        return
+
     def distance(self, other: 'BeamNGMember'):
         #TODO
         #return frechet_dist(self.sample_nodes, other.sample_nodes)
@@ -102,6 +107,17 @@ class BeamNGMember(Member):
         h = hashlib.sha256(str([tuple(node) for node in self.control_nodes]).encode('UTF-8')).hexdigest()[-5:]
         return f'{self.name_ljust} h={h} b={eval_boundary}'
 
+class OperationMutator:
+
+    NUM_UNDO_ATTEMPTS = 20
+
+    def __init__(self, lower_bound= 0, upper_bound= 1):
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+    def mutate(self):
+        mut_value = random.randint()
+
+
 
 class RoadMutator:
     NUM_UNDO_ATTEMPTS = 20
@@ -112,10 +128,14 @@ class RoadMutator:
         self.upper_bound = upper_bound
 
     def mutate_gene(self, index, xy_prob=0.5) -> Tuple[int, int]:
+
         gene = list(self.road.control_nodes[index])
+
         # Choose the mutation extent
         candidate_mut_values = [i for i in range(self.lower_bound, self.upper_bound) if i !=0]
+        # print("##############" + ".........." + str(candidate_mut_values))
         mut_value = random.choice(candidate_mut_values)
+
         #mut_value = random.randint(self.lower_bound, self.upper_bound)
         # Avoid to choose 0
         #if mut_value == 0:
@@ -126,7 +146,10 @@ class RoadMutator:
             c = 1
         else:
             c = 0
+        # print("##############" + "......****...." + str(gene))
         gene[c] += mut_value
+        # print("##############" + "......----...." + str(gene))
+        # print("##############" + "......++++...." + str(mut_value))
 
         self.road.control_nodes[index] = tuple(gene)
         self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
@@ -140,10 +163,15 @@ class RoadMutator:
 
     def mutate(self, num_undo_attempts=10):
         backup_nodes = list(self.road.control_nodes)
+        print("##############" + "......++ backup_nodes  ++...." + str(backup_nodes))
         attempted_genes = set()
         n = len(self.road.control_nodes) - 2
+        print("##############" + "......++  n  ++...." + str(n))
+
+        ##### why choose 3
         seglength = 3
         candidate_length = n - (2 * seglength)
+        print("##############" + "......++  candidate_length  ++...." + str(candidate_length))
         assert(candidate_length > 0)
 
         def next_gene_index() -> int:
@@ -152,6 +180,7 @@ class RoadMutator:
             i = None
             condition = False
             while not condition:
+                ##### why choose between 3 and n- 3
                 i = random.randint(seglength, n - seglength)
                 if i not in attempted_genes:
                     condition = True
@@ -166,6 +195,7 @@ class RoadMutator:
             return i
 
         gene_index = next_gene_index()
+        print("##############" + "......++   gene_index i  ++...." + str(gene_index))
         while gene_index != -1:
             c, mut_value = self.mutate_gene(gene_index)
             attempt = 0

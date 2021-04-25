@@ -13,7 +13,7 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
 
-        self.POPSIZE = 4
+        self.POPSIZE = 10
         self.NUM_GENERATIONS = 150
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
