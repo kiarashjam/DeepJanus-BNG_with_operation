@@ -9,7 +9,7 @@ class Config:
     ROAD_BBOX_SIZE = (-250, 0, 250, 500)
 
     ####### the decreasing amount
-    FOG_DENSITY_decreasing = 0.1
+    FOG_DENSITY_decreasing = 0.8
     WET_FOAM_decreasing = 5
     NUMBER_OF_DROP_RAIN_decreasing = 3000
     WET_RIPPLE_decreasing = 3000

@@ -3,4 +3,4 @@ list_operation = ["wet_foam", "wet_ripple", "rain", "fog" , "default", "add_obst
 
 if __name__ == '__main__':
    print("............phase 1.2a ................")
-   main_beamng.start("default")
+   main_beamng.start("fog")

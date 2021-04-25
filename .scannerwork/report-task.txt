@@ -1,0 +1,6 @@
+projectKey=core
+serverUrl=http://localhost:9000
+serverVersion=8.8.0.42792
+dashboardUrl=http://localhost:9000/dashboard?id=core
+ceTaskId=AXjpxWx1qjR-Xt3vSDx4
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXjpxWx1qjR-Xt3vSDx4

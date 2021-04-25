@@ -1,0 +1,40 @@
+SonarQube plugins:
+  - Python Code Quality and Security 3.4.0.7980 (python)
+  - CSS Code Quality and Security 1.4.0.1899 (cssfamily)
+  - Code Smells 4.0.0 (smells)
+  - Go Code Quality and Security 1.8.2.1946 (go)
+  - JaCoCo 1.1.0.898 (jacoco)
+  - Kotlin Code Quality and Security 1.8.2.1946 (kotlin)
+  - JavaScript/TypeScript Code Quality and Security 7.3.0.15071 (javascript)
+  - Ruby Code Quality and Security 1.8.2.1946 (ruby)
+  - Scala Code Quality and Security 1.8.2.1946 (sonarscala)
+  - C# Code Quality and Security 8.19.0.28253 (csharp)
+  - Java Code Quality and Security 6.14.0.25463 (java)
+  - HTML Code Quality and Security 3.3.0.2534 (web)
+  - Flex Code Quality and Security 2.6.0.2294 (flex)
+  - XML Code Quality and Security 2.1.0.2861 (xml)
+  - PHP Code Quality and Security 3.16.0.7320 (php)
+  - VB.NET Code Quality and Security 8.19.0.28253 (vbnet)
+Global server settings:
+  - sonar.core.id=BF41A1F2-AXjo85VlKMJDYFKhkIBA
+  - sonar.core.startTime=2021-04-19T11:42:41+0200
+  - sonar.forceAuthentication=true
+  - sonar.python.xunit.skipDetails=true
+Project server settings:
+Project scanner properties:
+  - sonar.ProjectBaseDir=C:UserskiarashjamshidiPycharmProjects	hesis
+  - sonar.ProjectKey=Python-Project
+  - sonar.ProjectName=Python-Project
+  - sonar.ProjectVersion=1.0
+  - sonar.host.url=http://localhost:9000
+  - sonar.login=******
+  - sonar.projectBaseDir=C:\Users\kiarashjamshidi\PycharmProjects\thesis\DeepJanus-BNG
+  - sonar.projectKey=core
+  - sonar.projectName=core
+  - sonar.projectVersion=1.0
+  - sonar.scanner.app=ScannerCLI
+  - sonar.scanner.appVersion=4.6.0.2311
+  - sonar.sourceEncoding=windows-1252
+  - sonar.sources=core
+  - sonar.verbose=true
+  - sonar.working.directory=C:\Users\kiarashjamshidi\PycharmProjects\thesis\DeepJanus-BNG\.scannerwork
