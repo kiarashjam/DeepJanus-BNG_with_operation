@@ -114,7 +114,7 @@ class OperationMutator:
     def __init__(self, lower_bound= 0, upper_bound= 1):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
-    def mutate(self):
+    def mutate_gene(self):
         mut_value = random.randint()
 
 
