@@ -49,7 +49,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         for member in members:
             print(member.type_operation)
             print(member.amount)
-            sim = self._run_simulation(member.sample_nodes, member.type_operation, member.amount)
+            sim = self._run_simulation_operation(member.sample_nodes, member.type_operation, member.amount)
         return sim
 
     # def evaluate(self, members: List[BeamNGMember]):
@@ -216,108 +216,108 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             self.end_iteration()
         return validity
 
-    def _run_simulation(self, nodes, type_operation, amount) -> SimulationData:
-        print("amount === "+str(amount))
-        print(type_operation)
-
-        print(
-            "BeamNGNvidiaRunner....................................... _run_simulation ...........................................")
-        print("the amount is = " + str(amount))
-        if type_operation == "fog":
-            operations.change_fog_amount(amount)
-        elif type_operation == "rain":
-            operations.change_rain_amount(amount)
-        elif type_operation == "wet_foam":
-            operations.change_foam_amount(amount)
-        elif type_operation == "wet_ripple":
-            operations.change_ripple_amount(amount)
-        elif type_operation == "default":
-            operations.default()
-        if not self.brewer:
-            self.brewer = BeamNGBrewer(beamng_home=self.config.BNG_HOME)
-            self.vehicle = self.brewer.setup_vehicle()
-            self.camera = self.brewer.setup_scenario_camera()
-
-        brewer = self.brewer
-        brewer.setup_road_nodes(nodes)
-        beamng = brewer.beamng
-        waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
-
-        maps.install_map_if_needed()
-        maps.beamng_map.generated().write_items(brewer.decal_road.to_json() + '\n' + waypoint_goal.to_json())
-
-        cameras = BeamNGCarCameras()
-        vehicle_state_reader = VehicleStateReader(self.vehicle, beamng, additional_sensors=cameras.cameras_array)
-        brewer.vehicle_start_pose = brewer.road_points.vehicle_start_pose()
-
-        steps = brewer.params.beamng_steps
-        simulation_id = time.strftime('%Y-%m-%d--%H-%M-%S', time.localtime())
-
-        # # send the data
-        name = self.config.simulation_name.replace('$(id)', simulation_id)
-        sim_data_collector = SimulationDataCollector(self.vehicle, beamng, brewer.decal_road, brewer.params,
-                                                     vehicle_state_reader=vehicle_state_reader,
-                                                     camera=self.camera,
-                                                     simulation_name=name,operation_type=type_operation, amount=amount)
-        # #
-        # sim_data_collector.get_simulation_data().start()
-        try:
-            # run the rogram
-        #
-            brewer.bring_up(type_operation, amount)
-            print("after bring up1 #######################################################")
-        #
-            if not self.model:
-                self.model = load_model(self.model_file)
-            print("after bring up2  #######################################################")
-            predict = NvidiaPrediction(self.model, self.config)
-            print("after bring up3  #######################################################")
-            iterations_count = 10000
-            idx = 0
-            break_bool = False
-            while True:
-                idx += 1
-                if idx >= iterations_count:
-                #     sim_data_collector.save()
-                    raise Exception('Timeout simulation ', sim_data_collector.name)
-
-                sim_data_collector.collect_current_data(oob_bb=False)
-                last_state: SimulationDataRecord = sim_data_collector.states[-1]
-                if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
-                    print("points_distance #######################################################")
-                    sim_data_collector.get_simulation_data().end(success=True)
-                    sim_data_collector.save()
-                    break
-                if last_state.is_oob:
-                    break_bool = True
-                    print("last_state #######################################################")
-                    break
-                img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
-                steering_angle, throttle = predict.predict(img, last_state)
-                self.vehicle.control(throttle=throttle, steering=steering_angle, brake=0)
-                beamng.step(steps)
-
-                self.stop_searching = False
-                # print("making false #######################################################")
-            # sim_data_collector.get_simulation_data().end(success=False)
-            print("success #######################################################")
-
-
-        except Exception as ex:
-            print("failure #######################################################")
-            sim_data_collector.get_simulation_data().end(success=True)
-            traceback.print_exception(type(ex), ex, ex.__traceback__)
-        finally:
-            # if self.config.simulation_save:
-            #     # sim_data_collector.save()
-            #     try:
-            #         sim_data_collector.take_car_picture_if_needed()
-            #     except:
-            #         pass
-
-            self.end_iteration()
-        #
-        return sim_data_collector.simulation_data
+    # def _run_simulation(self, nodes, type_operation, amount) -> SimulationData:
+    #     print("amount === "+str(amount))
+    #     print(type_operation)
+    #
+    #     print(
+    #         "BeamNGNvidiaRunner....................................... _run_simulation ...........................................")
+    #     print("the amount is = " + str(amount))
+    #     if type_operation == "fog":
+    #         operations.change_fog_amount(amount)
+    #     elif type_operation == "rain":
+    #         operations.change_rain_amount(amount)
+    #     elif type_operation == "wet_foam":
+    #         operations.change_foam_amount(amount)
+    #     elif type_operation == "wet_ripple":
+    #         operations.change_ripple_amount(amount)
+    #     elif type_operation == "default":
+    #         operations.default()
+    #     if not self.brewer:
+    #         self.brewer = BeamNGBrewer(beamng_home=self.config.BNG_HOME)
+    #         self.vehicle = self.brewer.setup_vehicle()
+    #         self.camera = self.brewer.setup_scenario_camera()
+    #
+    #     brewer = self.brewer
+    #     brewer.setup_road_nodes(nodes)
+    #     beamng = brewer.beamng
+    #     waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
+    #
+    #     maps.install_map_if_needed()
+    #     maps.beamng_map.generated().write_items(brewer.decal_road.to_json() + '\n' + waypoint_goal.to_json())
+    #
+    #     cameras = BeamNGCarCameras()
+    #     vehicle_state_reader = VehicleStateReader(self.vehicle, beamng, additional_sensors=cameras.cameras_array)
+    #     brewer.vehicle_start_pose = brewer.road_points.vehicle_start_pose()
+    #
+    #     steps = brewer.params.beamng_steps
+    #     simulation_id = time.strftime('%Y-%m-%d--%H-%M-%S', time.localtime())
+    #
+    #     # # send the data
+    #     name = self.config.simulation_name.replace('$(id)', simulation_id)
+    #     sim_data_collector = SimulationDataCollector(self.vehicle, beamng, brewer.decal_road, brewer.params,
+    #                                                  vehicle_state_reader=vehicle_state_reader,
+    #                                                  camera=self.camera,
+    #                                                  simulation_name=name,operation_type=type_operation, amount=amount)
+    #     # #
+    #     # sim_data_collector.get_simulation_data().start()
+    #     try:
+    #         # run the rogram
+    #     #
+    #         brewer.bring_up(type_operation, amount)
+    #         print("after bring up1 #######################################################")
+    #     #
+    #         if not self.model:
+    #             self.model = load_model(self.model_file)
+    #         print("after bring up2  #######################################################")
+    #         predict = NvidiaPrediction(self.model, self.config)
+    #         print("after bring up3  #######################################################")
+    #         iterations_count = 10000
+    #         idx = 0
+    #         break_bool = False
+    #         while True:
+    #             idx += 1
+    #             if idx >= iterations_count:
+    #             #     sim_data_collector.save()
+    #                 raise Exception('Timeout simulation ', sim_data_collector.name)
+    #
+    #             sim_data_collector.collect_current_data(oob_bb=False)
+    #             last_state: SimulationDataRecord = sim_data_collector.states[-1]
+    #             if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
+    #                 print("points_distance #######################################################")
+    #                 sim_data_collector.get_simulation_data().end(success=True)
+    #                 sim_data_collector.save()
+    #                 break
+    #             if last_state.is_oob:
+    #                 break_bool = True
+    #                 print("last_state #######################################################")
+    #                 break
+    #             img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
+    #             steering_angle, throttle = predict.predict(img, last_state)
+    #             self.vehicle.control(throttle=throttle, steering=steering_angle, brake=0)
+    #             beamng.step(steps)
+    #
+    #             self.stop_searching = False
+    #             # print("making false #######################################################")
+    #         # sim_data_collector.get_simulation_data().end(success=False)
+    #         print("success #######################################################")
+    #
+    #
+    #     except Exception as ex:
+    #         print("failure #######################################################")
+    #         sim_data_collector.get_simulation_data().end(success=True)
+    #         traceback.print_exception(type(ex), ex, ex.__traceback__)
+    #     finally:
+    #         # if self.config.simulation_save:
+    #         #     # sim_data_collector.save()
+    #         #     try:
+    #         #         sim_data_collector.take_car_picture_if_needed()
+    #         #     except:
+    #         #         pass
+    #
+    #         self.end_iteration()
+    #     #
+    #     return sim_data_collector.simulation_data
 
     def end_iteration(self):
         print(
