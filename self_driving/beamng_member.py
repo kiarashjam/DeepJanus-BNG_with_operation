@@ -5,6 +5,7 @@ from typing import Tuple, Dict
 from self_driving.beamng_config import BeamNGConfig
 from self_driving.beamng_evaluator import BeamNGEvaluator
 from core.member import Member
+# from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
 from self_driving.catmull_rom import catmull_rom
 from self_driving.road_bbox import RoadBoundingBox
 from self_driving.road_polygon import RoadPolygon
@@ -19,7 +20,7 @@ class BeamNGMember(Member):
     counter = 0
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox, amount: int, type_operation):
+                 road_bbox: RoadBoundingBox, type_operation, amount: int,):
         print("BeamNGMember..........................initial....................")
         super().__init__()
         BeamNGMember.counter += 1
@@ -36,6 +37,10 @@ class BeamNGMember(Member):
         self.problem: 'BeamNGProblem' = None
         self._evaluator: BeamNGEvaluator = None
 
+    def is_valid_operation(self):
+        return self.problem._get_evaluator(2).evaluate_operation(self, self.amount, self.type_operation, self.sample_nodes)
+
+
 
     def clone(self):
         print("BeamNGMember..........................clone....................")
@@ -44,6 +49,8 @@ class BeamNGMember(Member):
         res.config = self.config
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
+        res.amount = self.amount
+        res.type_operation = self.type_operation
         return res
 
     def to_dict(self) -> dict:
@@ -80,15 +87,15 @@ class BeamNGMember(Member):
         road_bbox = RoadBoundingBox(dict['road_bbox_size'])
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
-                           dict['num_spline_nodes'], road_bbox,type_operation, amount)
+                           dict['num_spline_nodes'], road_bbox, type_operation, amount)
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 
     def evaluate(self):
         print("BeamNGMember..........................evaluate....................")
         if self.needs_evaluation():
-            self.problem._get_evaluator().evaluate([self])
-            print('eval mbr', self)
+            self.problem._get_evaluator(1).evaluate_operation([self])
+            # print('eval mbr', self)
 
         # assert not self.needs_evaluation()
 
@@ -121,9 +128,14 @@ class BeamNGMember(Member):
         barycenter = np.mean(self.control_nodes, axis=0)[:2]
         return barycenter
 
-    def mutate(self) -> 'BeamNGMember':
+    # def mutate(self) -> 'BeamNGMember':
+    #     print("BeamNGMember..........................mutate....................")
+    #     RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+    #     self.distance_to_boundary = None
+    #     return self
+    def mutate_operation(self) -> 'BeamNGMember':
         print("BeamNGMember..........................mutate....................")
-        RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+        OperatorMutant(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
         self.distance_to_boundary = None
         return self
 
@@ -138,117 +150,152 @@ class BeamNGMember(Member):
         h = hashlib.sha256(str([tuple(node) for node in self.control_nodes]).encode('UTF-8')).hexdigest()[-5:]
         return f'{self.name_ljust} h={h} b={eval_boundary}'
 
-class FogMutator:
-    NUM_UNDO_ATTEMPTS = 10
-    def __init__(self,fog_density_amount_high = 0,fog_density_amount_low = 1):
+class OperatorMutant:
+
+    def __init__(self, operation , lower_bound, upper_bound):
         print(
-            "BeamNGMember..............FogMutator......................... initial ...........................................")
-        self.fog_density_amount_high = fog_density_amount_high
-        self.fog_density_amount_low = fog_density_amount_low
-    def mutate_gene(self) -> float:
-        print("s")
-
-
-
-class RoadMutator:
-    NUM_UNDO_ATTEMPTS = 20
-
-    def __init__(self, road: BeamNGMember, lower_bound=-2, upper_bound=2):
-        print("BeamNGMember................RoadMutator....................... RoadMutator ...........................................")
-        self.road = road
+            "OperatorMutant................................... initial ...........................................")
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.operation = operation
+        print(self.operation.amount)
 
-    def mutate_gene(self, index, xy_prob=0.5) -> Tuple[int, int]:
-        print("BeamNGMember...................RoadMutator.................... mutate_gene ...........................................")
-        gene = list(self.road.control_nodes[index])
-        print(index)
-        # Choose the mutation extent
-        candidate_mut_values = [i for i in range(self.lower_bound, self.upper_bound) if i !=0]
-        mut_value = random.choice(candidate_mut_values)
-        #mut_value = random.randint(self.lower_bound, self.upper_bound)
-        # Avoid to choose 0
-        #if mut_value == 0:
-        #    mut_value += 1
+    def mutate(self):
+        print(
+            "OperatorMutant................................... mutate ...........................................")
+        if self.operation.type_operation == "fog":
+            print(
+                "OperatorMutant................................... fog ...........................................")
+            self.operation.amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
+            print(self.operation.amount)
+        elif self.operation.type_operation == "rain":
+            print(
+                "OperatorMutant................................... rain ...........................................")
+            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 2000)])
+        elif self.operation.type_operation == "wet_foam":
+            print(
+                "OperatorMutant................................... wet_foam ...........................................")
+            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 20)])
+        elif self.operation.type_operation == "wet_ripple":
+            print(
+                "OperatorMutant................................... wet_ripple ...........................................")
+            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
+        elif self.operation.type_operation == "default":
+            print(
+                "OperatorMutant................................... default ...........................................")
+            self.operation.amount = 0
+        elif self.operation.type_operation == "add_obstacle":
+            print(
+                "OperatorMutant................................... add_obstacle ...........................................")
+            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 100)])
+        elif self.operation.type_operation == "changing_illumination":
+            print(
+                "OperatorMutant................................... changing_illumination ...........................................")
+            self.operation.amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
+        elif self.operation.type_operation == "add_bump":
+            print(
+                "OperatorMutant................................... add_bump ...........................................")
+            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
 
-        # Select coordinate to mutate
-        if random.random() < xy_prob:
-            c = 1
-        else:
-            c = 0
-        gene[c] += mut_value
-        # print(gene[c])
-        # print(mut_value)
-
-        self.road.control_nodes[index] = tuple(gene)
-        self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
-
-        return c, mut_value
-
-    def undo_mutation(self, index, c, mut_value):
-        print("BeamNGMember....................RoadMutator................... undo_mutation ...........................................")
-        gene = list(self.road.control_nodes[index])
-        gene[c] -= mut_value
-        # print("gene is  = "+str(gene))
-        self.road.control_nodes[index] = tuple(gene)
-        self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
-
-    def mutate(self, num_undo_attempts=10):
-        print("BeamNGMember.....................RoadMutator.................. mutate ...........................................")
-        backup_nodes = list(self.road.control_nodes)
-        # print("back up nodes = "+str(backup_nodes))
-        attempted_genes = set()
-        n = len(self.road.control_nodes) - 2
-        # print("n is "+str(n))
-        # print(self.road.control_nodes)
-
-        seglength = 3
-        candidate_length = n - (2 * seglength)
-        # print("candidate length = "+str(candidate_length))
-        assert(candidate_length > 0)
-
-        def next_gene_index() -> int:
-            print("BeamNGMember..................RoadMutator..................... next_gene_index ...........................................")
-            print("attempted gene  = " + str(attempted_genes))
-            print("candidate length = " + str(candidate_length))
-            if len(attempted_genes) == candidate_length:
-                return -1
-            i = None
-            condition = False
-            while not condition:
-                i = random.randint(seglength, n - seglength)
-                print("seglength = " + str(seglength))
-                print("seglength = " + str(n - seglength))
-                if i not in attempted_genes:
-                    condition = True
-            assert(i is not None)
-            assert seglength <= i <= n - seglength
-
-            # i = random.randint(3, n - 3)
-            # while i in attempted_genes:
-            #     i = random.randint(3, n-3)
-
-            # print("attempted genes = " + str(attempted_genes))
-            attempted_genes.add(i)
-            return i
-
-        gene_index = next_gene_index()
-        # print("gene index = " + str(gene_index))
-        while gene_index != -1:
-            c, mut_value = self.mutate_gene(gene_index)
-            attempt = 0
-            is_valid = self.road.is_valid()
-            while not is_valid and attempt < num_undo_attempts:
-                self.undo_mutation(gene_index, c, mut_value)
-                c, mut_value = self.mutate_gene(gene_index)
-                attempt += 1
-                is_valid = self.road.is_valid()
-            if is_valid:
-                break
-            else:
-                gene_index = next_gene_index()
-        if gene_index == -1:
-            raise ValueError("No gene can be mutated")
-
-        assert self.road.is_valid()
-        assert self.road.control_nodes != backup_nodes
+# class RoadMutator:
+#     NUM_UNDO_ATTEMPTS = 20
+#
+#     def __init__(self, road: BeamNGMember, lower_bound=-2, upper_bound=2):
+#         print("BeamNGMember................RoadMutator....................... RoadMutator ...........................................")
+#         self.road = road
+#         self.lower_bound = lower_bound
+#         self.upper_bound = upper_bound
+#
+#     def mutate_gene(self, index, xy_prob=0.5) -> Tuple[int, int]:
+#         print("BeamNGMember...................RoadMutator.................... mutate_gene ...........................................")
+#         gene = list(self.road.control_nodes[index])
+#         print(index)
+#         # Choose the mutation extent
+#         candidate_mut_values = [i for i in range(self.lower_bound, self.upper_bound) if i !=0]
+#         mut_value = random.choice(candidate_mut_values)
+#         #mut_value = random.randint(self.lower_bound, self.upper_bound)
+#         # Avoid to choose 0
+#         #if mut_value == 0:
+#         #    mut_value += 1
+#
+#         # Select coordinate to mutate
+#         if random.random() < xy_prob:
+#             c = 1
+#         else:
+#             c = 0
+#         gene[c] += mut_value
+#         # print(gene[c])
+#         # print(mut_value)
+#
+#         self.road.control_nodes[index] = tuple(gene)
+#         self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
+#
+#         return c, mut_value
+#
+#     def undo_mutation(self, index, c, mut_value):
+#         print("BeamNGMember....................RoadMutator................... undo_mutation ...........................................")
+#         gene = list(self.road.control_nodes[index])
+#         gene[c] -= mut_value
+#         # print("gene is  = "+str(gene))
+#         self.road.control_nodes[index] = tuple(gene)
+#         self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
+#
+#     def mutate(self, num_undo_attempts=10):
+#         print("BeamNGMember.....................RoadMutator.................. mutate ...........................................")
+#         backup_nodes = list(self.road.control_nodes)
+#         # print("back up nodes = "+str(backup_nodes))
+#         attempted_genes = set()
+#         n = len(self.road.control_nodes) - 2
+#         # print("n is "+str(n))
+#         # print(self.road.control_nodes)
+#
+#         seglength = 3
+#         candidate_length = n - (2 * seglength)
+#         # print("candidate length = "+str(candidate_length))
+#         assert(candidate_length > 0)
+#
+#         def next_gene_index() -> int:
+#             print("BeamNGMember..................RoadMutator..................... next_gene_index ...........................................")
+#             print("attempted gene  = " + str(attempted_genes))
+#             print("candidate length = " + str(candidate_length))
+#             if len(attempted_genes) == candidate_length:
+#                 return -1
+#             i = None
+#             condition = False
+#             while not condition:
+#                 i = random.randint(seglength, n - seglength)
+#                 print("seglength = " + str(seglength))
+#                 print("seglength = " + str(n - seglength))
+#                 if i not in attempted_genes:
+#                     condition = True
+#             assert(i is not None)
+#             assert seglength <= i <= n - seglength
+#
+#             # i = random.randint(3, n - 3)
+#             # while i in attempted_genes:
+#             #     i = random.randint(3, n-3)
+#
+#             # print("attempted genes = " + str(attempted_genes))
+#             attempted_genes.add(i)
+#             return i
+#
+#         gene_index = next_gene_index()
+#         # print("gene index = " + str(gene_index))
+#         while gene_index != -1:
+#             c, mut_value = self.mutate_gene(gene_index)
+#             attempt = 0
+#             is_valid = self.road.is_valid()
+#             while not is_valid and attempt < num_undo_attempts:
+#                 self.undo_mutation(gene_index, c, mut_value)
+#                 c, mut_value = self.mutate_gene(gene_index)
+#                 attempt += 1
+#                 is_valid = self.road.is_valid()
+#             if is_valid:
+#                 break
+#             else:
+#                 gene_index = next_gene_index()
+#         if gene_index == -1:
+#             raise ValueError("No gene can be mutated")
+#
+#         assert self.road.is_valid()
+#         assert self.road.control_nodes != backup_nodes

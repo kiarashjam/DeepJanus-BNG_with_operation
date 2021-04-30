@@ -35,6 +35,7 @@ class BeamNGIndividual(Individual):
 
     def evaluate(self):
         print("BeamNGIndividual....................................... evaluate ...........................................")
+
         self._assert_members_not_equals()
 
         #import timeit
@@ -52,7 +53,7 @@ class BeamNGIndividual(Individual):
         #print('Time to sparseness: '+ str(stop - start)+ 'archive len: '+ str(len(self.archive)))
 
         self.m1.evaluate()
-        # self.m2.evaluate()
+        self.m2.evaluate()
         #stop = timeit.default_timer()
         #print('Time to eval: ', stop - start)
 
@@ -94,7 +95,7 @@ class BeamNGIndividual(Individual):
     def _assert_members_not_equals(self):
         print(
             "BeamNGIndividual....................................... _assert_members_not_equals ...........................................")
-        assert self.m1.control_nodes != self.m2.control_nodes
+        assert self.m1 != self.m2
 
     def to_dict(self):
         print(

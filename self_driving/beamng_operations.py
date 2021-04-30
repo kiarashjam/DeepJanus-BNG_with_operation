@@ -204,6 +204,7 @@ def default_weather(type_level):
 
 
 def modification_fog(fog_density):
+  print("################## fog density ================="+str(fog_density))
   string_version_of_json = ""
   with open('levels_template/main_level/tig/main/MissionGroup/sky_and_sun/items.level.json') as f:
     list_jasons = f.readlines()

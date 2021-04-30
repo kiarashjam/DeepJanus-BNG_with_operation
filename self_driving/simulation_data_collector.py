@@ -34,8 +34,8 @@ class SimulationDataCollector:
     def collect_current_data(self, oob_bb=True, wrt="right"):
         """If oob_bb is True, then the out-of-bound (OOB) examples are calculated
         using the bounding box of the car."""
-        print(
-            "SimulationDataCollector....................................... collect_current_data ...........................................")
+        # print(
+        #     "SimulationDataCollector....................................... collect_current_data ...........................................")
         self.vehicle_state_reader.update_state()
         car_state = self.vehicle_state_reader.get_state()
 

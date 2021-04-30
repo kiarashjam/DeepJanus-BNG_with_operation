@@ -14,7 +14,7 @@ class BeamNGConfig(Config):
             "BeamNGConfig....................................... initial ...........................................")
         super().__init__()
 
-        self.num_control_nodes = 10
+        self.num_control_nodes = 4
 
         self.MIN_SPEED = 10
         self.MAX_SPEED = 25

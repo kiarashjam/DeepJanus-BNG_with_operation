@@ -4,7 +4,6 @@ import random
 from typing import List
 
 from deap import creator
-
 from core.archive import Archive
 from core.folders import folders
 from core.log_setup import get_logger
@@ -61,9 +60,16 @@ class BeamNGProblem(Problem):
             "BeamNGProblem....................................... deap_generate_individual ...........................................")
         seed = self._seed_pool_strategy.get_seed()
         road1 = seed.clone()
-        road2 = seed.clone().mutate()
+        print(road1.type_operation)
+        print(road1.amount)
+        # print("#####################"+str(road1))
+        road2 = seed.clone().mutate_operation()
+        print("##############1111111111111111111###############")
+        print(road2.type_operation)
+        print(road2.amount)
         road1.config = self.config
-        road2.config = self.config
+        # print("#####################" + str(road1))
+        # road2.config = self.config
         individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
         individual.seed = seed
         log.info(f'generated {individual}')
@@ -137,25 +143,30 @@ class BeamNGProblem(Problem):
                     log.info(f'reseed rem {pop[i]}')
                     pop[i] = ind1
 
-    def _get_evaluator(self):
+    def _get_evaluator(self,type):
         print(
             "BeamNGProblem....................................... _get_evaluator ...........................................")
-        if self._evaluator:
+        if type == 1:
+            if self._evaluator:
+                return self._evaluator
+            ev_name = self.config.beamng_evaluator
+            if ev_name == BeamNGConfig.EVALUATOR_FAKE:
+                from self_driving.beamng_evaluator_fake import BeamNGFakeEvaluator
+                self._evaluator = BeamNGFakeEvaluator(self.config)
+            elif ev_name == BeamNGConfig.EVALUATOR_LOCAL_BEAMNG:
+                from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
+                self._evaluator = BeamNGNvidiaOob(self.config)
+            elif ev_name == BeamNGConfig.EVALUATOR_REMOTE_BEAMNG:
+                from self_driving.beamng_evaluator_remote import BeamNGRemoteEvaluator
+                self._evaluator = BeamNGRemoteEvaluator(self.config)
+            else:
+                raise NotImplemented(self.config.beamng_evaluator)
+
             return self._evaluator
-        ev_name = self.config.beamng_evaluator
-        if ev_name == BeamNGConfig.EVALUATOR_FAKE:
-            from self_driving.beamng_evaluator_fake import BeamNGFakeEvaluator
-            self._evaluator = BeamNGFakeEvaluator(self.config)
-        elif ev_name == BeamNGConfig.EVALUATOR_LOCAL_BEAMNG:
+        if type == 2:
             from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
             self._evaluator = BeamNGNvidiaOob(self.config)
-        elif ev_name == BeamNGConfig.EVALUATOR_REMOTE_BEAMNG:
-            from self_driving.beamng_evaluator_remote import BeamNGRemoteEvaluator
-            self._evaluator = BeamNGRemoteEvaluator(self.config)
-        else:
-            raise NotImplemented(self.config.beamng_evaluator)
 
-        return self._evaluator
 
     def pre_evaluate_members(self, individuals: List[BeamNGIndividual]):
         print(
@@ -165,7 +176,7 @@ class BeamNGProblem(Problem):
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
         # log.info('----evaluation warmup')
         print("start......................")
-        self._get_evaluator().evaluate(all_members)
+        self._get_evaluator(1).evaluate_operation(all_members)
 
         print("finish......................")
         # log.info('----warmpup completed')

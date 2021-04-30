@@ -40,7 +40,7 @@ class Config:
         self.ARCHIVE_THRESHOLD = 35.0
 
         ######## the intial amount
-        self.FOG_DENSITY = 1
+        self.FOG_DENSITY = 0.9
         self.WET_FOAM = 40
         self.NUMBER_OF_DROP_RAIN = 300000
         self.WET_RIPPLE = 30000

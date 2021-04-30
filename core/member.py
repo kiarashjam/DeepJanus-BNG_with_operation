@@ -25,6 +25,9 @@ class Member:
     def to_dict(self) -> dict:
         raise NotImplemented()
 
+    def is_valid_operation(self):
+        raise NotImplemented()
+
     @classmethod
     def from_dict(cls, dict: Dict, type_operation, amount):
         raise NotImplemented()

@@ -61,7 +61,7 @@ class BeamNGBrewer:
         print(
             "BeamNGBrewer....................................... setup_vehicle ...........................................")
         assert self.vehicle is None
-        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='new model', color='White')
+        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='*Milad*', color='Black')
         return self.vehicle
 
     def setup_scenario_camera(self, resolution=(1280, 1280), fov=120) -> BeamNGCamera:
