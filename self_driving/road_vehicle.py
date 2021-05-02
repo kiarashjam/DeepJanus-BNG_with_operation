@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print('ok')
     import os
 
-    # print(os.getcwd())
+    print(os.getcwd())
     os.chdir('../udacity_integration')
     from road_storage import RoadStorage
 

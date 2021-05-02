@@ -4,8 +4,6 @@ import logging
 
 class IniFile:
     def __init__(self, path):
-        print(
-            "InFile....................................... initial ...........................................")
         self.path = path
         # assert isinstance(self.path, str), 'path parameter must be a string'
         self.config = configparser.ConfigParser()

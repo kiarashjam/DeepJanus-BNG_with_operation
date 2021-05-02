@@ -9,8 +9,6 @@ from core.folders import folders
 class FolderStorage:
 
     def __init__(self, path: Path, mask: str):
-        print(
-            "FolderStorage....................................... initial ...........................................")
         self.mask = mask  # 'road{:03}_nodes.json'
         self.folder = path
         path.mkdir(parents=True, exist_ok=True)

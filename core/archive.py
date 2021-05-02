@@ -9,5 +9,4 @@ class IndividualSet(set):
 
 class Archive(IndividualSet):
     def process_population(self, pop: List[Individual]):
-        print("............phase 9b ...............")
         raise NotImplemented()

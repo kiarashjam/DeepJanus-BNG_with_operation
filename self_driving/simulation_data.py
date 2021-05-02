@@ -37,13 +37,12 @@ class SimulationData:
     f_params = 'params'
     f_road = 'road'
     f_records = 'records'
-    # op_params= ''
 
     def __init__(self, simulation_name: str):
         self.name = simulation_name
         self.path_root: Path = folders.simulations.joinpath(simulation_name)
         self.path_text: Path = self.path_root.joinpath('operation.txt')
-        self.path_json: Path = self.path_root.joinpath('.full.json')
+        self.path_json: Path = self.path_root.joinpath('simulation.full.json')
         self.path_partial: Path = self.path_root.joinpath('simulation.partial.tsv')
         self.path_road_img: Path = self.path_root.joinpath('road')
         self.id: str = None

@@ -7,7 +7,6 @@ from core.seed_pool import SeedPool
 
 class SeedPoolAccessStrategy:
     def __init__(self, pool: SeedPool):
-        print("............phase 5a ................")
         self.pool = pool
         self.counter = -1
 

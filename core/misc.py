@@ -12,10 +12,7 @@ from core.individual import Individual
 
 
 def delete_folder_recursively(path: Union[str, Path], exception_if_fail: bool = True):
-    print(
-        "Misc....................................... delete_folder_recursively ...........................................")
-    # print(path)
-    # path = str(path)
+    path = str(path)
     if not os.path.exists(path):
         return
     assert os.path.isdir(path), path
@@ -36,8 +33,6 @@ def delete_folder_recursively(path: Union[str, Path], exception_if_fail: bool = 
 
 
 def evaluate_sparseness(ind: Individual, pop: Set[Individual]):
-    print(
-        "Misc....................................... evaluate_sparseness ...........................................")
     elements = pop - {ind}
     if len(elements) == 0:
         return 1.0
@@ -47,16 +42,12 @@ def evaluate_sparseness(ind: Individual, pop: Set[Individual]):
 
 
 def closest_indexes(array: List['T'], element: 'T', distance_fun: Callable[['T', 'T'], float]):
-    print(
-        "Misc....................................... closest_indexes ...........................................")
     indexes = list(np.argsort([distance_fun(element, el) for el in array]))
     return indexes
 
 
 def closest_elements(elements_set: Set['T'], obj: 'T', distance_fun: Callable[['T', 'T'], float]) \
         -> List[Tuple['T', float]]:
-    print(
-        "Misc....................................... closest_elements ...........................................")
     elements = list(elements_set)
     distances = [distance_fun(obj, el) for el in elements]
     indexes = list(np.argsort(distances))
@@ -71,8 +62,6 @@ if __name__ == '__main__':
     class TestUtils(unittest.TestCase):
         def test_closest_indexes(self):
             def dist(a, b):
-                print(
-                    "Misc....................................... test_closest_indexes ...........................................")
                 return np.abs(a - b)
 
             target = closest_indexes([-30, 40, 1, -1], 0.1, dist)
@@ -82,8 +71,6 @@ if __name__ == '__main__':
 
         def test_closest_elements(self):
             def dist(a, b):
-                print(
-                    "Misc....................................... test_closest_elements ...........................................")
                 return np.abs(a - b)
 
             target = closest_elements({-30, 40, 2, -2}, 1, dist)

@@ -12,9 +12,7 @@ from self_driving.simulation_data import SimulationParams
 from self_driving.beamng_pose import BeamNGPose
 
 
-
 class BeamNGCamera:
-
     def __init__(self, beamng: BeamNGpy, name: str, camera: Camera = None):
         print(
             "BeamNGBrewer....................BeamNGCamera................... initial ...........................................")
@@ -44,7 +42,6 @@ class BeamNGBrewer:
         self.vehicle: Vehicle = None
         self.camera: BeamNGCamera = None
         if road_nodes:
-            print("here 1")
             self.setup_road_nodes(road_nodes)
         steps = 5
         self.params = SimulationParams(beamng_steps=steps, delay_msec=int(steps * 0.05 * 1000))
@@ -80,6 +77,7 @@ class BeamNGBrewer:
 
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
+        ## addiing the obstacle operator
         if type_operation == "add_obstacle":
             i = 0
             while i < amount:
@@ -94,27 +92,21 @@ class BeamNGBrewer:
         self.scenario.make(self.beamng)
         if not self.beamng.server:
             self.beamng.open()
-
-            # if 0.22 < amount < 0.75:
-            #     self.vehicle.set_lights(headlights=2)
         self.beamng.pause()
         self.beamng.set_deterministic()
         self.beamng.load_scenario(self.scenario)
         self.beamng.start_scenario()
+        ## changing illumination operator
         if type_operation == "changing_illumination":
             self.beamng.set_tod(amount)
 
-
+        ## adding the bump operation
         if type_operation == "add_bump":
             bump_lists = {"upper_length": random.uniform(4, 5), "upper_width": random.uniform(1, 2),
                           "width": random.uniform(6, 7), "length": random.uniform(10,11),
                           "height": random.uniform(1, 2)}
             i = 30
             while i < amount:
-                print(".................................")
-                print(type(self.road_nodes[i]))
-                print(self.road_nodes[i])
-                print(".................................")
                 self.beamng.create_bump(name="bump" + str(i/30), upper_length=bump_lists["upper_length"],
                                 upper_width=bump_lists["upper_width"],
                                 rot=(0, 1, 0, 0),
@@ -123,10 +115,8 @@ class BeamNGBrewer:
                 i = i + 30
 
     def __del__(self):
-
         if self.beamng:
             try:
-                print("__del__ #######################################################")
                 self.beamng.close()
             except:
                 pass
@@ -143,7 +133,6 @@ if __name__ == '__main__':
         seed_storage = SeedStorage('basic5')
         for i in range(1, 11):
             member = BeamNGMember.from_dict(seed_storage.load_json_by_index(i))
-            print("here 3")
             brewer.setup_road_nodes(member.sample_nodes)
             brewer.vehicle_start_pose = brewer.road_points.vehicle_start_pose()
             brewer.bring_up()

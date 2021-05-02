@@ -4,6 +4,7 @@ import random
 from typing import List
 
 from deap import creator
+
 from core.archive import Archive
 from core.folders import folders
 from core.log_setup import get_logger
@@ -36,21 +37,21 @@ class BeamNGProblem(Problem):
             seed_pool = SeedPoolRandom(self, config.POPSIZE)
         else:
             if type_operation == "fog":
-                temp = self.config.FOG_DENSITY
+                amount = self.config.FOG_DENSITY
             elif type_operation == "rain":
-                temp = self.config.NUMBER_OF_DROP_RAIN
+                amount = self.config.NUMBER_OF_DROP_RAIN
             elif self.type_operation == "wet_foam":
-                temp = self.config.WET_FOAM
+                amount = self.config.WET_FOAM
             elif type_operation == "wet_ripple":
-                temp = self.config.WET_RIPPLE
+                amount = self.config.WET_RIPPLE
             elif type_operation == "default":
-                temp = 0
+                amount = 0
             elif type_operation == "add_obstacle":
-                temp = self.config.NUMBER_BUMP
+                amount = self.config.NUMBER_BUMP
             elif type_operation == "changing_illumination":
-                temp = self.config.ILLUMINATION_AMOUNT
+                amount = self.config.ILLUMINATION_AMOUNT
 
-            seed_pool = SeedPoolFolder(self, config.seed_folder, type_operation, temp)
+            seed_pool = SeedPoolFolder(self, config.seed_folder, type_operation, amount)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
         self.experiment_path = folders.experiments.joinpath(self.config.experiment_name)
         delete_folder_recursively(self.experiment_path)
@@ -60,16 +61,9 @@ class BeamNGProblem(Problem):
             "BeamNGProblem....................................... deap_generate_individual ...........................................")
         seed = self._seed_pool_strategy.get_seed()
         road1 = seed.clone()
-        print(road1.type_operation)
-        print(road1.amount)
-        # print("#####################"+str(road1))
         road2 = seed.clone().mutate_operation()
-        print("##############1111111111111111111###############")
-        print(road2.type_operation)
-        print(road2.amount)
         road1.config = self.config
-        # print("#####################" + str(road1))
-        # road2.config = self.config
+        road2.config = self.config
         individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
         individual.seed = seed
         log.info(f'generated {individual}')
@@ -175,8 +169,6 @@ class BeamNGProblem(Problem):
         # the following code does not work as wanted or expected!
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
         # log.info('----evaluation warmup')
-        print("start......................")
         self._get_evaluator(1).evaluate_operation(all_members)
 
-        print("finish......................")
         # log.info('----warmpup completed')
