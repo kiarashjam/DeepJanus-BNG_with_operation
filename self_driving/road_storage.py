@@ -8,8 +8,6 @@ from core.folders import folders
 class RoadStorage:
 
     def __init__(self, path: str = None):
-        print(
-            "RoadStorage....................................... initial ...........................................")
         if path is None:
             path='test_driving'
         self.folder = str(folders.member_seeds.joinpath(path))
@@ -59,8 +57,6 @@ class RoadStorage:
 
 
 if __name__ == '__main__':
-    print(
-        "RoadStorage....................................... main ...........................................")
     for i in range(1, 31):
         nodes = RoadStorage().get_road_nodes_by_index(i)
         print(i, len(nodes))

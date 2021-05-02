@@ -8,16 +8,12 @@ from self_driving.road_polygon import RoadPolygon
 
 
 def create_if_not_exists(folder_path):
-    print(
-        "RoadVisualizer....................................... create_if_not_exists ...........................................")
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
 
 def plot_road_bbox(road_bbox: RoadBoundingBox, fig=None, show=False, fill_color="white", border_color="black",
                    margin_percentage=0.01):
-    print(
-        "RoadVisualizer....................................... plot_road_bbox ...........................................")
     if fig is None:
         fig = plt.figure()
         ax = fig.add_subplot(111)
@@ -41,8 +37,6 @@ def plot_road_bbox(road_bbox: RoadBoundingBox, fig=None, show=False, fill_color=
 def plot_road_polygon(road_polygon: RoadPolygon, title="RoadPolygon", show=True, fig=None, fill_color="gray",
                       middle_color="#fad201", border_color="white", is_final_road=False, margin_percentage=0.01,
                       save=False, folder_path="../data/images", file_name="road.jpg", format="jpg"):
-    print(
-        "RoadVisualizer....................................... plot_road_polygon ...........................................")
     if fig is None:
         fig = plt.figure()
         ax = fig.add_subplot(111)
@@ -77,8 +71,6 @@ def plot_road_polygon(road_polygon: RoadPolygon, title="RoadPolygon", show=True,
 
 def plot_road(beam_ng_member: BeamNGMember, title="Road", show=True, save=False, folder_path="../data/images",
               file_name="road.jpg", format="jpg"):
-    print(
-        "RoadVisualizer....................................... plot_road ...........................................")
     fig = plot_road_bbox(beam_ng_member.road_bbox, show=False, fill_color="#76BA1B", border_color="black")
     road_polygon = RoadPolygon.from_nodes(beam_ng_member.sample_nodes)
     fig = plot_road_polygon(road_polygon, fig=fig, title=title, show=show, is_final_road=True, save=save,
@@ -96,7 +88,6 @@ if __name__ == "__main__":
     # plot_road_bbox(RoadBoundingBox((-250, 0, 250, 500)), show=True, fill_color="blue", border_color="red")
 
     road = RoadGenerator(num_control_nodes=5).generate()
-    print("............phase 13q ................")
 
     # plot_road_polygon(RoadPolygon.from_nodes(road.control_nodes))
     # plot_road_polygon(RoadPolygon.from_nodes(road.sample_nodes))

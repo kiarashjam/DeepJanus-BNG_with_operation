@@ -18,8 +18,6 @@ class RoadVehicle:
 
 
 if __name__ == '__main__':
-    print(
-        "RoadVehicle....................................... main ...........................................")
     print('ok')
     import os
 

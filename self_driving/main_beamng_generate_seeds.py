@@ -20,8 +20,6 @@ problem_smart = BeamNGProblem(config_smart, SmartArchive(config_smart.ARCHIVE_TH
 # problem = BeamNGProblem(config, SmartArchive(config.ARCHIVE_THRESHOLD))
 
 if __name__ == '__main__':
-    print(
-        "MainBeamngGenerateSeeds....................................... main ...........................................")
     good_members_found = 0
     attempts = 0
     storage = SeedStorage('prova_roads')

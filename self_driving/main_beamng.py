@@ -5,12 +5,7 @@ import matplotlib.pyplot as plt
 
 from self_driving.beamng_problem import BeamNGProblem
 
-
-
-
-
 def start(type_operation):
-    print("............phase 2a ................")
     config = BeamNGConfig()
     problem = BeamNGProblem(config, SmartArchive(config.ARCHIVE_THRESHOLD), type_operation)
     nsga2.main(problem)
