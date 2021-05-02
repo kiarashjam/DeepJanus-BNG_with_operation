@@ -5,8 +5,6 @@ from typing import Tuple, Dict
 from self_driving.beamng_config import BeamNGConfig
 from self_driving.beamng_evaluator import BeamNGEvaluator
 from core.member import Member
-# from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
-from self_driving.catmull_rom import catmull_rom
 from self_driving.road_bbox import RoadBoundingBox
 from self_driving.road_polygon import RoadPolygon
 from self_driving.edit_distance_polyline import iterative_levenshtein
@@ -56,20 +54,20 @@ class BeamNGMember(Member):
     def to_dict(self) -> dict:
         print("BeamNGMember..........................to_dict....................")
         if self.type_operation == "fog":
-            temp = self.config.FOG_DENSITY
+            amount = self.config.FOG_DENSITY
         elif self.type_operation == "rain":
-            temp = self.config.NUMBER_OF_DROP_RAIN
+            amount = self.config.NUMBER_OF_DROP_RAIN
         elif self.type_operation == "wet_foam":
 
-            temp = self.config.WET_FOAM
+            amount = self.config.WET_FOAM
         elif self.type_operation == "wet_ripple":
-            temp = self.config.WET_RIPPLE
+            amount = self.config.WET_RIPPLE
         elif self.type_operation == "default":
             amount = 0
         elif self.type_operation == "add_obstacle":
-            temp = self.config.NUMBER_BUMP
+            amount = self.config.NUMBER_BUMP
         elif self.type_operation == "changing_illumination":
-            temp = self.config.ILLUMINATION_AMOUNT
+            amount = self.config.ILLUMINATION_AMOUNT
 
         return {
             'control_nodes': self.control_nodes,
@@ -77,7 +75,7 @@ class BeamNGMember(Member):
             'num_spline_nodes': self.num_spline_nodes,
             'road_bbox_size': self.road_bbox.bbox.bounds,
             'distance_to_boundary': self.distance_to_boundary,
-            'amount': temp,
+            'amount': amount,
             'type': self.type_operation
         }
 
@@ -130,7 +128,25 @@ class BeamNGMember(Member):
 
     def mutate_operation(self) -> 'BeamNGMember':
         print("BeamNGMember..........................mutate....................")
-        OperatorMutant(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+        if self.type_operation == "fog":
+            OperatorMutant(self).mutate(self.problem.config.FOG_DENSITY_threshold_min, self.problem.config.FOG_DENSITY_threshold_max, 1)
+        elif self.type_operation == "rain":
+            OperatorMutant(self).mutate(self.problem.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max, 2)
+        elif self.type_operation == "wet_foam":
+            OperatorMutant(self).mutate(self.problem.config.WET_FOAM_threshold_min, self.problem.config.FOG_DENSITY_threshold_max, 2)
+        elif self.type_operation == "wet_ripple":
+            OperatorMutant(self).mutate(self.problem.config.WET_RIPPLE_threshold_min, self.problem.config.WET_RIPPLE_threshold_max, 2)
+        elif self.type_operation == "default":
+            print("default change")
+        elif self.type_operation == "add_obstacle":
+            OperatorMutant(self).mutate(self.problem.config.ADDING_OBSTACLE_min, self.problem.config.ADDING_OBSTACLE_max, 2)
+        elif self.type_operation == "changing_illumination":
+            OperatorMutant(self).mutate(self.problem.config.ILLUMINATION_AMOUNT_threshold_min, self.problem.config.ILLUMINATION_AMOUNT_threshold_max, 1)
+        elif self.type_operation == "add_bump":
+            OperatorMutant(self).mutate(self.problem.config.NUMBER_BUMP_threshold_min, self.problem.config.NUMBER_BUMP_threshold_max, 2)
+
+
+
         self.distance_to_boundary = None
         return self
 
@@ -147,47 +163,96 @@ class BeamNGMember(Member):
 
 class OperatorMutant:
 
-    def __init__(self, operation , lower_bound, upper_bound):
+    def __init__(self, operation):
         print(
             "OperatorMutant................................... initial ...........................................")
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
         self.operation = operation
         print(self.operation.amount)
 
-    def mutate(self):
+    def mutate(self, minimum, maximum, type_operator):
         print(
             "OperatorMutant................................... mutate ...........................................")
-        if self.operation.type_operation == "fog":
-            print(
-                "OperatorMutant................................... fog ...........................................")
-            self.operation.amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
-            print(self.operation.amount)
-        elif self.operation.type_operation == "rain":
-            print(
-                "OperatorMutant................................... rain ...........................................")
-            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 2000)])
-        elif self.operation.type_operation == "wet_foam":
-            print(
-                "OperatorMutant................................... wet_foam ...........................................")
-            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 20)])
-        elif self.operation.type_operation == "wet_ripple":
-            print(
-                "OperatorMutant................................... wet_ripple ...........................................")
-            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
-        elif self.operation.type_operation == "default":
-            print(
-                "OperatorMutant................................... default ...........................................")
-            self.operation.amount = 0
-        elif self.operation.type_operation == "add_obstacle":
-            print(
-                "OperatorMutant................................... add_obstacle ...........................................")
-            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 100)])
-        elif self.operation.type_operation == "changing_illumination":
-            print(
-                "OperatorMutant................................... changing_illumination ...........................................")
-            self.operation.amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
-        elif self.operation.type_operation == "add_bump":
-            print(
-                "OperatorMutant................................... add_bump ...........................................")
-            self.operation.amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
+        if type_operator == 1:
+            while True:
+                new_amount = random.choice([random.uniform(minimum, self.operation.amount), random.uniform(self.operation.amount, maximum)])
+                print(new_amount)
+                if new_amount != self.operation.amount:
+                    self.operation.amount = new_amount
+                    print(self.operation.amount)
+                    break
+        if type_operator == 2:
+            while True:
+                new_amount = random.choice([random.randint(minimum, self.operation.amount), random.randint(self.operation.amount, maximum)])
+                print(new_amount)
+                if new_amount != self.operation.amount:
+                    self.operation.amount = new_amount
+                    print(self.operation.amount)
+                    break
+
+        # if self.operation.type_operation == "fog":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... fog ...........................................")
+        #         new_amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
+        # elif self.operation.type_operation == "rain":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... rain ...........................................")
+        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 2000)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
+        # elif self.operation.type_operation == "wet_foam":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... wet_foam ...........................................")
+        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 20)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
+        # elif self.operation.type_operation == "wet_ripple":
+        #     while True:
+        #             print(
+        #                 "OperatorMutant................................... wet_ripple ...........................................")
+        #             new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
+        #             if new_amount != self.operation.amount:
+        #                 self.operation.amount = new_amount
+        #                 print(self.operation.amount)
+        #                 break
+        # elif self.operation.type_operation == "default":
+        #     print(
+        #         "OperatorMutant................................... default ...........................................")
+        #     self.operation.amount = 0
+        # elif self.operation.type_operation == "add_obstacle":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... add_obstacle ...........................................")
+        #         new_amount = random.choice([random.randint( self.operation.amount), random.randint(self.operation.amount, 100)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
+        # elif self.operation.type_operation == "changing_illumination":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... changing_illumination ...........................................")
+        #         new_amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
+        # elif self.operation.type_operation == "add_bump":
+        #     while True:
+        #         print(
+        #             "OperatorMutant................................... add_bump ...........................................")
+        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
+        #         if new_amount != self.operation.amount:
+        #             self.operation.amount = new_amount
+        #             print(self.operation.amount)
+        #             break
