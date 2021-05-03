@@ -30,7 +30,6 @@ class BeamNGMember(Member):
         self.sample_nodes = sample_nodes
         self.num_spline_nodes = num_spline_nodes
         self.road_bbox = road_bbox
-
         self.config: BeamNGConfig = None
         self.problem: 'BeamNGProblem' = None
         self._evaluator: BeamNGEvaluator = None
@@ -123,11 +122,11 @@ class BeamNGMember(Member):
 
         self.distance_to_boundary = None
 
-    def is_valid(self):
-        print("BeamNGMember..........................is_valid....................")
-
-        return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
-                self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+    # def is_valid(self):
+    #     print("BeamNGMember..........................is_valid....................")
+    #
+    #     return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
+    #             self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
 
     def distance(self, other: 'BeamNGMember'):
         print("BeamNGMember..........................distance....................")

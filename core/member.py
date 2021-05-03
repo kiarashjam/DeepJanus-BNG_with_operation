@@ -26,6 +26,9 @@ class Member:
     def is_valid_operation(self, type_operator, amount):
         raise NotImplemented()
 
+    def mutate_operation(self):
+        raise NotImplemented()
+
     @classmethod
     def from_dict(cls, dict: Dict, type_operation, amount):
         raise NotImplemented()
