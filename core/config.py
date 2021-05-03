@@ -8,6 +8,18 @@ class Config:
     INITIAL_NODE = (0.0, 0.0, -28.0, 8.0)
     ROAD_BBOX_SIZE = (-250, 0, 250, 500)
 
+    MUT_CONTROL_POINTS = 'MUT_CONTROL_POINTS'
+    MUT_FOG = 'MUT_FOG'
+    MUT_RAIN = 'MUT_RAIN'
+    MUT_WET_FOAM = 'MUT_WET_FOAM'
+    MUT_WET_RIPPLE = 'MUT_WET_RIPPLE'
+    MUT_ILLUMINATION = 'MUT_ILLUMINATION'
+    MUT_OBSTACLE = 'MUT_OBSTACLE'
+    MUT_BUMP = 'MUT_BUMP'
+
+
+
+
     def __init__(self):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
@@ -19,6 +31,8 @@ class Config:
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
+
+        self.MUTATION_TYPE = 'MUT_FOG'
 
         self.K_SD = 0.01
 
