@@ -107,8 +107,9 @@ class BeamNGMember(Member):
     def evaluate(self):
         print("BeamNGMember..........................evaluate....................")
         if self.needs_evaluation():
-            self.problem._get_evaluator(1).evaluate_operation([self])
-            # print('eval mbr', self)
+            validity = self.problem._get_evaluator(1).evaluate_operation([self])
+            print('eval mbr', self)
+            print("the operation validity is  == " + str(validity))
 
         assert not self.needs_evaluation()
 

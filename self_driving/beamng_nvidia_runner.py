@@ -107,18 +107,17 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                 last_state: SimulationDataRecord = sim_data_collector.states[-1]
                 if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
                     print("the car finish the line #######################################################")
-                    sim_data_collector.get_simulation_data().end(success=True)
                     sim_data_collector.save()
                     validity = True
                     break
                 if last_state.is_oob:
                     print("the car is out of boundary #######################################################")
                     validity = False
-                    sim_data_collector.get_simulation_data().end(success=True)
                     break
+            sim_data_collector.get_simulation_data().end(success=True)
         except Exception as ex:
             print("failure #######################################################")
-            sim_data_collector.get_simulation_data().end(success=True)
+            sim_data_collector.get_simulation_data().end(success=False, exception=ex)
             traceback.print_exception(type(ex), ex, ex.__traceback__)
         finally:
             self.end_iteration()

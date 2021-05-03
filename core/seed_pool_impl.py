@@ -37,7 +37,6 @@ class SeedPoolFolder(SeedPool):
 
 
 class SeedPoolRandom(SeedPool):
-
     def __init__(self, problem, n):
         print(
             "SeedPoolImpl.................SeedPoolRandom...................... initial ...........................................")

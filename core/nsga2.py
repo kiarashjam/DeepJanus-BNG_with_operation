@@ -41,11 +41,9 @@ def main(problem: Problem = None, seed=None):
     stats.register("avg", numpy.mean, axis=0)
     stats.register("std", numpy.std, axis=0)
     logbook = tools.Logbook()
-
     logbook.header = "gen", "evals", "min", "max", "avg", "std"
 
     # Generate initial population.
-
     log.info("### Initializing population....")
     pop = toolbox.population(n=config.POPSIZE)
     print("............phase 1b ................")
