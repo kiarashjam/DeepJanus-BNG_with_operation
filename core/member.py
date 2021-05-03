@@ -23,7 +23,7 @@ class Member:
     def to_dict(self) -> dict:
         raise NotImplemented()
 
-    def is_valid_operation(self):
+    def is_valid_operation(self, type_operator, amount):
         raise NotImplemented()
 
     @classmethod

@@ -35,8 +35,24 @@ class BeamNGMember(Member):
         self.problem: 'BeamNGProblem' = None
         self._evaluator: BeamNGEvaluator = None
 
-    def is_valid_operation(self):
-        return self.problem._get_evaluator(2).evaluate_operation(self, self.amount, self.type_operation, self.sample_nodes)
+    def is_valid_operation(self, type_operation, amount):
+        print("BeamNGMember..........................is_valid_operation....................")
+        if self.type_operation == "fog":
+            return self.problem.config.FOG_DENSITY_threshold_min < amount < self.problem.config.FOG_DENSITY_threshold_max
+        elif self.type_operation == "rain":
+            return self.problem.problem.config.NUMBER_OF_DROP_RAIN_threshold_min < amount < self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max
+        elif self.type_operation == "wet_foam":
+            return self.problem.config.WET_FOAM_threshold_min < amount < self.problem.config.FOG_DENSITY_threshold_max
+        elif self.type_operation == "wet_ripple":
+            return self.problem.config.WET_RIPPLE_threshold_min < amount < self.problem.config.WET_RIPPLE_threshold_max
+        elif self.type_operation == "default":
+            return  True
+        elif self.type_operation == "add_obstacle":
+            return  self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
+        elif self.type_operation == "changing_illumination":
+            return self.problem.config.ILLUMINATION_AMOUNT_threshold_min < amount < self.problem.config.ILLUMINATION_AMOUNT_threshold_max
+        elif self.type_operation == "add_bump":
+            return  self.problem.config.NUMBER_BUMP_threshold_min < amount < self.problem.config.NUMBER_BUMP_threshold_max
 
 
 
@@ -175,84 +191,16 @@ class OperatorMutant:
         if type_operator == 1:
             while True:
                 new_amount = random.choice([random.uniform(minimum, self.operation.amount), random.uniform(self.operation.amount, maximum)])
-                print(new_amount)
-                if new_amount != self.operation.amount:
-                    self.operation.amount = new_amount
-                    print(self.operation.amount)
+                if self.operation.is_valid_operation(type_operator, new_amount):
+                    if new_amount != self.operation.amount:
+                        self.operation.amount = new_amount
+                        print(self.operation.amount)
                     break
         if type_operator == 2:
             while True:
                 new_amount = random.choice([random.randint(minimum, self.operation.amount), random.randint(self.operation.amount, maximum)])
-                print(new_amount)
-                if new_amount != self.operation.amount:
-                    self.operation.amount = new_amount
-                    print(self.operation.amount)
-                    break
-
-        # if self.operation.type_operation == "fog":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... fog ...........................................")
-        #         new_amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
-        # elif self.operation.type_operation == "rain":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... rain ...........................................")
-        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 2000)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
-        # elif self.operation.type_operation == "wet_foam":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... wet_foam ...........................................")
-        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 20)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
-        # elif self.operation.type_operation == "wet_ripple":
-        #     while True:
-        #             print(
-        #                 "OperatorMutant................................... wet_ripple ...........................................")
-        #             new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
-        #             if new_amount != self.operation.amount:
-        #                 self.operation.amount = new_amount
-        #                 print(self.operation.amount)
-        #                 break
-        # elif self.operation.type_operation == "default":
-        #     print(
-        #         "OperatorMutant................................... default ...........................................")
-        #     self.operation.amount = 0
-        # elif self.operation.type_operation == "add_obstacle":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... add_obstacle ...........................................")
-        #         new_amount = random.choice([random.randint( self.operation.amount), random.randint(self.operation.amount, 100)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
-        # elif self.operation.type_operation == "changing_illumination":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... changing_illumination ...........................................")
-        #         new_amount = random.choice([random.uniform(0, self.operation.amount), random.uniform(self.operation.amount, 1)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
-        # elif self.operation.type_operation == "add_bump":
-        #     while True:
-        #         print(
-        #             "OperatorMutant................................... add_bump ...........................................")
-        #         new_amount = random.choice([random.randint(0, self.operation.amount), random.randint(self.operation.amount, 1000)])
-        #         if new_amount != self.operation.amount:
-        #             self.operation.amount = new_amount
-        #             print(self.operation.amount)
-        #             break
+                if self.operation.is_valid_operation(type_operator, new_amount):
+                    if new_amount != self.operation.amount:
+                        self.operation.amount = new_amount
+                        print(self.operation.amount)
+                        break
