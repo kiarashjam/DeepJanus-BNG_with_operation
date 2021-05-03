@@ -79,7 +79,6 @@ def run_sim(street_1: DecalRoad):
     vehicle = brewer.setup_vehicle()
     camera = brewer.setup_scenario_camera()
     beamng = brewer.beamng
-    print("here 2")
     brewer.setup_road_nodes(street_1.nodes)
 
     maps.beamng_map.generated().write_items(brewer.decal_road.to_json() + '\n' + waypoint_goal.to_json())
