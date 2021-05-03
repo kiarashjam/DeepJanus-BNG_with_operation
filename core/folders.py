@@ -4,7 +4,6 @@ from pathlib import Path
 
 class Folders:
     def __init__(self, lib_folder: str):
-        print("............phase 1.1a ................")
         self.lib: Path = Path(lib_folder).resolve()
         self.root: Path = self.lib.joinpath('..').resolve()
         self.data: Path = self.root.joinpath('data').absolute()

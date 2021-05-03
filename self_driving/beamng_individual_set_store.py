@@ -21,7 +21,6 @@ from self_driving.road_points import RoadPoints
 
 class BeamNGIndividualSetStore:
     def __init__(self, folder: Path):
-        print("............phase 4q ................")
         self.folder = folder
 
     def save(self, individuals: IndividualSet):
@@ -32,17 +31,14 @@ class BeamNGIndividualSetStore:
 
 class _BeamNGIndividualStore:
     def save(self, ind: BeamNGIndividual, prefix: str = None):
-        print("............phase 5q ................")
         raise NotImplemented()
 
     def load(self, prefix: str) -> BeamNGIndividual:
-        print("............phase 6q ................")
         raise NotImplemented()
 
 
 class _BeamNGIndividualCompositeMembersStore:
     def __init__(self, folder: Path):
-        print("............phase 7q ................")
         self.folder = folder
 
     def save(self, ind: BeamNGIndividual, prefix: str = None):

@@ -9,7 +9,6 @@ from self_driving.road_points import RoadPoints
 
 class BeamNGRoadImagery:
     def __init__(self, road_points: RoadPoints):
-        print("............phase 12q ................")
         self.road_points = road_points
         self._fig, self._ax = None, None
 
@@ -39,7 +38,6 @@ class BeamNGRoadImagery:
 
 
 def main():
-    print("............phase 13q ................")
     storage = SeedStorage('short')
     for i in range(1, 100):
         member_filepath = storage.get_path_by_index(i)

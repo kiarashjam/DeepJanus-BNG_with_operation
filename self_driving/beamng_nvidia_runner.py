@@ -1,6 +1,5 @@
 import logging as log
 import os
-import random
 import time
 import traceback
 from typing import List, Tuple
@@ -13,7 +12,6 @@ from self_driving.beamng_config import BeamNGConfig
 from self_driving.beamng_evaluator import BeamNGEvaluator
 from self_driving.beamng_member import BeamNGMember
 from self_driving.beamng_tig_maps import maps
-from self_driving.beamng_operations import operations
 from self_driving.beamng_waypoint import BeamNGWaypoint
 from self_driving.nvidia_prediction import NvidiaPrediction
 from self_driving.simulation_data import SimulationDataRecord, SimulationData
@@ -21,7 +19,6 @@ from self_driving.simulation_data_collector import SimulationDataCollector
 from self_driving.utils import get_node_coords, points_distance
 from self_driving.vehicle_state_reader import VehicleStateReader
 from udacity_integration.beamng_car_cameras import BeamNGCarCameras
-from tensorflow.keras.models import load_model
 
 log = get_logger(__file__)
 
@@ -30,7 +27,6 @@ FloatDTuple = Tuple[float, float, float, float]
 
 class BeamNGNvidiaOob(BeamNGEvaluator):
     def __init__(self, config: BeamNGConfig):
-        print("............phase 10q ................")
         self.config = config
         self.brewer: BeamNGBrewer = None
         self.model_file = str(folders.trained_models_colab.joinpath(config.keras_model_file))
@@ -38,7 +34,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             raise Exception(f'File {self.model_file} does not exist!')
         self.model = None
 
-    def evaluate(self, members: List[BeamNGMember], type_operation):
+    def evaluate(self, members: List[BeamNGMember]):
         for member in members:
             if not member.needs_evaluation():
                 log.info(f'{member} is already evaluated. skipping')
@@ -56,37 +52,16 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     log.info(f'{member} BeamNG evaluation start')
                 if attempt > 2:
                     time.sleep(5)
-                sim = self._run_simulation(member.sample_nodes, type_operation)
+                sim = self._run_simulation(member.sample_nodes)
                 if sim.info.success:
                     break
 
             member.distance_to_boundary = sim.min_oob_distance()
             log.info(f'{member} BeamNG evaluation completed')
 
-    def _run_simulation(self, nodes, type_operation) -> SimulationData:
-        if type_operation == "fog":
-            amount = random.uniform(0, 1)
-            operations.change_fog_amount(amount)
-        elif type_operation == "rain":
-            amount = random.randint(0, 10000)
-            operations.change_rain_amount(amount)
-        elif type_operation == "wet_foam":
-            amount = random.randint(0, 40)
-            operations.change_foam_amount(amount)
-        elif type_operation == "wet_ripple":
-            amount = random.randint(0, 30000)
-            operations.change_ripple_amount(amount)
-        elif type_operation == "default":
-            operations.default()
-            amount = 0
-        elif type_operation == "add_obstacle":
-            amount = random.randint(100, 10000)
-        elif type_operation == "changing_illumination":
-            amount = random.uniform(0, 1)
-        elif type_operation == "add_bump":
-            amount = random.randint(100,200)
+    def _run_simulation(self, nodes) -> SimulationData:
         if not self.brewer:
-            self.brewer = BeamNGBrewer(beamng_home=self.config.BNG_HOME)
+            self.brewer = BeamNGBrewer()
             self.vehicle = self.brewer.setup_vehicle()
             self.camera = self.brewer.setup_scenario_camera()
 
@@ -94,7 +69,6 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         brewer.setup_road_nodes(nodes)
         beamng = brewer.beamng
         waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
-
         maps.install_map_if_needed()
         maps.beamng_map.generated().write_items(brewer.decal_road.to_json() + '\n' + waypoint_goal.to_json())
 
@@ -104,20 +78,16 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
 
         steps = brewer.params.beamng_steps
         simulation_id = time.strftime('%Y-%m-%d--%H-%M-%S', time.localtime())
-
-        # send the data
         name = self.config.simulation_name.replace('$(id)', simulation_id)
         sim_data_collector = SimulationDataCollector(self.vehicle, beamng, brewer.decal_road, brewer.params,
                                                      vehicle_state_reader=vehicle_state_reader,
                                                      camera=self.camera,
-                                                     simulation_name=name,operation_type=type_operation, amount=amount)
+                                                     simulation_name=name)
 
         sim_data_collector.get_simulation_data().start()
         try:
-            # run the rogram
-
-            brewer.bring_up(type_operation, amount)
-
+            brewer.bring_up()
+            from keras.models import load_model
             if not self.model:
                 self.model = load_model(self.model_file)
             predict = NvidiaPrediction(self.model, self.config)

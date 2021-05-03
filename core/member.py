@@ -3,7 +3,6 @@ from typing import Dict
 
 class Member:
     def __init__(self):
-        print("............phase 2c ................")
         self.distance_to_boundary: float = None
 
     def distance(self, o: 'Member'):

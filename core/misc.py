@@ -12,7 +12,6 @@ from core.individual import Individual
 
 
 def delete_folder_recursively(path: Union[str, Path], exception_if_fail: bool = True):
-    print("............phase 6a ................")
     path = str(path)
     if not os.path.exists(path):
         return

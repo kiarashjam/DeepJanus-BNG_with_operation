@@ -9,7 +9,6 @@ class BeamNGConfig(Config):
     EVALUATOR_REMOTE_BEAMNG = 'EVALUATOR_REMOTE_BEAMNG'
 
     def __init__(self):
-        print("............phase 3a ................")
         super().__init__()
 
         self.num_control_nodes = 10
@@ -19,6 +18,3 @@ class BeamNGConfig(Config):
 
         self.beamng_close_at_iteration = False
         self.beamng_evaluator = self.EVALUATOR_LOCAL_BEAMNG
-        self.BNG_HOME = r"C:/Users/kiarashjamshidi/bm"
-        self.BNG_USER = r"C:/Users/kiarashjamshidi/Documents/BeamNG.research"
-

@@ -2,6 +2,8 @@ import hashlib
 import random
 from typing import Tuple, Dict
 
+from similaritymeasures import frechet_dist
+
 from self_driving.beamng_config import BeamNGConfig
 from self_driving.beamng_evaluator import BeamNGEvaluator
 from core.member import Member
@@ -20,7 +22,6 @@ class BeamNGMember(Member):
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
                  road_bbox: RoadBoundingBox):
-        print("............phase 9q ................")
         super().__init__()
         BeamNGMember.counter += 1
         self.name = f'mbr{str(BeamNGMember.counter)}'
@@ -109,25 +110,19 @@ class RoadMutator:
     def __init__(self, road: BeamNGMember, lower_bound=-2, upper_bound=2):
         self.road = road
         self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
+        self.higher_bound = upper_bound
 
     def mutate_gene(self, index, xy_prob=0.5) -> Tuple[int, int]:
         gene = list(self.road.control_nodes[index])
         # Choose the mutation extent
-        candidate_mut_values = [i for i in range(self.lower_bound, self.upper_bound) if i !=0]
-        mut_value = random.choice(candidate_mut_values)
-        #mut_value = random.randint(self.lower_bound, self.upper_bound)
+        mut_value = random.randint(self.lower_bound, self.higher_bound)
         # Avoid to choose 0
-        #if mut_value == 0:
-        #    mut_value += 1
-
-        # Select coordinate to mutate
+        if mut_value == 0:
+            mut_value += 1
+        c = 0
         if random.random() < xy_prob:
             c = 1
-        else:
-            c = 0
         gene[c] += mut_value
-
         self.road.control_nodes[index] = tuple(gene)
         self.road.sample_nodes = catmull_rom(self.road.control_nodes, self.road.num_spline_nodes)
         return c, mut_value
@@ -142,43 +137,36 @@ class RoadMutator:
         backup_nodes = list(self.road.control_nodes)
         attempted_genes = set()
         n = len(self.road.control_nodes) - 2
-        seglength = 3
-        candidate_length = n - (2 * seglength)
-        assert(candidate_length > 0)
 
         def next_gene_index() -> int:
-            if len(attempted_genes) == candidate_length:
+            if len(attempted_genes) == n:
                 return -1
-            i = None
-            condition = False
-            while not condition:
-                i = random.randint(seglength, n - seglength)
-                if i not in attempted_genes:
-                    condition = True
-            assert(i is not None)
-            assert seglength <= i <= n - seglength
-
-            # i = random.randint(3, n - 3)
-            # while i in attempted_genes:
-            #     i = random.randint(3, n-3)
-
+            i = random.randint(3, n-3)
+            while i in attempted_genes:
+                i = random.randint(3, n-3)
             attempted_genes.add(i)
+            assert 3 <= i <= n-3
             return i
 
         gene_index = next_gene_index()
+
         while gene_index != -1:
             c, mut_value = self.mutate_gene(gene_index)
+
             attempt = 0
+
             is_valid = self.road.is_valid()
             while not is_valid and attempt < num_undo_attempts:
                 self.undo_mutation(gene_index, c, mut_value)
                 c, mut_value = self.mutate_gene(gene_index)
                 attempt += 1
                 is_valid = self.road.is_valid()
+
             if is_valid:
                 break
             else:
                 gene_index = next_gene_index()
+
         if gene_index == -1:
             raise ValueError("No gene can be mutated")
 

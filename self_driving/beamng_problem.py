@@ -25,9 +25,7 @@ log = get_logger(__file__)
 
 
 class BeamNGProblem(Problem):
-    def __init__(self, config: BeamNGConfig, archive: Archive, type_operation):
-        print("............phase 4a ................")
-        self.type_operation = type_operation
+    def __init__(self, config: BeamNGConfig, archive: Archive):
         self.config: BeamNGConfig = config
         self._evaluator: BeamNGEvaluator = None
         super().__init__(config, archive)
@@ -129,5 +127,5 @@ class BeamNGProblem(Problem):
         # the following code does not work as wanted or expected!
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
         log.info('----evaluation warmup')
-        self._get_evaluator().evaluate(all_members, self.type_operation)
+        self._get_evaluator().evaluate(all_members)
         log.info('----warmpup completed')

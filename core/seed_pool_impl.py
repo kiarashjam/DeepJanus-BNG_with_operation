@@ -30,7 +30,6 @@ class SeedPoolFolder(SeedPool):
 
 class SeedPoolRandom(SeedPool):
     def __init__(self, problem, n):
-        print("............phase 9 ................")
         super().__init__(problem)
         self.n = n
         self.seeds = [problem.generate_random_member() for _ in range(self.n)]

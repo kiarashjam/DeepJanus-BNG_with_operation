@@ -13,7 +13,7 @@ class SimulationDataCollector:
                  params: SimulationParams,
                  vehicle_state_reader: VehicleStateReader = None,
                  camera: BeamNGCamera = None,
-                 simulation_name: str = None, operation_type:str = None, amount:int = None):
+                 simulation_name: str = None):
         self.vehicle_state_reader = vehicle_state_reader if vehicle_state_reader \
             else VehicleStateReader(vehicle, beamng)
         self.oob_monitor = OutOfBoundsMonitor(RoadPolygon.from_nodes(road.nodes), self.vehicle_state_reader)
@@ -26,8 +26,6 @@ class SimulationDataCollector:
         self.simulation_data: SimulationData = SimulationData(simulation_name)
         self.simulation_data.set(self.params, self.road, self.states)
         self.simulation_data.clean()
-        self.operation_type = operation_type
-        self.amount = amount
 
     def collect_current_data(self, oob_bb=True, wrt="right"):
         """If oob_bb is True, then the out-of-bound (OOB) examples are calculated
@@ -58,4 +56,4 @@ class SimulationDataCollector:
                 self.camera.get_rgb_image().save(str(img_path))
 
     def save(self):
-        self.simulation_data.save(self.operation_type, self.amount)
+        self.simulation_data.save()

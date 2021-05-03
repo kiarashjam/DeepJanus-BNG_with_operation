@@ -16,7 +16,6 @@ class GreedyArchive(Archive):
 
 class SmartArchive(Archive):
     def __init__(self, ARCHIVE_THRESHOLD):
-        print("............phase 3.2a ................")
         super().__init__()
         self.ARCHIVE_THRESHOLD = ARCHIVE_THRESHOLD
 

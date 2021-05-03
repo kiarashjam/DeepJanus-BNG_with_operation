@@ -81,7 +81,6 @@ def plot_catmull_rom(c, points):
 
 
 if __name__ == '__main__':
-    print("............phase 15q ................")
     points = [(0, 4), (1, 2), (3, 1), (5, 3), (3, 5), (1, 7), (3, 9), (5, 8), (6, 6)]
     c = catmull_rom_2d(points)
     plot_catmull_rom(c, points)

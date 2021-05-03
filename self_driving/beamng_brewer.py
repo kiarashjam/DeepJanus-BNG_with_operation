@@ -1,6 +1,4 @@
-import random
-
-from beamngpy import BeamNGpy, Scenario, Vehicle, ProceduralCube
+from beamngpy import BeamNGpy, Scenario, Vehicle
 from beamngpy.sensors import Camera
 from core.folder_storage import SeedStorage
 from self_driving.beamng_config import BeamNGConfig
@@ -12,11 +10,8 @@ from self_driving.simulation_data import SimulationParams
 from self_driving.beamng_pose import BeamNGPose
 
 
-
 class BeamNGCamera:
-
     def __init__(self, beamng: BeamNGpy, name: str, camera: Camera = None):
-        print("............phase 1q ................")
         self.name = name
         self.pose: BeamNGPose = BeamNGPose()
         self.camera = camera
@@ -33,8 +28,8 @@ class BeamNGCamera:
 
 
 class BeamNGBrewer:
-    def __init__(self, road_nodes: List4DTuple = None, beamng_home=None):
-        self.beamng = BeamNGpy('localhost', 64256, home=beamng_home)
+    def __init__(self, road_nodes: List4DTuple = None):
+        self.beamng = BeamNGpy('localhost', 64256)
         self.vehicle: Vehicle = None
         self.camera: BeamNGCamera = None
         if road_nodes:
@@ -50,7 +45,7 @@ class BeamNGBrewer:
 
     def setup_vehicle(self) -> Vehicle:
         assert self.vehicle is None
-        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='new model', color='White')
+        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='TIG', color='Red')
         return self.vehicle
 
     def setup_scenario_camera(self, resolution=(1280, 1280), fov=120) -> BeamNGCamera:
@@ -58,54 +53,21 @@ class BeamNGBrewer:
         self.camera = BeamNGCamera(self.beamng, 'brewer_camera')
         return self.camera
 
-    def bring_up(self, type_operation, amount):
+    def bring_up(self):
         self.scenario = Scenario('tig', 'tigscenario')
         if self.vehicle:
             self.scenario.add_vehicle(self.vehicle, pos=self.vehicle_start_pose.pos, rot=self.vehicle_start_pose.rot)
 
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
-        if type_operation == "add_obstacle":
-            i = 0
-            while i < amount:
-                position = (random.uniform(-1000, 1000), random.uniform(-1000, 1000), -28)
-                cube1 = ProceduralCube(name='cube1', pos=(position), rot=None,
-                               size=(1, 1, 10))
-                self.scenario.add_procedural_mesh(cube1)
-                i = i + 1
-
-
 
         self.scenario.make(self.beamng)
         if not self.beamng.server:
             self.beamng.open()
-
-            # if 0.22 < amount < 0.75:
-            #     self.vehicle.set_lights(headlights=2)
         self.beamng.pause()
         self.beamng.set_deterministic()
         self.beamng.load_scenario(self.scenario)
         self.beamng.start_scenario()
-        if type_operation == "changing_illumination":
-            self.beamng.set_tod(amount)
-
-
-        if type_operation == "add_bump":
-            bump_lists = {"upper_length": random.uniform(4, 5), "upper_width": random.uniform(1, 2),
-                          "width": random.uniform(6, 7), "length": random.uniform(10,11),
-                          "height": random.uniform(1, 2)}
-            i = 30
-            while i < amount:
-                print(".................................")
-                print(type(self.road_nodes[i]))
-                print(self.road_nodes[i])
-                print(".................................")
-                self.beamng.create_bump(name="bump" + str(i/30), upper_length=bump_lists["upper_length"],
-                                upper_width=bump_lists["upper_width"],
-                                rot=(0, 1, 0, 0),
-                                pos=(self.road_nodes[i][0], self.road_nodes[i][1], self.road_nodes[i][2]),
-                                width=bump_lists["width"], length=bump_lists["length"], height=bump_lists["height"])
-                i = i + 30
 
     def __del__(self):
         if self.beamng:

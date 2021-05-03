@@ -12,7 +12,6 @@ log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
-    print("............phase 7a ................")
     config = problem.config
     random.seed(seed)
 
@@ -39,30 +38,23 @@ def main(problem: Problem = None, seed=None):
     stats.register("avg", numpy.mean, axis=0)
     stats.register("std", numpy.std, axis=0)
     logbook = tools.Logbook()
-
     logbook.header = "gen", "evals", "min", "max", "avg", "std"
 
     # Generate initial population.
-
     log.info("### Initializing population....")
     pop = toolbox.population(n=config.POPSIZE)
-    print("............phase 1b ................")
 
     # Evaluate the initial population.
     # Note: the fitness functions are all invalid before the first iteration since they have not been evaluated.
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
-    print("............phase 2b ................")
 
     problem.pre_evaluate_members(invalid_ind)
-    print("............phase 3b ................")
 
     fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
-    print("............phase 4b ................")
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
 
     problem.archive.process_population(pop)
-    print("............phase 8b ................")
 
     # This is just to assign the crowding distance to the individuals (no actual selection is done).
     pop = toolbox.select(pop, len(pop))
@@ -70,15 +62,12 @@ def main(problem: Problem = None, seed=None):
     record = stats.compile(pop)
     logbook.record(gen=0, evals=len(invalid_ind), **record)
     print(logbook.stream)
-    print("............phase 9b ................")
 
     # Initialize the archive.
     problem.on_iteration(0, pop, logbook)
-    print("............phase 10b ................")
 
     # Begin the generational process
     for gen in range(1, config.NUM_GENERATIONS):
-        print("............phase 11b ................")
         # invalid_ind = [ind for ind in pop]
 
 
@@ -91,13 +80,11 @@ def main(problem: Problem = None, seed=None):
         offspring = [ind.clone() for ind in offspring]
 
         problem.reseed(pop, offspring)
-        print("............phase 12b ................")
 
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):
             toolbox.mutate(ind1)
             toolbox.mutate(ind2)
             del ind1.fitness.values, ind2.fitness.values
-        print("............phase 13b ................")
 
         # Evaluate the individuals with an invalid fitness
         to_eval = offspring + pop
@@ -106,7 +93,6 @@ def main(problem: Problem = None, seed=None):
         problem.pre_evaluate_members(invalid_ind)
 
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
-        print("............phase 14b ................")
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
@@ -115,10 +101,8 @@ def main(problem: Problem = None, seed=None):
         pop = toolbox.select(pop + offspring, config.POPSIZE)
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
-        print("............phase 15b ................")
         print(logbook.stream)
         problem.on_iteration(gen, pop, logbook)
-        print("............phase 16b ................")
     return pop, logbook
 
 

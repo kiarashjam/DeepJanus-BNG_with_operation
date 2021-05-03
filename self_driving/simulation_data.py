@@ -11,9 +11,9 @@ from self_driving.decal_road import DecalRoad
 from core.folders import folders
 from core.misc import delete_folder_recursively
 
-SimulationDataRecordProperties = ['timer', 'pos', 'dir', 'vel', 'steering',
+SimulationDataRecordProperties = ['timer', 'damage', 'pos', 'dir', 'vel', 'gforces', 'gforces2', 'steering',
                                   'steering_input', 'brake', 'brake_input', 'throttle', 'throttle_input',
-                                  'wheelspeed', 'vel_kmh', 'is_oob', 'oob_counter',
+                                  'throttleFactor', 'engineThrottle', 'wheelspeed', 'vel_kmh', 'is_oob', 'oob_counter',
                                   'max_oob_percentage', 'oob_distance']
 
 SimulationDataRecord = namedtuple('SimulationDataRecord', SimulationDataRecordProperties)
@@ -37,13 +37,11 @@ class SimulationData:
     f_params = 'params'
     f_road = 'road'
     f_records = 'records'
-    # op_params= ''
 
     def __init__(self, simulation_name: str):
         self.name = simulation_name
         self.path_root: Path = folders.simulations.joinpath(simulation_name)
-        self.path_text: Path = self.path_root.joinpath('operation.txt')
-        self.path_json: Path = self.path_root.joinpath('.full.json')
+        self.path_json: Path = self.path_root.joinpath('simulation.full.json')
         self.path_partial: Path = self.path_root.joinpath('simulation.partial.tsv')
         self.path_road_img: Path = self.path_root.joinpath('road')
         self.id: str = None
@@ -72,7 +70,7 @@ class SimulationData:
     def clean(self):
         delete_folder_recursively(self.path_root)
 
-    def save(self, type_operation, main_value):
+    def save(self):
         self.path_root.mkdir(parents=True, exist_ok=True)
         with open(self.path_json, 'w') as f:
             f.write(json.dumps({
@@ -92,11 +90,6 @@ class SimulationData:
         road_imagery = BeamNGRoadImagery.from_sample_nodes(self.road.nodes)
         road_imagery.save(self.path_road_img.with_suffix('.jpg'))
         road_imagery.save(self.path_road_img.with_suffix('.svg'))
-        print(str(self.path_partial) +"/"+ str(type_operation))
-        with open(str(self.path_root) +"/"+ str(type_operation), 'x') as f:
-            f.write("changing  type  = " + str(type_operation) + "\n" +
-                    "amount of  " + str(type_operation) + " is = " + str(main_value) + "\n")
-
 
     def load(self) -> 'SimulationData':
         with open(self.path_json, 'r') as f:

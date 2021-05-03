@@ -88,7 +88,6 @@ if __name__ == "__main__":
     # plot_road_bbox(RoadBoundingBox((-250, 0, 250, 500)), show=True, fill_color="blue", border_color="red")
 
     road = RoadGenerator(num_control_nodes=5).generate()
-    print("............phase 13q ................")
 
     # plot_road_polygon(RoadPolygon.from_nodes(road.control_nodes))
     # plot_road_polygon(RoadPolygon.from_nodes(road.sample_nodes))

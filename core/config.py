@@ -9,11 +9,10 @@ class Config:
     ROAD_BBOX_SIZE = (-250, 0, 250, 500)
 
     def __init__(self):
-        print("............phase config / 3.1 a ................")
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
 
-        self.POPSIZE = 4
+        self.POPSIZE = 12
         self.NUM_GENERATIONS = 150
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
@@ -27,7 +26,7 @@ class Config:
         self.simulation_name = 'beamng_nvidia_runner/sim_$(id)'
 
         #self.keras_model_file = 'self-driving-car-4600.h5'
-        self.keras_model_file = 'self-driving-car-190-2020.h5'
+        self.keras_model_file = 'self-driving-car-185-2020.h5'
 
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
