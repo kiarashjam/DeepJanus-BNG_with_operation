@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="" />
+    <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-30-03/road.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-30-03/road.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-30-03/simulation.full.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-30-03/simulation.partial.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-35-04/road.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-35-04/road.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-35-04/simulation.full.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-35-04/simulation.partial.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-40-09/road.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-40-09/road.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-40-09/simulation.full.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-04--20-40-09/simulation.partial.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +32,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1qnQiI0ocdpj8xxRFkdIAkswGa4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -104,9 +128,6 @@
       <module name="DeepJanus-BNG" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />

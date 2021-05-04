@@ -79,9 +79,25 @@ class BeamNGMember(Member):
     def clear_evaluation(self):
         self.distance_to_boundary = None
 
-    def is_valid(self):
-        return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
-                self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+    def is_valid(self, amount):
+        if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
+            return self.problem.config.FOG_DENSITY_threshold_min < amount < self.problem.config.FOG_DENSITY_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
+            return self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min < amount < self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_FOAM':
+            return self.problem.config.WET_FOAM_threshold_min < amount < self.problem.config.WET_FOAM_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+            return self.problem.config.WET_RIPPLE_threshold_min < amount < self.problem.config.WET_RIPPLE_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
+            return self.problem.config.ILLUMINATION_AMOUNT_threshold_min < amount < self.problem.config.ILLUMINATION_AMOUNT_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
+            return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
+            return self.problem.config.NUMBER_BUMP_threshold_min < amount < self.problem.config.NUMBER_BUMP_threshold_max
+        elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
+            return (RoadPolygon.from_nodes(self.sample_nodes).is_valid(0) and
+                    self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+
 
     def distance(self, other: 'BeamNGMember'):
         #TODO
@@ -95,10 +111,27 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate(self) -> 'BeamNGMember':
-        if self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
-            RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+
+        if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
+            FogMutant(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount = self.problem.config.FOG_DENSITY_threshold_max).mutate()
             self.distance_to_boundary = None
-        return self
+        elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
+            RainMutant(self, min_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_FOAM':
+            WetFoamMutant(self, min_amount = self.problem.config.WET_FOAM_threshold_min, max_amount = self.problem.config.WET_FOAM_threshold_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+            WetRippleMutant(self, min_amount = self.problem.config.WET_RIPPLE_threshold_min, max_amount = self.problem.config.WET_RIPPLE_threshold_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
+            ChangeIlluminationMutant(self, min_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_min, max_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
+            AddObstacleMutant(self, min_amount = self.problem.config.ADDING_OBSTACLE_min, max_amount = self.problem.config.ADDING_OBSTACLE_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
+            AddBumpMutant(self, min_amount = self.problem.config.NUMBER_BUMP_threshold_min , max_amount = self.problem.config.NUMBER_BUMP_threshold_max).mutate()
+        elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
+            RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT),
+                        upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+            self.distance_to_boundary = None
+        return  self
 
     def __repr__(self):
         eval_boundary = 'na'
@@ -163,12 +196,12 @@ class RoadMutator:
 
             attempt = 0
 
-            is_valid = self.road.is_valid()
+            is_valid = self.road.is_valid(0)
             while not is_valid and attempt < num_undo_attempts:
                 self.undo_mutation(gene_index, c, mut_value)
                 c, mut_value = self.mutate_gene(gene_index)
                 attempt += 1
-                is_valid = self.road.is_valid()
+                is_valid = self.road.is_valid(0)
 
             if is_valid:
                 break
@@ -178,5 +211,117 @@ class RoadMutator:
         if gene_index == -1:
             raise ValueError("No gene can be mutated")
 
-        assert self.road.is_valid()
+        assert self.road.is_valid(0)
         assert self.road.control_nodes != backup_nodes
+
+class FogMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+
+
+
+    def mutate(self):
+        backup_nodes = list(self.operation.fog_density)
+        attempted_genes = set()
+        while True:
+            new_amount = random.choice(
+                [random.uniform(self.min_amount, self.operation.fog_density), random.uniform(self.operation.fog_density, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.amount:
+                    self.operation.amount = new_amount
+                    print(self.operation.amount)
+                break
+
+class RainMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self):
+        while True:
+
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.number_drop_rain), random.randint(self.operation.number_drop_rain, self.max_amount)])
+            print(new_amount)
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.number_drop_rain:
+                    self.operation.number_drop_rain = new_amount
+                break
+
+class WetFoamMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self,):
+        while True:
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.wet_foam_density), random.randint(self.operation.wet_foam_density, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.wet_foam_density:
+                    self.operation.wet_foam_density = new_amount
+                    print(self.operation.wet_foam_density)
+                break
+
+class WetRippleMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self):
+        while True:
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.wet_ripple_density), random.randint(self.operation.wet_ripple_density, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.wet_ripple_density:
+                    self.operation.wet_ripple_density = new_amount
+                    print(self.operation.wet_ripple_density)
+                break
+
+class ChangeIlluminationMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self):
+        while True:
+            new_amount = random.choice(
+                [random.uniform(self.min_amount, self.operation.illumination), random.uniform(self.operation.illumination, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.illumination:
+                    self.operation.illumination = new_amount
+                    print(self.operation.illumination)
+                break
+
+class AddObstacleMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self):
+        while True:
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.number_of_obstacle), random.randint(self.operation.number_of_obstacle, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.number_of_obstacle:
+                    self.operation.number_of_obstacle = new_amount
+                    print(self.operation.number_of_obstacle)
+                break
+class AddBumpMutant:
+    def __init__(self, operation, min_amount, max_amount):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+
+    def mutate(self):
+        while True:
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.number_of_bump), random.randint(self.operation.number_of_bump, self.max_amount)])
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.number_of_bump:
+                    self.operation.number_of_bump = new_amount
+                    print(self.operation.number_of_bump)
+                break
