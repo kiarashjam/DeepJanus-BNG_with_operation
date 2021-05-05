@@ -52,21 +52,24 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     log.info(f'{member} BeamNG evaluation start')
                 if attempt > 2:
                     time.sleep(5)
-                sim = self._run_simulation(member.sample_nodes)
+                sim = self._run_simulation(member)
                 if sim.info.success:
                     break
 
             member.distance_to_boundary = sim.min_oob_distance()
             log.info(f'{member} BeamNG evaluation completed')
 
-    def _run_simulation(self, nodes) -> SimulationData:
+    def _run_simulation(self, member) -> SimulationData:
         if not self.brewer:
             self.brewer = BeamNGBrewer()
             self.vehicle = self.brewer.setup_vehicle()
             self.camera = self.brewer.setup_scenario_camera()
 
         brewer = self.brewer
+        nodes = member.sample_nodes
+        brewer.setup_operation(member)
         brewer.setup_road_nodes(nodes)
+        print(nodes)
         beamng = brewer.beamng
         waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
         maps.install_map_if_needed()

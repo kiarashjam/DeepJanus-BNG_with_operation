@@ -4,6 +4,7 @@ from typing import Tuple, Dict
 
 from similaritymeasures import frechet_dist
 
+from core.config import Config
 from self_driving.beamng_config import BeamNGConfig
 from self_driving.beamng_evaluator import BeamNGEvaluator
 from core.member import Member
@@ -40,8 +41,10 @@ class BeamNGMember(Member):
         self.number_of_bump = 0
         self.number_of_obstacle = 0
         self.illumination = 0
+        self.mutation_type = 'MUT_FOG'
 
     def clone(self):
+
         res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox)
         res.config = self.config
         res.problem = self.problem
@@ -218,9 +221,6 @@ class FogMutantor:
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
-
-
-
 
     def mutate(self):
         while True:
