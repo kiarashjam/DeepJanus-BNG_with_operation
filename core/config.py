@@ -2,6 +2,12 @@ class Config:
     GEN_RANDOM = 'GEN_RANDOM'
     GEN_RANDOM_SEEDED = 'GEN_RANDOM_SEEDED'
     GEN_SEQUENTIAL_SEEDED = 'GEN_SEQUENTIAL_SEEDED'
+
+    SEG_LENGTH = 25
+    NUM_SPLINE_NODES =10
+    INITIAL_NODE = (0.0, 0.0, -28.0, 8.0)
+    ROAD_BBOX_SIZE = (-250, 0, 250, 500)
+
     MUT_CONTROL_POINTS = 'MUT_CONTROL_POINTS'
     MUT_FOG = 'MUT_FOG'
     MUT_RAIN = 'MUT_RAIN'
@@ -31,22 +37,19 @@ class Config:
 
 
 
-    SEG_LENGTH = 25
-    NUM_SPLINE_NODES =10
-    INITIAL_NODE = (0.0, 0.0, -28.0, 8.0)
-    ROAD_BBOX_SIZE = (-250, 0, 250, 500)
 
     def __init__(self):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
 
-        self.POPSIZE = 4
+        self.POPSIZE = 12
         self.NUM_GENERATIONS = 150
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
+
         self.MUTATION_TYPE = Config.MUT_CONTROL_POINTS
 
         self.K_SD = 0.01

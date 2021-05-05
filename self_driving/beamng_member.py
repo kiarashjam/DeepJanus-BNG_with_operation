@@ -98,7 +98,6 @@ class BeamNGMember(Member):
             return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                     self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
 
-
     def distance(self, other: 'BeamNGMember'):
         #TODO
         #return frechet_dist(self.sample_nodes, other.sample_nodes)
