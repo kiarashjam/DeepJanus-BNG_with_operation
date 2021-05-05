@@ -130,8 +130,8 @@ class BeamNGMember(Member):
         elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
             RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT),
                         upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
-            self.distance_to_boundary = None
-        return  self
+        self.distance_to_boundary = None
+        return self
 
     def __repr__(self):
         eval_boundary = 'na'
