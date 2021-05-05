@@ -2,59 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-44-22/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-44-22/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-44-22/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-44-22/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-53-02/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-53-02/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-53-02/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--12-53-02/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-36-05/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-36-05/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-36-05/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-36-05/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-37-52/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-37-52/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-37-52/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-37-52/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-39-09/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-39-09/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-39-09/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-39-09/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-43-29/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-43-29/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-43-29/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-43-29/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-45-41/oob_camera_shot1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-45-41/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-45-41/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-45-41/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-45-41/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-47-50/oob_camera_shot1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-47-50/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-47-50/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-47-50/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-47-50/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-49-43/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-49-43/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-49-43/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-49-43/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-55-47/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-55-47/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-55-47/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-55-47/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-56-51/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-56-51/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-56-51/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-05--15-56-51/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/self_driving/beamng_operations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_brewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_brewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
