@@ -47,7 +47,7 @@ class Config:
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
-        self.MUTATION_TYPE = Config.MUT_RAIN
+        self.MUTATION_TYPE = Config.MUT_CONTROL_POINTS
 
         self.K_SD = 0.01
 

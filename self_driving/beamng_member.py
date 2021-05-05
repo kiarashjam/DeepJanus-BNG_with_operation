@@ -95,7 +95,7 @@ class BeamNGMember(Member):
         elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
             return self.problem.config.NUMBER_BUMP_threshold_min < amount < self.problem.config.NUMBER_BUMP_threshold_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
-            return (RoadPolygon.from_nodes(self.sample_nodes).is_valid(0) and
+            return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                     self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
 
 
@@ -224,15 +224,13 @@ class FogMutant:
 
 
     def mutate(self):
-        backup_nodes = list(self.operation.fog_density)
-        attempted_genes = set()
         while True:
             new_amount = random.choice(
                 [random.uniform(self.min_amount, self.operation.fog_density), random.uniform(self.operation.fog_density, self.max_amount)])
             if self.operation.is_valid(new_amount):
-                if new_amount != self.operation.amount:
-                    self.operation.amount = new_amount
-                    print(self.operation.amount)
+                if new_amount != self.operation.fog_density:
+                    self.operation.fog_density = new_amount
+                    print(self.operation.fog_density)
                 break
 
 class RainMutant:
