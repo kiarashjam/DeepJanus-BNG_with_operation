@@ -41,7 +41,7 @@ class BeamNGMember(Member):
         self.number_of_bump = 0
         self.number_of_obstacle = 0
         self.illumination = 0
-        self.mutation_type = 'MUT_FOG'
+        self.mutation_type = None
 
     def clone(self):
 
@@ -49,6 +49,7 @@ class BeamNGMember(Member):
         res.config = self.config
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
+        res.mutation_type = self.problem.config.MUTATION_TYPE
         return res
 
     def to_dict(self) -> dict:
@@ -57,7 +58,8 @@ class BeamNGMember(Member):
             'sample_nodes': self.sample_nodes,
             'num_spline_nodes': self.num_spline_nodes,
             'road_bbox_size': self.road_bbox.bbox.bounds,
-            'distance_to_boundary': self.distance_to_boundary
+            'distance_to_boundary': self.distance_to_boundary,
+            'mutation_type' : self.mutation_type
         }
 
     @classmethod
@@ -113,7 +115,7 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate(self) -> 'BeamNGMember':
-
+        self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
             FogMutantor(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount = self.problem.config.FOG_DENSITY_threshold_max).mutate()
             self.distance_to_boundary = None

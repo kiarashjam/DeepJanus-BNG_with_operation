@@ -69,7 +69,6 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         nodes = member.sample_nodes
         brewer.setup_operation(member)
         brewer.setup_road_nodes(nodes)
-        print(nodes)
         beamng = brewer.beamng
         waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
         maps.install_map_if_needed()
