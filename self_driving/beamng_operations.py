@@ -256,9 +256,9 @@ def modification_rain(num_drops):
       else:
         string_version_of_json = string_version_of_json + "\n" + str(json.dumps(json_version[i]))
       i = i + 1
-    writing_json_in_file(string_version_of_json, "rain")
+    writing_json_in_file(string_version_of_json)
     # maps.install_map_default()
-    maps.install_map_with_rain()
+    maps.install_map()
 
 
 
