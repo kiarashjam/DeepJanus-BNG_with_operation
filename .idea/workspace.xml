@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/data/log.ini" beforeDir="false" afterPath="$PROJECT_DIR$/data/log.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_tig_maps.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_tig_maps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/main_beamng.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/main_beamng.py" afterDir="false" />
-    </list>
+    <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -155,7 +150,7 @@
       <workItem from="1619620005713" duration="4762000" />
       <workItem from="1619772331802" duration="22035000" />
       <workItem from="1619990449448" duration="4992000" />
-      <workItem from="1620029468195" duration="15070000" />
+      <workItem from="1620029468195" duration="16005000" />
     </task>
     <servers />
   </component>
