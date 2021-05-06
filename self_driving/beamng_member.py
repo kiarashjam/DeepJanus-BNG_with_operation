@@ -33,6 +33,13 @@ class BeamNGMember(Member):
         self.config: BeamNGConfig = None
         self.problem: 'BeamNGProblem' = None
         self._evaluator: BeamNGEvaluator = None
+        self.fog_density = 0
+        self.wet_foam_density = 0
+        self.number_drop_rain = 0
+        self.wet_ripple_density = 0
+        self.number_of_bump = 0
+        self.number_of_obstacle = 0
+        self.illumination = 0
 
     def clone(self):
         res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox)
@@ -88,8 +95,9 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate(self) -> 'BeamNGMember':
-        RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
-        self.distance_to_boundary = None
+        if self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
+            RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT), upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
+            self.distance_to_boundary = None
         return self
 
     def __repr__(self):
