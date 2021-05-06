@@ -50,7 +50,7 @@ class BeamNGBrewer:
         self.number_drop_rain = member.number_drop_rain
         self.wet_ripple_density = member.wet_ripple_density
         self.number_of_bump = member.number_of_bump
-        self.number_of_obstacle = member.number_of_obstacle
+        self.number_of_obstacle = member.position_of_obstacle
         self.illumination = member.illumination
         self.type_operation = member.mutation_type
 

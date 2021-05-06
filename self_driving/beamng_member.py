@@ -39,7 +39,7 @@ class BeamNGMember(Member):
         self.number_drop_rain = 0
         self.wet_ripple_density = 0
         self.number_of_bump = 0
-        self.number_of_obstacle = 0
+        self.position_of_obstacle = (0, 0, 0)
         self.illumination = 0
         self.mutation_type = None
 
@@ -96,7 +96,10 @@ class BeamNGMember(Member):
         elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
             return self.problem.config.ILLUMINATION_AMOUNT_threshold_min < amount < self.problem.config.ILLUMINATION_AMOUNT_threshold_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
-            return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
+            for node in self.control_nodes:
+                print("s")
+
+            # return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
             return self.problem.config.NUMBER_BUMP_threshold_min < amount < self.problem.config.NUMBER_BUMP_threshold_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
@@ -304,11 +307,11 @@ class AddObstacleMutantor:
 
     def mutate(self):
         while True:
-            new_amount = random.choice([random.randint(self.min_amount, self.operation.number_of_obstacle), random.randint(self.operation.number_of_obstacle, self.max_amount)])
+            new_amount = random.choice([random.randint(self.min_amount, self.operation.position_of_obstacle), random.randint(self.operation.position_of_obstacle, self.max_amount)])
             if self.operation.is_valid(new_amount):
-                if new_amount != self.operation.number_of_obstacle:
-                    self.operation.number_of_obstacle = new_amount
-                    print(self.operation.number_of_obstacle)
+                if new_amount != self.operation.position_of_obstacle:
+                    self.operation.position_of_obstacle = new_amount
+                    print(self.operation.position_of_obstacle)
                 break
 class AddBumpMutantor:
     def __init__(self, operation, min_amount, max_amount):
@@ -318,7 +321,7 @@ class AddBumpMutantor:
 
     def mutate(self):
         while True:
-            new_amount = random.choice([random.randint(self.min_amount, self.operation.number_of_bump), random.randint(self.operation.number_of_bump, self.max_amount)])
+            new_amount = (random.randint(-1000, 1000), random.randint(-1000, 1000), self.operation.control_nodes[0][2])
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.number_of_bump:
                     self.operation.number_of_bump = new_amount
