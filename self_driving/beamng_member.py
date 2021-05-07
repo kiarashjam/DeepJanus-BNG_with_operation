@@ -131,20 +131,20 @@ class BeamNGMember(Member):
     def mutate(self) -> 'BeamNGMember':
         self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
-            FogMutantor(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount = self.problem.config.FOG_DENSITY_threshold_max).mutate()
+            FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount = self.problem.config.FOG_DENSITY_threshold_max).mutate()
             self.distance_to_boundary = None
         elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
-            RainMutantor(self, min_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
+            RainMutator(self, min_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_WET_FOAM':
-            WetFoamMutantor(self, min_amount = self.problem.config.WET_FOAM_threshold_min, max_amount = self.problem.config.WET_FOAM_threshold_max).mutate()
+            WetFoamMutator(self, min_amount = self.problem.config.WET_FOAM_threshold_min, max_amount = self.problem.config.WET_FOAM_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
-            WetRippleMutantor(self, min_amount = self.problem.config.WET_RIPPLE_threshold_min, max_amount = self.problem.config.WET_RIPPLE_threshold_max).mutate()
+            WetRippleMutator(self, min_amount = self.problem.config.WET_RIPPLE_threshold_min, max_amount = self.problem.config.WET_RIPPLE_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
-            ChangeIlluminationMutantor(self, min_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_min, max_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_max).mutate()
+            ChangeIlluminationMutator(self, min_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_min, max_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
-            AddObstacleMutantor(self, min_amount = self.problem.config.ADDING_OBSTACLE_min, max_amount = self.problem.config.ADDING_OBSTACLE_max).mutate()
+            AddObstacleMutator(self, min_amount = self.problem.config.ADDING_OBSTACLE_min, max_amount = self.problem.config.ADDING_OBSTACLE_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
-            AddBumpMutantor(self, min_amount = self.problem.config.NUMBER_BUMP_threshold_min, max_amount = self.problem.config.NUMBER_BUMP_threshold_max).mutate()
+            AddBumpMutator(self, min_amount = self.problem.config.NUMBER_BUMP_threshold_min, max_amount = self.problem.config.NUMBER_BUMP_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
             RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT),
                         upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()
@@ -232,7 +232,7 @@ class RoadMutator:
         assert self.road.is_valid(0)
         assert self.road.control_nodes != backup_nodes
 
-class FogMutantor:
+class FogMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -247,7 +247,7 @@ class FogMutantor:
                     self.operation.fog_density = new_amount
                 break
 
-class RainMutantor:
+class RainMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -262,7 +262,7 @@ class RainMutantor:
                     self.operation.number_drop_rain = new_amount
                 break
 
-class WetFoamMutantor:
+class WetFoamMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -276,7 +276,7 @@ class WetFoamMutantor:
                     self.operation.wet_foam_density = new_amount
                 break
 
-class WetRippleMutantor:
+class WetRippleMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -290,7 +290,7 @@ class WetRippleMutantor:
                     self.operation.wet_ripple_density = new_amount
                 break
 
-class ChangeIlluminationMutantor:
+class ChangeIlluminationMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -305,7 +305,7 @@ class ChangeIlluminationMutantor:
                     self.operation.illumination = new_amount
                 break
 
-class AddObstacleMutantor:
+class AddObstacleMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
@@ -315,7 +315,7 @@ class AddObstacleMutantor:
             new_amount = (self.operation.position_of_obstacle[0], self.operation.position_of_obstacle[1] + 1, self.operation.position_of_obstacle[2])
             self.operation.position_of_obstacle = new_amount
 
-class AddBumpMutantor:
+class AddBumpMutator:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
         self.min_amount = min_amount
