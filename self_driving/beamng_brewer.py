@@ -1,5 +1,6 @@
+import math
 import random
-from beamngpy import BeamNGpy, Scenario, Vehicle, ProceduralCube
+from beamngpy import BeamNGpy, Scenario, Vehicle, ProceduralCube, StaticObject
 from beamngpy.sensors import Camera
 from core.folder_storage import SeedStorage
 from self_driving.beamng_config import BeamNGConfig
@@ -53,6 +54,7 @@ class BeamNGBrewer:
         self.number_of_obstacle = member.position_of_obstacle
         self.illumination = member.illumination
         self.type_operation = member.mutation_type
+        self.surrounding = member.surrounding
 
 
     def setup_vehicle(self) -> Vehicle:
@@ -114,6 +116,27 @@ class BeamNGBrewer:
 
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
+
+        ## checking the surrounding
+
+        if len(self.surrounding) > 0:
+            for operation in self.surrounding:
+                if operation == 'Trees':
+                    j = 0
+                    while j < 2000:
+                        out_road = True
+                        trees_position = (
+                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
+                        for node in self.road_nodes:
+                            distance = math.sqrt(((node[0] - trees_position[0]) ** 2) + ((node[1] - trees_position[1]) ** 2))
+                            if distance < 10:
+                                out_road = False
+                        if out_road:
+                            trees_object = StaticObject(name="trees" + "_" + str(j),
+                                             pos=(trees_position), rot=(0, 0, 0), scale=(1, 1, 1),
+                                             shape='/levels/tig/art/shapes/trees_palm/fanpalm_tall.dae')
+                            self.scenario.add_object(trees_object)
+                            j = j +1
 
         ## addiing the obstacle operator
         if self.type_operation == "MUT_OBSTACLE":

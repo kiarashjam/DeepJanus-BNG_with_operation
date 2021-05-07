@@ -43,6 +43,7 @@ class BeamNGMember(Member):
         self.position_of_obstacle = (0, 0, 0)
         self.illumination = 0
         self.mutation_type = None
+        self.surrounding = None
 
     def clone(self):
 
@@ -51,6 +52,7 @@ class BeamNGMember(Member):
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
         res.mutation_type = self.problem.config.MUTATION_TYPE
+        res.surrounding = self.problem.config.SURROUNDING
         if self.problem.config.MUTATION_TYPE == "MUT_OBSTACLE" and self.position_of_obstacle == (0, 0, 0):
             while True:
                 new_amount = (
@@ -131,20 +133,20 @@ class BeamNGMember(Member):
     def mutate(self) -> 'BeamNGMember':
         self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
-            FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount = self.problem.config.FOG_DENSITY_threshold_max).mutate()
+            FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount=self.problem.config.FOG_DENSITY_threshold_max).mutate()
             self.distance_to_boundary = None
         elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
-            RainMutator(self, min_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount = self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
+            RainMutator(self, min_amount=self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount=self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_WET_FOAM':
-            WetFoamMutator(self, min_amount = self.problem.config.WET_FOAM_threshold_min, max_amount = self.problem.config.WET_FOAM_threshold_max).mutate()
+            WetFoamMutator(self, min_amount=self.problem.config.WET_FOAM_threshold_min, max_amount=self.problem.config.WET_FOAM_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
-            WetRippleMutator(self, min_amount = self.problem.config.WET_RIPPLE_threshold_min, max_amount = self.problem.config.WET_RIPPLE_threshold_max).mutate()
+            WetRippleMutator(self, min_amount=self.problem.config.WET_RIPPLE_threshold_min, max_amount=self.problem.config.WET_RIPPLE_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
-            ChangeIlluminationMutator(self, min_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_min, max_amount = self.problem.config.ILLUMINATION_AMOUNT_threshold_max).mutate()
+            ChangeIlluminationMutator(self, min_amount=self.problem.config.ILLUMINATION_AMOUNT_threshold_min, max_amount=self.problem.config.ILLUMINATION_AMOUNT_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
-            AddObstacleMutator(self, min_amount = self.problem.config.ADDING_OBSTACLE_min, max_amount = self.problem.config.ADDING_OBSTACLE_max).mutate()
+            AddObstacleMutator(self, min_amount=self.problem.config.ADDING_OBSTACLE_min, max_amount=self.problem.config.ADDING_OBSTACLE_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
-            AddBumpMutator(self, min_amount = self.problem.config.NUMBER_BUMP_threshold_min, max_amount = self.problem.config.NUMBER_BUMP_threshold_max).mutate()
+            AddBumpMutator(self, min_amount=self.problem.config.NUMBER_BUMP_threshold_min, max_amount=self.problem.config.NUMBER_BUMP_threshold_max).mutate()
         elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
             RoadMutator(self, lower_bound=-int(self.problem.config.MUTATION_EXTENT),
                         upper_bound=int(self.problem.config.MUTATION_EXTENT)).mutate()

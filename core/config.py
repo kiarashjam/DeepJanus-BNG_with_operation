@@ -17,6 +17,12 @@ class Config:
     MUT_OBSTACLE = 'MUT_OBSTACLE'
     MUT_BUMP = 'MUT_BUMP'
 
+    ### surrounding operation
+
+    Sign = 'Sign'
+    Trees = 'Trees'
+    Terrain = 'Terrain'
+
     ##### threshold_min
     FOG_DENSITY_threshold_min = 0
     WET_FOAM_threshold_min = 0
@@ -51,6 +57,7 @@ class Config:
         self.ARCHIVE_THRESHOLD = 35.0
 
         self.MUTATION_TYPE = Config.MUT_OBSTACLE
+        self.SURROUNDING = [Config.Trees]
 
         self.K_SD = 0.01
 
