@@ -1,4 +1,5 @@
 import hashlib
+import math
 import random
 from typing import Tuple, Dict
 
@@ -50,6 +51,13 @@ class BeamNGMember(Member):
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
         res.mutation_type = self.problem.config.MUTATION_TYPE
+        if self.problem.config.MUTATION_TYPE == "MUT_OBSTACLE" and self.position_of_obstacle == (0, 0, 0):
+            while True:
+                new_amount = (
+                random.randint(-1000, 1000), random.randint(-1000, 1000), self.control_nodes[0][2])
+                if self.is_valid(new_amount):
+                    res.position_of_obstacle = new_amount
+                    break
         return res
 
     def to_dict(self) -> dict:
@@ -97,7 +105,10 @@ class BeamNGMember(Member):
             return self.problem.config.ILLUMINATION_AMOUNT_threshold_min < amount < self.problem.config.ILLUMINATION_AMOUNT_threshold_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
             for node in self.control_nodes:
-                print("s")
+                distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))
+                if distance < 5:
+                    return True
+            return False
 
             # return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
         elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
@@ -234,7 +245,6 @@ class FogMutantor:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.fog_density:
                     self.operation.fog_density = new_amount
-                    print(self.operation.fog_density)
                 break
 
 class RainMutantor:
@@ -247,7 +257,6 @@ class RainMutantor:
         while True:
 
             new_amount = random.choice([random.randint(self.min_amount, self.operation.number_drop_rain), random.randint(self.operation.number_drop_rain, self.max_amount)])
-            print(new_amount)
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.number_drop_rain:
                     self.operation.number_drop_rain = new_amount
@@ -265,7 +274,6 @@ class WetFoamMutantor:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.wet_foam_density:
                     self.operation.wet_foam_density = new_amount
-                    print(self.operation.wet_foam_density)
                 break
 
 class WetRippleMutantor:
@@ -280,7 +288,6 @@ class WetRippleMutantor:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.wet_ripple_density:
                     self.operation.wet_ripple_density = new_amount
-                    print(self.operation.wet_ripple_density)
                 break
 
 class ChangeIlluminationMutantor:
@@ -296,7 +303,6 @@ class ChangeIlluminationMutantor:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.illumination:
                     self.operation.illumination = new_amount
-                    print(self.operation.illumination)
                 break
 
 class AddObstacleMutantor:
@@ -306,13 +312,9 @@ class AddObstacleMutantor:
         self.max_amount = max_amount
 
     def mutate(self):
-        while True:
-            new_amount = random.choice([random.randint(self.min_amount, self.operation.position_of_obstacle), random.randint(self.operation.position_of_obstacle, self.max_amount)])
-            if self.operation.is_valid(new_amount):
-                if new_amount != self.operation.position_of_obstacle:
-                    self.operation.position_of_obstacle = new_amount
-                    print(self.operation.position_of_obstacle)
-                break
+            new_amount = (self.operation.position_of_obstacle[0], self.operation.position_of_obstacle[1] + 1, self.operation.position_of_obstacle[2])
+            self.operation.position_of_obstacle = new_amount
+
 class AddBumpMutantor:
     def __init__(self, operation, min_amount, max_amount):
         self.operation = operation
@@ -325,5 +327,4 @@ class AddBumpMutantor:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.number_of_bump:
                     self.operation.number_of_bump = new_amount
-                    print(self.operation.number_of_bump)
                 break

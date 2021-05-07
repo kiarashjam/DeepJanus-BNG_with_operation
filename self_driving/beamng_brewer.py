@@ -95,12 +95,9 @@ class BeamNGBrewer:
 
     def setup_adding_obstacle(self, amount):
         i = 0
-        while i < amount:
-            position = (random.uniform(-1000, 1000), random.uniform(-1000, 1000), -28)
-            cube1 = ProceduralCube(name='cube1', pos=(position), rot=None,
-                                   size=(1, 1, 10))
-            self.scenario.add_procedural_mesh(cube1)
-            i = i + 1
+        cube1 = ProceduralCube(name='cube1', pos=(amount), rot=None,
+                               size=(1, 1, 10))
+        self.scenario.add_procedural_mesh(cube1)
 
     def bring_up(self):
         if self.type_operation == "MUT_FOG":
