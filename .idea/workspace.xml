@@ -2,63 +2,86 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-53/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-53/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-53/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-53/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-54/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-54/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-54/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-57-54/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-59-37/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-59-37/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-59-37/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--14-59-37/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-02-07/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-02-07/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-02-07/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-02-07/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-01/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-01/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-01/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-01/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-02/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-02/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-02/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-02/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-46/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-46/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-46/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-03-46/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-04-25/oob_camera_shot1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-04-25/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-04-25/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-04-25/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-04-25/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-06-13/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-06-13/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-06-13/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-06-13/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-07-18/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-07-18/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-07-18/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-07-18/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-10-31/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-10-31/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-10-31/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-10-31/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-11-12/road.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-11-12/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-11-12/simulation.full.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/simulations/beamng_nvidia_runner/sim_2021-05-07--15-11-12/simulation.partial.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_tall.dae" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_tall.dae.imposter.dds" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_tall.dae.imposter_normals.dds" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/main.materials.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_brewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_brewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/cliffs.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/main.materials.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/meet-bob.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/rock.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_cliff_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_cliff_n.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_cliff_s.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock1.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock10.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock11.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock2.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock3.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock4.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock5.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock6.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock7.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock8.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock9.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock_n.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/rock/wca_rock_s.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/detail_grunge_01_low_desat.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/eca_bld_metalbeams_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/eca_bld_metalbeams_n.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/eca_bld_metalbeams_s.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/eca_roadsigns_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/eca_roadsigns_s.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/main.materials.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_2way.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_4way.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_bend_left.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_bend_right.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_bump.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_chevron_left.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_chevron_right.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_chevron_right.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_corner_left25.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_corner_right25.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_dip.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_gravel.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_intersection_left.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_intersection_offset_left.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_intersection_offset_right.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_intersection_right.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_narrowbridge.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_narrows.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_north.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_route1.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_route2.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_sbend_left.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_sbend_right.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_slippery.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_south.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_speedlimit_40.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_speedlimit_50.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_stop.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_stop_ahead.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_t-intersection.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_tractor.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_weightlimit.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_yield.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/signs/sign_yield_ahead.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/detail_grunge_palm_01.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_full.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_full.dae.imposter.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_full.dae.imposter_normals.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_n.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_s.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_short.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_short.dae.imposter.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_short.dae.imposter_normals.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_skirt.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_skirt.dae.imposter.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_skirt.dae.imposter_normals.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_slim.dae" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_slim.dae.imposter.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/fanpalm_slim.dae.imposter_normals.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/vegetation_palm_bark_01_d.dds" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm/vegetation_palm_bark_01_n.dds" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +120,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/levels_template/tig/art/shapes/trees_palm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/levels_template/tig/art/shapes" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
