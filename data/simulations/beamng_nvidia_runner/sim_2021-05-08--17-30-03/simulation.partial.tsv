@@ -1,0 +1,2 @@
+timer	damage	pos	dir	vel	gforces	gforces2	steering	steering_input	brake	brake_input	throttle	throttle_input	throttleFactor	engineThrottle	wheelspeed	vel_kmh	is_oob	oob_counter	max_oob_percentage	oob_distance
+0	0	(2.0239598751068115, 2.480642318725586, -28)	(0.009620939381420612, 0.9999536871910095, 0)	(0, 0, 0)	(0, 0, 0)	(0, 0, 0)	0	None	0	None	0	None	None	None	0	0	False	0	nan	1.9979954041038714

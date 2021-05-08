@@ -22,6 +22,11 @@ class Config:
     Sign = 'Sign'
     Trees = 'Trees'
     Terrain = 'Terrain'
+    Rocks = 'Rocks'
+    Cabin = 'Cabin'
+    House = 'House'
+    Surrounding_amount ={"Trees_amount": 2000, "Rocks_amount": 2000, "Cabin_amount": 1000, "House_amount": 1000}
+
 
     ##### threshold_min
     FOG_DENSITY_threshold_min = 0
@@ -56,8 +61,10 @@ class Config:
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_TYPE = Config.MUT_RAIN
-        self.SURROUNDING = [Config.Trees]
+        self.MUTATION_TYPE = Config.MUT_FOG
+        self.SURROUNDING = [Config.House, Config.Trees, Config.Rocks]
+        self.Surrounding_amount = Config.Surrounding_amount
+
 
         self.K_SD = 0.01
 

@@ -54,7 +54,8 @@ class BeamNGBrewer:
         self.number_of_obstacle = member.position_of_obstacle
         self.illumination = member.illumination
         self.type_operation = member.mutation_type
-        self.surrounding = member.surrounding
+        self.surrounding_type = member.surrounding_type
+        self.surrounding_amount= member.surrounding_amount
 
 
     def setup_vehicle(self) -> Vehicle:
@@ -100,6 +101,114 @@ class BeamNGBrewer:
         cube1 = ProceduralCube(name='cube1', pos=(amount), rot=None,
                                size=(1, 1, 10))
         self.scenario.add_procedural_mesh(cube1)
+    def setup_surrounding(self):
+        ## checking the surrounding
+
+        if len(self.surrounding_type) > 0:
+            reserved_points = [(0, 0, 0)]
+            for operation in self.surrounding_type:
+                print("the operation "+str(operation)+" is loading....")
+                if operation == 'Trees':
+                    j = 0
+                    while j < self.surrounding_amount["Trees_amount"]:
+                        out_road = True
+                        trees_position = (
+                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
+                        for node in self.road_nodes:
+                            not_close_to_other_object = True
+                            distance = math.sqrt(
+                                ((node[0] - trees_position[0]) ** 2) + ((node[1] - trees_position[1]) ** 2))
+                            if distance < 6:
+                                out_road = False
+                        for reserved_point in reserved_points:
+                            distance_object = math.sqrt(
+                                ((reserved_point[0] - trees_position[0]) ** 2) + (
+                                        (reserved_point[1] - trees_position[1]) ** 2))
+                            if distance_object < 0.5:
+                                not_close_to_other_object = False
+                        if out_road and not_close_to_other_object:
+                            reserved_points.append(trees_position)
+                            trees_object = StaticObject(name="trees" + "_" + str(j),
+                                                        pos=(trees_position), rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/trees_palm/fanpalm_tall.dae')
+                            self.scenario.add_object(trees_object)
+                            j = j + 1
+
+                elif operation == 'Rocks':
+                    j = 0
+                    while j < self.surrounding_amount["Rocks_amount"]:
+                        out_road = True
+                        rocks_position = (
+                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
+                        for node in self.road_nodes:
+                            not_close_to_other_object = True
+                            distance = math.sqrt(
+                                ((node[0] - rocks_position[0]) ** 2) + ((node[1] - rocks_position[1]) ** 2))
+                            if distance < 6:
+                                out_road = False
+                        for reserved_point in reserved_points:
+                            distance_object = math.sqrt(
+                                ((reserved_point[0] - rocks_position[0]) ** 2) + (
+                                        (reserved_point[1] - rocks_position[1]) ** 2))
+                            if distance_object < 0.5:
+                                not_close_to_other_object = False
+                        if out_road and not_close_to_other_object:
+                            reserved_points.append(rocks_position)
+                            rocks_object = StaticObject(name="rocks" + "_" + str(j),
+                                                        pos=(rocks_position), rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/rocks/wca_rock'+str(random.randint(1,11))+'.dae')
+                            self.scenario.add_object(rocks_object)
+                            j = j + 1
+                elif operation == 'Cabin':
+                    j = 0
+                    while j < self.surrounding_amount["Cabin_amount"]:
+                        out_road = True
+                        cabin_position = (
+                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
+                        for node in self.road_nodes:
+                            not_close_to_other_object = True
+                            distance = math.sqrt(
+                                ((node[0] - cabin_position[0]) ** 2) + ((node[1] - cabin_position[1]) ** 2))
+                            if distance < 13:
+                                out_road = False
+                        for reserved_point in reserved_points:
+                            distance_object = math.sqrt(
+                                ((reserved_point[0] - cabin_position[0]) ** 2) + (
+                                        (reserved_point[1] - cabin_position[1]) ** 2))
+                            if distance_object < 10:
+                                not_close_to_other_object = False
+                        if out_road and not_close_to_other_object:
+                            reserved_points.append(cabin_position)
+                            cabin_object = StaticObject(name="cabin" + "_" + str(j),
+                                                        pos=(cabin_position[0], cabin_position[1], cabin_position[2]+1), rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/buildings/cabin'+str(random.choice([1, 2]))+'.dae')
+                            self.scenario.add_object(cabin_object)
+                            j = j + 1
+                elif operation == 'House':
+                    j = 0
+                    while j < self.surrounding_amount["House_amount"]:
+                        out_road = True
+                        house_position = (
+                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
+                        for node in self.road_nodes:
+                            not_close_to_other_object = True
+                            distance = math.sqrt(
+                                ((node[0] - house_position[0]) ** 2) + ((node[1] - house_position[1]) ** 2))
+                            if distance < 13:
+                                out_road = False
+                        for reserved_point in reserved_points:
+                            distance_object = math.sqrt(
+                                ((reserved_point[0] - house_position[0]) ** 2) + (
+                                        (reserved_point[1] - house_position[1]) ** 2))
+                            if distance_object < 10:
+                                not_close_to_other_object = False
+                        if out_road and not_close_to_other_object:
+                            reserved_points.append(house_position)
+                            house_object = StaticObject(name="house" + "_" + str(j),
+                                                        pos=(house_position[0], house_position[1], house_position[2]+1), rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/buildings/house'+str(random.choice([1, 2, 3, 4]))+'.dae')
+                            self.scenario.add_object(house_object)
+                            j = j + 1
 
     def bring_up(self):
         if self.type_operation == "MUT_FOG":
@@ -116,27 +225,8 @@ class BeamNGBrewer:
 
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
-
-        ## checking the surrounding
-
-        if len(self.surrounding) > 0:
-            for operation in self.surrounding:
-                if operation == 'Trees':
-                    j = 0
-                    while j < 2000:
-                        out_road = True
-                        trees_position = (
-                            random.randint(-1000, 1000), random.randint(-1000, 1000), self.road_nodes[0][2])
-                        for node in self.road_nodes:
-                            distance = math.sqrt(((node[0] - trees_position[0]) ** 2) + ((node[1] - trees_position[1]) ** 2))
-                            if distance < 10:
-                                out_road = False
-                        if out_road:
-                            trees_object = StaticObject(name="trees" + "_" + str(j),
-                                             pos=(trees_position), rot=(0, 0, 0), scale=(1, 1, 1),
-                                             shape='/levels/tig/art/shapes/trees_palm/fanpalm_tall.dae')
-                            self.scenario.add_object(trees_object)
-                            j = j +1
+        # setup the surrounding
+        self.setup_surrounding()
 
         ## addiing the obstacle operator
         if self.type_operation == "MUT_OBSTACLE":

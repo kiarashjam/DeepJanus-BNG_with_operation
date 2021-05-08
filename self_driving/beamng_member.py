@@ -43,7 +43,9 @@ class BeamNGMember(Member):
         self.position_of_obstacle = (0, 0, 0)
         self.illumination = 0
         self.mutation_type = None
-        self.surrounding = None
+        self.surrounding_type = None
+        self.surrounding_amount = {"Trees_amount": 0, "Rocks_amount": 0, "Cabin_amount": 0, "House_amount": 0}
+
 
     def clone(self):
 
@@ -52,7 +54,8 @@ class BeamNGMember(Member):
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
         res.mutation_type = self.problem.config.MUTATION_TYPE
-        res.surrounding = self.problem.config.SURROUNDING
+        res.surrounding_type = self.problem.config.SURROUNDING
+        res.surrounding_amount = self.problem.config.Surrounding_amount
         if self.problem.config.MUTATION_TYPE == "MUT_OBSTACLE" and self.position_of_obstacle == (0, 0, 0):
             while True:
                 new_amount = (
