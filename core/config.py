@@ -56,7 +56,7 @@ class Config:
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_TYPE = Config.MUT_OBSTACLE
+        self.MUTATION_TYPE = Config.MUT_RAIN
         self.SURROUNDING = [Config.Trees]
 
         self.K_SD = 0.01

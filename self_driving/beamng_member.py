@@ -37,7 +37,7 @@ class BeamNGMember(Member):
         self._evaluator: BeamNGEvaluator = None
         self.fog_density = 0
         self.wet_foam_density = 0
-        self.number_drop_rain = 0
+        self.number_drop_rain = 2000
         self.wet_ripple_density = 0
         self.number_of_bump = 0
         self.position_of_obstacle = (0, 0, 0)
