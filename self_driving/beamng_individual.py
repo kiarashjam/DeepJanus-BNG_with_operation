@@ -85,7 +85,7 @@ class BeamNGIndividual(Individual):
         return np.mean([i1_posi.distance(i2_posi), i1_nega.distance(i2_nega)])
 
     def _assert_members_not_equals(self):
-        assert self.m1.control_nodes != self.m2.control_nodes
+        assert self.m1 != self.m2
 
     def to_dict(self):
         return {'name': self.name,
