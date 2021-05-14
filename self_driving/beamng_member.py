@@ -23,7 +23,8 @@ class BeamNGMember(Member):
     counter = 0
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox):
+                 road_bbox: RoadBoundingBox, fog_density, wet_foam_density, number_drop_rain,
+                 wet_ripple_density, number_of_bump, position_of_obstacle, illumination, mutation_type,):
         super().__init__()
         BeamNGMember.counter += 1
         self.name = f'mbr{str(BeamNGMember.counter)}'
@@ -72,7 +73,13 @@ class BeamNGMember(Member):
             'num_spline_nodes': self.num_spline_nodes,
             'road_bbox_size': self.road_bbox.bbox.bounds,
             'distance_to_boundary': self.distance_to_boundary,
-            'mutation_type' : self.mutation_type
+            'fog_density': self.fog_density,
+            'wet_foam_density': self.wet_foam_density,
+            'number_drop_rain': self.number_drop_rain,
+            'wet_ripple_density': self.wet_ripple_density,
+            'number_of_bump': self.number_of_bump,
+
+            'mutation_type': self.mutation_type
         }
 
     @classmethod
