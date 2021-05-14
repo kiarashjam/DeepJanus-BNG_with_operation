@@ -85,7 +85,7 @@ class BeamNGIndividual(Individual):
         return np.mean([i1_posi.distance(i2_posi), i1_nega.distance(i2_nega)])
 
     def _assert_members_not_equals(self):
-        assert self.m1 != self.m2
+        assert self.is_equal(self.m1, self.m2)
 
     def to_dict(self):
         return {'name': self.name,
@@ -109,11 +109,20 @@ class BeamNGIndividual(Individual):
 
     def mutate(self):
         road_to_mutate = self.m1 if random.randrange(2) == 0 else self.m2
+
         condition = False
         while not condition:
             road_to_mutate.mutate()
             #if self.m1.distance(self.m2) != 0.0:
-            if self.m1 != self.m2:
+            if self.is_equal(self.m1, self.m2):
                 condition = True
         self.members_distance = None
         log.info(f'mutated {road_to_mutate}')
+    def is_equal(self, m1, m2):
+        if (m1.control_nodes == m2.control_nodes and m1.fog_density == m2.fog_density and
+                m1.number_drop_rain == m2.number_drop_rain and m1.wet_foam_density == m2.wet_foam_density and
+                m1.wet_ripple_density == m2.wet_ripple_density and m1.illumination == m2.illumination and
+                m1.position_of_obstacle == m2.position_of_obstacle and m1.number_of_bump == m2.number_of_bump):
+            return False
+        else:
+            return True

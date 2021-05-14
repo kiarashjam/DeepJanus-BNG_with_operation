@@ -2,25 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6cad79b4-4fb2-4108-8b29-da9b8dc531a9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind1_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind2_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind3_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen0/population/ind4_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind1_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind6_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind7_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/population/ind8_both_roads.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/experiments/exp/gen1/report1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_individual.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_individual.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
