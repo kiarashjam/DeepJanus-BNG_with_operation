@@ -23,8 +23,7 @@ class BeamNGMember(Member):
     counter = 0
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox, fog_density, wet_foam_density, number_drop_rain,
-                 wet_ripple_density, number_of_bump, position_of_obstacle, illumination, mutation_type,):
+                 road_bbox: RoadBoundingBox):
         super().__init__()
         BeamNGMember.counter += 1
         self.name = f'mbr{str(BeamNGMember.counter)}'
