@@ -54,15 +54,15 @@ class Config:
         self.fitness_weights = (1.0, -1.0)
 
         self.POPSIZE = 4
-        self.NUM_GENERATIONS = 15
+        self.NUM_GENERATIONS = 2
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_TYPE = Config.MUT_FOG
-        self.SURROUNDING = [Config.Cabin]
+        self.MUTATION_TYPE = Config.MUT_RAIN
+        self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
 

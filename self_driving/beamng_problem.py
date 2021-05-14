@@ -20,6 +20,7 @@ from self_driving.beamng_individual import BeamNGIndividual
 from self_driving.beamng_individual_set_store import BeamNGIndividualSetStore
 from self_driving.beamng_member import BeamNGMember
 from self_driving.road_generator import RoadGenerator
+from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
 
 log = get_logger(__file__)
 
@@ -112,7 +113,7 @@ class BeamNGProblem(Problem):
             from self_driving.beamng_evaluator_fake import BeamNGFakeEvaluator
             self._evaluator = BeamNGFakeEvaluator(self.config)
         elif ev_name == BeamNGConfig.EVALUATOR_LOCAL_BEAMNG:
-            from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
+
             self._evaluator = BeamNGNvidiaOob(self.config)
         elif ev_name == BeamNGConfig.EVALUATOR_REMOTE_BEAMNG:
             from self_driving.beamng_evaluator_remote import BeamNGRemoteEvaluator

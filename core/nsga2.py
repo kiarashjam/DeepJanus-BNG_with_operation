@@ -97,10 +97,10 @@ def main(problem: Problem = None, seed=None):
         print("################13b#####################")
 
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):
-            # toolbox.mutate(ind1)
-            # toolbox.mutate(ind2)
+            toolbox.mutate(ind1)
+            toolbox.mutate(ind2)
             print("################14.1b#####################")
-            # del ind1.fitness.values, ind2.fitness.values
+            del ind1.fitness.values, ind2.fitness.values
         print("################14b#####################")
 
         # Evaluate the individuals with an invalid fitness
@@ -114,7 +114,7 @@ def main(problem: Problem = None, seed=None):
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
-        print("################917b#####################")
+        print("################17b#####################")
         problem.archive.process_population(offspring + pop)
         # Select the next generation population
         print("################18b#####################")
@@ -125,7 +125,7 @@ def main(problem: Problem = None, seed=None):
         print(logbook.stream)
         print("################20b#####################")
         problem.on_iteration(gen, pop, logbook)
-    print("################10b#####################")
+    print("################21b#####################")
     return pop, logbook
 
 

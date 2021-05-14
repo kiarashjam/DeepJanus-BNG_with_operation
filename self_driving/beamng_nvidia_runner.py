@@ -1,158 +1,162 @@
-import json
+import logging as log
 import os
-import shutil
 import time
+import traceback
+from typing import List, Tuple
+
+from core.folder_storage import SeedStorage
+from core.folders import folders
+from core.log_setup import get_logger
+from self_driving.beamng_brewer import BeamNGBrewer
+from self_driving.beamng_config import BeamNGConfig
+from self_driving.beamng_evaluator import BeamNGEvaluator
+from self_driving.beamng_member import BeamNGMember
+from self_driving.beamng_tig_maps import maps
+from self_driving.beamng_waypoint import BeamNGWaypoint
+from self_driving.nvidia_prediction import NvidiaPrediction
+from self_driving.simulation_data import SimulationDataRecord, SimulationData
+from self_driving.simulation_data_collector import SimulationDataCollector
+from self_driving.utils import get_node_coords, points_distance
+from self_driving.vehicle_state_reader import VehicleStateReader
+from udacity_integration.beamng_car_cameras import BeamNGCarCameras
+
+log = get_logger(__file__)
+
+FloatDTuple = Tuple[float, float, float, float]
 
 
-class BeamNGMainFolder:
-    def __init__(self, path):
-        self.path = os.path.realpath(path)
+class BeamNGNvidiaOob(BeamNGEvaluator):
+    def __init__(self, config: BeamNGConfig):
+        self.config = config
+        self.brewer: BeamNGBrewer = None
+        self.model_file = str(folders.trained_models_colab.joinpath(config.keras_model_file))
+        if not os.path.exists(self.model_file):
+            raise Exception(f'File {self.model_file} does not exist!')
+        self.model = None
 
-    def write_items(self, content):
-        with open(os.path.join(self.path, 'items.level.json'), 'w') as f:
-            f.write(content)
+    def evaluate(self, members: List[BeamNGMember]):
+        for member in members:
+            if not member.needs_evaluation():
+                log.info(f'{member} is already evaluated. skipping')
+                continue
+            counter = 20
+            attempt = 0
+            while True:
+                attempt += 1
+                if attempt == counter:
+                    raise Exception('Exhausted attempts')
+                if attempt > 1:
+                    log.info(f'RETRYING TO run simulation {attempt}')
+                    self._close()
+                else:
+                    log.info(f'{member} BeamNG evaluation start')
+                if attempt > 2:
+                    time.sleep(5)
+                sim = self._run_simulation(member)
+                if sim.info.success:
+                    break
 
+            member.distance_to_boundary = sim.min_oob_distance()
+            log.info(f'{member} BeamNG evaluation completed')
 
-class MapFolder:
-    def __init__(self, path):
-        self.path = path
-        self.tig_version_json_path = os.path.join(path, 'tig-version.json')
+    def _run_simulation(self, member) -> SimulationData:
+        if not self.brewer:
+            self.brewer = BeamNGBrewer()
+            self.vehicle = self.brewer.setup_vehicle()
+            self.camera = self.brewer.setup_scenario_camera()
 
-    def exists(self):
-        return os.path.exists(self.path)
+        brewer = self.brewer
+        nodes = member.sample_nodes
+        brewer.setup_operation(member)
+        brewer.setup_road_nodes(nodes)
+        beamng = brewer.beamng
+        waypoint_goal = BeamNGWaypoint('waypoint_goal', get_node_coords(nodes[-1]))
+        maps.install_map_if_needed()
+        maps.beamng_map.generated().write_items(brewer.decal_road.to_json() + '\n' + waypoint_goal.to_json())
 
-    def same_version(self, other_map: 'MapFolder'):
-        self_ver = self.version_info()['version']
-        other_ver = other_map.version_info()['version']
-        return self_ver == other_ver
+        cameras = BeamNGCarCameras()
+        vehicle_state_reader = VehicleStateReader(self.vehicle, beamng, additional_sensors=cameras.cameras_array)
+        brewer.vehicle_start_pose = brewer.road_points.vehicle_start_pose()
 
-    def version_info_exists(self):
-        return os.path.exists(self.tig_version_json_path)
+        steps = brewer.params.beamng_steps
+        simulation_id = time.strftime('%Y-%m-%d--%H-%M-%S', time.localtime())
+        name = self.config.simulation_name.replace('$(id)', simulation_id)
+        sim_data_collector = SimulationDataCollector(self.vehicle, beamng, brewer.decal_road, brewer.params,
+                                                     vehicle_state_reader=vehicle_state_reader,
+                                                     camera=self.camera,
+                                                     simulation_name=name)
 
-    def version_info(self):
-        with open(self.tig_version_json_path, 'r') as f:
-            return json.load(f)
+        sim_data_collector.get_simulation_data().start()
+        try:
+            brewer.bring_up()
+            from keras.models import load_model
+            if not self.model:
+                self.model = load_model(self.model_file)
+            predict = NvidiaPrediction(self.model, self.config)
+            iterations_count = 1000
+            idx = 0
+            while True:
+                idx += 1
+                if idx >= iterations_count:
+                    sim_data_collector.save()
+                    raise Exception('Timeout simulation ', sim_data_collector.name)
 
-    def tig_version_json_path(self):
-        return self.path + '/'
+                sim_data_collector.collect_current_data(oob_bb=False)
+                last_state: SimulationDataRecord = sim_data_collector.states[-1]
+                if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
+                    break
 
-    def delete_all_map(self):
-        # print(f'Removing [{self.path}]')
-        shutil.rmtree(self.path, ignore_errors=True)
+                if last_state.is_oob:
+                    break
+                img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
+                steering_angle, throttle = predict.predict(img, last_state)
+                self.vehicle.control(throttle=throttle, steering=steering_angle, brake=0)
+                beamng.step(steps)
 
-        # sometimes rmtree fails to remove files
-        for tries in range(20):
-            if os.path.exists(self.path):
-                time.sleep(0.1)
-                shutil.rmtree(self.path, ignore_errors=True)
+            sim_data_collector.get_simulation_data().end(success=True)
+        except Exception as ex:
+            sim_data_collector.get_simulation_data().end(success=False, exception=ex)
+            traceback.print_exception(type(ex), ex, ex.__traceback__)
+        finally:
+            if self.config.simulation_save:
+                sim_data_collector.save()
+                try:
+                    sim_data_collector.take_car_picture_if_needed()
+                except:
+                    pass
 
-        if os.path.exists(self.path):
-            shutil.rmtree(self.path)
+            self.end_iteration()
 
-    def generated(self):
-        return BeamNGMainFolder(os.path.join(self.path, r'main/MissionGroup/generated'))
+        return sim_data_collector.simulation_data
 
-
-class LevelsFolder:
-    def __init__(self, path):
-        self.path = os.path.realpath(path)
-
-    def ensure_folder_exists(self):
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
-
-    def get_map(self, map_name: str):
-        return MapFolder(os.path.join(self.path, map_name))
-
-
-class Maps:
-    beamng_map: MapFolder
-    source_map: MapFolder
-
-    def __init__(self):
-        self.beamng_levels = LevelsFolder(os.path.join(os.environ['USERPROFILE'], r'Documents/BeamNG.research/levels'))
-        self.source_levels = LevelsFolder('./levels_template')
-        self.source_map = self.source_levels.get_map('tig')
-        self.beamng_map = self.beamng_levels.get_map('tig')
-        self.never_logged_path = True
-
-    def print_paths(self):
-        print('beamng_levels', self.beamng_levels.path)
-        print('source_levels', self.source_levels.path)
-
-    def install_map_if_needed(self):
-        if self.never_logged_path:
-            self.never_logged_path = False
-            # print(f'BeamNG userpath levels is [{self.beamng_levels.path}]')
-
-        self.beamng_levels.ensure_folder_exists()
-
-        if self.beamng_map.exists():
-            if not self.beamng_map.version_info_exists():
-                print(f'Warning! The folder [{self.beamng_map.path}] does not look like a map of tig project.\n'
-                      f'It does not contains the distinctive file [{self.beamng_map.tig_version_json_path}]')
-                print('Stopping execution')
-                exit(1)
+    def end_iteration(self):
+        try:
+            if self.config.beamng_close_at_iteration:
+                self._close()
             else:
-                if not self.beamng_map.same_version(self.source_map):
-                    print(f'Maps have different version information. '
-                          f'Do you want to remove all {self.beamng_map.path} folder and copy it anew?'
-                          f'.\nType yes to accept, no to keep it as it is')
-                    while True:
-                        resp = input('>')
-                        if resp in ['yes', 'no']:
-                            break
-                        print('Type yes or no')
-                    if resp == 'yes':
-                        self.beamng_map.delete_all_map()
+                if self.brewer:
+                    self.brewer.beamng.stop_scenario()
+        except Exception as ex:
+            log.debug('end_iteration() failed:')
+            traceback.print_exception(type(ex), ex, ex.__traceback__)
 
-        if not self.beamng_map.exists():
-            # print(f'Copying from [{self.source_map.path}] to [{self.beamng_map.path}]')
-            shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
+    def _close(self):
+        if self.brewer:
+            try:
+                self.brewer.beamng.close()
+            except Exception as ex:
+                log.debug('beamng.close() failed:')
+                traceback.print_exception(type(ex), ex, ex.__traceback__)
+            self.brewer = None
 
-class MapFolderOperation:
-    def __init__(self, path):
-        self.path = path
-
-    def delete_all_map(self):
-
-        shutil.rmtree(self.path, ignore_errors=True)
-        # sometimes rmtree fails to remove files
-        for tries in range(20):
-            if os.path.exists(self.path):
-                time.sleep(0.1)
-                shutil.rmtree(self.path, ignore_errors=True)
-        if os.path.exists(self.path):
-            shutil.rmtree(self.path)
-
-class LevelsFolderOperation:
-    def __init__(self, path):
-        self.path = os.path.realpath(path)
-    def get_map(self, map_name: str):
-        return MapFolderOperation(os.path.join(self.path, map_name))
-
-class MapsOperation:
-    beamng_map: MapFolderOperation
-    source_map: MapFolderOperation
-
-    def __init__(self):
-        self.beamng_levels = LevelsFolderOperation(os.path.join(os.environ['USERPROFILE'], r'Documents/BeamNG.research/levels'))
-        self.source_levels = LevelsFolderOperation(os.getcwd()+'/levels_template/')
-        self.source_map = self.source_levels.get_map('tig/main/MissionGroup/sky_and_sun/')
-        self.beamng_map = self.beamng_levels.get_map('tig/main/MissionGroup/sky_and_sun/')
-        self.never_logged_path = True
-    def install_map(self):
-        if self.never_logged_path:
-            self.never_logged_path = False
-
-        self.beamng_map.delete_all_map()
-        shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
-        # print(f'Copying from [{self.source_map.path}] to [{self.beamng_map.path}]')
-
-
-
-global maps
-maps = Maps()
 
 if __name__ == '__main__':
-    maps.install_map_if_needed()
+    config = BeamNGConfig()
+    inst = BeamNGNvidiaOob(config)
+    while True:
+        seed_storage = SeedStorage('basic5')
+        for i in range(1, 11):
+            member = BeamNGMember.from_dict(seed_storage.load_json_by_index(i))
+            member.clear_evaluation()
+            inst.evaluate([member])
+            log.info(member)

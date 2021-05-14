@@ -113,7 +113,7 @@ class BeamNGIndividual(Individual):
         while not condition:
             road_to_mutate.mutate()
             #if self.m1.distance(self.m2) != 0.0:
-            if self.m1.control_nodes != self.m2.control_nodes:
+            if self.m1 != self.m2:
                 condition = True
         self.members_distance = None
         log.info(f'mutated {road_to_mutate}')

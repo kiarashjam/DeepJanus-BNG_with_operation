@@ -37,7 +37,7 @@ class BeamNGMember(Member):
         self._evaluator: BeamNGEvaluator = None
         self.fog_density = 0
         self.wet_foam_density = 0
-        self.number_drop_rain = 2000
+        self.number_drop_rain = 0
         self.wet_ripple_density = 0
         self.number_of_bump = 0
         self.position_of_obstacle = (0, 0, 0)
@@ -80,7 +80,7 @@ class BeamNGMember(Member):
         road_bbox = RoadBoundingBox(dict['road_bbox_size'])
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
-                           dict['num_spline_nodes'], road_bbox)
+                           dict['num_spline_nodes'], road_bbox, )
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 
@@ -134,6 +134,7 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate(self) -> 'BeamNGMember':
+        print("mutate")
         self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
             FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount=self.problem.config.FOG_DENSITY_threshold_max).mutate()

@@ -107,7 +107,7 @@ class Maps:
                         self.beamng_map.delete_all_map()
 
         if not self.beamng_map.exists():
-            print(f'Copying from [{self.source_map.path}] to [{self.beamng_map.path}]')
+
             shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
 
 class MapFolderOperation:
@@ -115,7 +115,6 @@ class MapFolderOperation:
         self.path = path
 
     def delete_all_map(self):
-        print("delted ..................................")
         shutil.rmtree(self.path, ignore_errors=True)
         # sometimes rmtree fails to remove files
         for tries in range(20):
@@ -147,7 +146,7 @@ class MapsOperation:
 
         self.beamng_map.delete_all_map()
         shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
-        print(f'Copying from [{self.source_map.path}] to [{self.beamng_map.path}]')
+
 
 
 

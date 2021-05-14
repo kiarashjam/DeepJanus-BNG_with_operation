@@ -67,6 +67,8 @@ class BeamNGBrewer:
         assert self.camera is None
         self.camera = BeamNGCamera(self.beamng, 'brewer_camera')
         return self.camera
+    def setup_default(self):
+        operations.default()
 
     def setup_fog(self, amount):
         operations.change_fog_amount(amount)
@@ -211,13 +213,14 @@ class BeamNGBrewer:
                             j = j + 1
 
     def bring_up(self):
+        self.setup_default()
         if self.type_operation == "MUT_FOG":
             self.setup_fog(self.fog_density)
-        elif self.type_operation  == "MUT_RAIN":
+        elif self.type_operation == "MUT_RAIN":
             self.setup_rain(self.number_drop_rain)
-        elif self.type_operation  == "MUT_WET_FOAM":
+        elif self.type_operation == "MUT_WET_FOAM":
             self.setup_wet_foam(self.wet_foam_density)
-        elif self.type_operation  == "MUT_WET_RIPPLE":
+        elif self.type_operation == "MUT_WET_RIPPLE":
             self.setup_wet_ripple(self.wet_ripple_density)
         self.scenario = Scenario('tig', 'tigscenario')
         if self.vehicle:
