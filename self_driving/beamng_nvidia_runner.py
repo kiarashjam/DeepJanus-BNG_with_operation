@@ -19,6 +19,7 @@ from self_driving.simulation_data_collector import SimulationDataCollector
 from self_driving.utils import get_node_coords, points_distance
 from self_driving.vehicle_state_reader import VehicleStateReader
 from udacity_integration.beamng_car_cameras import BeamNGCarCameras
+from core.config import Config
 
 log = get_logger(__file__)
 
@@ -54,6 +55,8 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     time.sleep(5)
                 sim = self._run_simulation(member)
                 if sim.info.success:
+                    Config.EXECTIME = Config.EXECTIME + sim.states[-1].timer
+                    print("Execution time: ", Config.EXECTIME)
                     break
 
             member.distance_to_boundary = sim.min_oob_distance()
@@ -119,6 +122,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             traceback.print_exception(type(ex), ex, ex.__traceback__)
         finally:
             if self.config.simulation_save:
+                member.simulation = sim_data_collector.get_simulation_data()
                 sim_data_collector.save()
                 try:
                     sim_data_collector.take_car_picture_if_needed()

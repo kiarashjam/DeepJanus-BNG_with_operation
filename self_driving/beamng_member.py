@@ -91,7 +91,7 @@ class BeamNGMember(Member):
         road_bbox = RoadBoundingBox(dict['road_bbox_size'])
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
-                           dict['num_spline_nodes'], road_bbox, )
+                           dict['num_spline_nodes'], road_bbox)
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 
@@ -110,17 +110,18 @@ class BeamNGMember(Member):
         self.distance_to_boundary = None
 
     def is_valid(self, amount):
-        if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
+        print("BeamNGMember........is_valid.........")
+        if self.mutation_type == 'MUT_FOG':
             return self.problem.config.FOG_DENSITY_threshold_min < amount < self.problem.config.FOG_DENSITY_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
+        elif self.mutation_type == 'MUT_RAIN':
             return self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min < amount < self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_FOAM':
+        elif self.mutation_type == 'MUT_WET_FOAM':
             return self.problem.config.WET_FOAM_threshold_min < amount < self.problem.config.WET_FOAM_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+        elif self.mutation_type == 'MUT_WET_RIPPLE':
             return self.problem.config.WET_RIPPLE_threshold_min < amount < self.problem.config.WET_RIPPLE_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
+        elif self.mutation_type == 'MUT_ILLUMINATION':
             return self.problem.config.ILLUMINATION_AMOUNT_threshold_min < amount < self.problem.config.ILLUMINATION_AMOUNT_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_OBSTACLE':
+        elif self.mutation_type == 'MUT_OBSTACLE':
             for node in self.control_nodes:
                 distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))
                 if distance < 5:
@@ -128,9 +129,9 @@ class BeamNGMember(Member):
             return False
 
             # return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_BUMP':
+        elif self.mutation_type == 'MUT_BUMP':
             return self.problem.config.NUMBER_BUMP_threshold_min < amount < self.problem.config.NUMBER_BUMP_threshold_max
-        elif self.problem.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
+        elif self.mutation_type == 'MUT_CONTROL_POINTS':
             return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                     self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
 

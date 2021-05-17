@@ -20,8 +20,7 @@ from self_driving.beamng_individual import BeamNGIndividual
 from self_driving.beamng_individual_set_store import BeamNGIndividualSetStore
 from self_driving.beamng_member import BeamNGMember
 from self_driving.road_generator import RoadGenerator
-from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
-
+from self_driving.initial_population_generator import initial_pool_generator, initial_population_generator
 log = get_logger(__file__)
 
 
@@ -33,6 +32,10 @@ class BeamNGProblem(Problem):
         super().__init__(config, archive)
         if self.config.generator_name == self.config.GEN_RANDOM:
             seed_pool = SeedPoolRandom(self, config.POPSIZE)
+        elif self.config.generator_name == self.config.GEN_DIVERSITY:
+            path = initial_pool_generator(self.config, self)
+            initial_population_generator(path, self.config, self)
+            seed_pool = SeedPoolFolder(self, config.initial_population_folder)
         else:
             seed_pool = SeedPoolFolder(self, config.seed_folder)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
@@ -82,8 +85,11 @@ class BeamNGProblem(Problem):
         print("BeamNGProblem........generate_random_member.........")
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
+        print("donedone")
         result.config = self.config
         result.problem = self
+        result.mutation_type = self.config.MUTATION_TYPE
+        result.surrounding_type = self.config.SURROUNDING
         return result
 
     def deap_individual_class(self):
@@ -118,7 +124,7 @@ class BeamNGProblem(Problem):
             from self_driving.beamng_evaluator_fake import BeamNGFakeEvaluator
             self._evaluator = BeamNGFakeEvaluator(self.config)
         elif ev_name == BeamNGConfig.EVALUATOR_LOCAL_BEAMNG:
-
+            from self_driving.beamng_nvidia_runner import BeamNGNvidiaOob
             self._evaluator = BeamNGNvidiaOob(self.config)
         elif ev_name == BeamNGConfig.EVALUATOR_REMOTE_BEAMNG:
             from self_driving.beamng_evaluator_remote import BeamNGRemoteEvaluator
