@@ -71,7 +71,7 @@ class Maps:
 
     def __init__(self):
         self.beamng_levels = LevelsFolder(os.path.join(os.environ['USERPROFILE'], r'Documents/BeamNG.research/levels'))
-        self.source_levels = LevelsFolder('./levels_template')
+        self.source_levels = LevelsFolder('../levels_template')
         self.source_map = self.source_levels.get_map('tig')
         self.beamng_map = self.beamng_levels.get_map('tig')
         self.never_logged_path = True
@@ -107,47 +107,8 @@ class Maps:
                         self.beamng_map.delete_all_map()
 
         if not self.beamng_map.exists():
-
+            print(f'Copying from [{self.source_map.path}] to [{self.beamng_map.path}]')
             shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
-
-class MapFolderOperation:
-    def __init__(self, path):
-        self.path = path
-
-    def delete_all_map(self):
-        shutil.rmtree(self.path, ignore_errors=True)
-        # sometimes rmtree fails to remove files
-        for tries in range(20):
-            if os.path.exists(self.path):
-                time.sleep(0.1)
-                shutil.rmtree(self.path, ignore_errors=True)
-        if os.path.exists(self.path):
-            shutil.rmtree(self.path)
-
-class LevelsFolderOperation:
-    def __init__(self, path):
-        self.path = os.path.realpath(path)
-    def get_map(self, map_name: str):
-        return MapFolderOperation(os.path.join(self.path, map_name))
-
-class MapsOperation:
-    beamng_map: MapFolderOperation
-    source_map: MapFolderOperation
-
-    def __init__(self):
-        self.beamng_levels = LevelsFolderOperation(os.path.join(os.environ['USERPROFILE'], r'Documents/BeamNG.research/levels'))
-        self.source_levels = LevelsFolderOperation(os.getcwd()+'/levels_template/')
-        self.source_map = self.source_levels.get_map('tig/main/MissionGroup/sky_and_sun/')
-        self.beamng_map = self.beamng_levels.get_map('tig/main/MissionGroup/sky_and_sun/')
-        self.never_logged_path = True
-    def install_map(self):
-        if self.never_logged_path:
-            self.never_logged_path = False
-
-        self.beamng_map.delete_all_map()
-        shutil.copytree(src=self.source_map.path, dst=self.beamng_map.path)
-
-
 
 
 global maps
