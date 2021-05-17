@@ -26,7 +26,6 @@ log = get_logger(__file__)
 
 class BeamNGProblem(Problem):
     def __init__(self, config: BeamNGConfig, archive: Archive):
-        print("BeamNGProblem........initial.........")
         self.config: BeamNGConfig = config
         self._evaluator: BeamNGEvaluator = None
         super().__init__(config, archive)
@@ -43,7 +42,6 @@ class BeamNGProblem(Problem):
         delete_folder_recursively(self.experiment_path)
 
     def deap_generate_individual(self):
-        print("BeamNGProblem........deap_generate_individual.........")
         seed = self._seed_pool_strategy.get_seed()
         road1 = seed.clone()
         road2 = seed.clone().mutate()
@@ -59,7 +57,6 @@ class BeamNGProblem(Problem):
         return individual.evaluate()
 
     def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
-        print("BeamNGProblem........on_iteration.........")
         # self.archive.process_population(pop)
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
@@ -82,10 +79,8 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
     def generate_random_member(self) -> Member:
-        print("BeamNGProblem........generate_random_member.........")
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
-        print("donedone")
         result.config = self.config
         result.problem = self
         result.mutation_type = self.config.MUTATION_TYPE
