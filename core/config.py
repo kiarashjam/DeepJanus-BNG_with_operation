@@ -64,7 +64,7 @@ class Config:
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_TYPE = Config.MUT_CONTROL_POINTS
+        self.MUTATION_TYPE = Config.MUT_FOG
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 

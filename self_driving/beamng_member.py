@@ -25,6 +25,7 @@ class BeamNGMember(Member):
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
                  road_bbox: RoadBoundingBox):
 
+        print("BeamNGMember........initial.........")
         super().__init__()
         BeamNGMember.counter += 1
         self.name = f'mbr{str(BeamNGMember.counter)}'
@@ -49,6 +50,7 @@ class BeamNGMember(Member):
 
 
     def clone(self):
+        print("BeamNGMember........clone.........")
 
         res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox)
         res.config = self.config
@@ -67,6 +69,7 @@ class BeamNGMember(Member):
         return res
 
     def to_dict(self) -> dict:
+        print("BeamNGMember........to_dict.........")
         return {
             'control_nodes': self.control_nodes,
             'sample_nodes': self.sample_nodes,
@@ -84,6 +87,7 @@ class BeamNGMember(Member):
 
     @classmethod
     def from_dict(cls, dict: Dict):
+        print("BeamNGMember........from_dict.........")
         road_bbox = RoadBoundingBox(dict['road_bbox_size'])
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
@@ -92,6 +96,7 @@ class BeamNGMember(Member):
         return res
 
     def evaluate(self):
+        print("BeamNGMember........evaluate.........")
         if self.needs_evaluation():
             self.problem._get_evaluator().evaluate([self])
             print('eval mbr', self)
@@ -105,6 +110,7 @@ class BeamNGMember(Member):
         self.distance_to_boundary = None
 
     def is_valid(self, amount):
+        print("BeamNGMember........is_valid.........")
         if self.mutation_type == 'MUT_FOG':
             return self.problem.config.FOG_DENSITY_threshold_min < amount < self.problem.config.FOG_DENSITY_threshold_max
         elif self.mutation_type == 'MUT_RAIN':
@@ -141,6 +147,7 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate(self) -> 'BeamNGMember':
+        print("BeamNGMember........mutate.........")
         self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
             FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount=self.problem.config.FOG_DENSITY_threshold_max).mutate()

@@ -14,6 +14,7 @@ log = get_logger(__file__)
 
 
 class BeamNGIndividual(Individual):
+    print("BeamNGIndividual.......initial........")
     counter = 0
 
     def __init__(self, m1: BeamNGMember, m2: BeamNGMember, config: Config, archive: Archive):
@@ -32,6 +33,7 @@ class BeamNGIndividual(Individual):
         self.seed: BeamNGMember
 
     def evaluate(self):
+        print("BeamNGIndividual.......evaluate........")
         self._assert_members_not_equals()
 
         import timeit
@@ -65,6 +67,7 @@ class BeamNGIndividual(Individual):
         return ff1, self.oob_ff
 
     def clone(self) -> 'BeamNGIndividual':
+        print("BeamNGIndividual.......clone........")
         res: BeamNGIndividual = creator.Individual(self.m1.clone(), self.m2.clone(), self.config, self.archive)
         res.seed = self.seed
         log.info(f'cloned to {res} from {self}')
@@ -88,6 +91,7 @@ class BeamNGIndividual(Individual):
         assert self.m1 != self.m2
 
     def to_dict(self):
+        print("BeamNGIndividual.......to_dict........")
         return {'name': self.name,
                 'members_distance': self.members_distance,
                 'm1': self.m1.to_dict(),
@@ -99,6 +103,7 @@ class BeamNGIndividual(Individual):
 
     @classmethod
     def from_dict(self, d):
+        print("BeamNGIndividual.......from_dict........")
         m1 = BeamNGMember.from_dict(d['m1'])
         m2 = BeamNGMember.from_dict(d['m2'])
         ind = BeamNGIndividual(m1, m2, None, None)
@@ -111,6 +116,7 @@ class BeamNGIndividual(Individual):
         return f'{self.name_ljust} dist={dist} m1[{self.m1}] m2[{self.m2}] seed[{self.seed}]'
 
     def mutate(self):
+        print("BeamNGIndividual.......mutate........")
         road_to_mutate = self.m1 if random.randrange(2) == 0 else self.m2
         condition = False
         while not condition:

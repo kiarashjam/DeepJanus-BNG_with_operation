@@ -37,6 +37,9 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
 
     def evaluate(self, members: List[BeamNGMember]):
         for member in members:
+            print(member.fog_density)
+        for member in members:
+
             if not member.needs_evaluation():
                 log.info(f'{member} is already evaluated. skipping')
                 continue

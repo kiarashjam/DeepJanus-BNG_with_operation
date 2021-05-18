@@ -7,6 +7,7 @@ from random import shuffle, choice
 from shutil import copy
 from core.seed_pool_impl import SeedPoolFolder, SeedPoolRandom
 from self_driving.edit_distance_polyline import iterative_levenshtein
+import random
 
 
 
@@ -56,6 +57,64 @@ def initial_pool_generator(config, problem):
     member.mutation_type = config.MUTATION_TYPE
     member.surrounding_type = config.SURROUNDING
     #member.clear_evaluation()
+    if config.MUTATION_TYPE == 'MUT_FOG':
+        member.fog_density = random.uniform(config.FOG_DENSITY_threshold_min, config.FOG_DENSITY_threshold_max)
+        member.wet_foam_density = 0
+        member.number_drop_rain = 0
+        member.wet_ripple_density = 0
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+    elif config.MUTATION_TYPE == 'MUT_RAIN':
+        member.fog_density = 0
+        member.wet_foam_density = 0
+        member.number_drop_rain = random.randint(config.NUMBER_OF_DROP_RAIN_threshold_min, config.NUMBER_OF_DROP_RAIN_threshold_max)
+        member.wet_ripple_density = 0
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+    elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
+        member.fog_density = 0
+        member.wet_foam_density = random.randint(config.FOG_DENSITY_threshold_min, config.FOG_DENSITY_threshold_max)
+        member.number_drop_rain = 0
+        member.wet_ripple_density = 0
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+    elif config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+        member.fog_density = 0
+        member.wet_foam_density = 0
+        member.number_drop_rain = 0
+        member.wet_ripple_density = random.randint(config.WET_RIPPLE_threshold_min, config.WET_RIPPLE_threshold_max)
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+    elif config.MUTATION_TYPE == 'MUT_ILLUMINATION':
+        member.fog_density = 0
+        member.wet_foam_density = 0
+        member.number_drop_rain = 0
+        member.wet_ripple_density = 0
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = random.uniform(config.ILLUMINATION_AMOUNT_threshold_min, config.ILLUMINATION_AMOUNT_threshold_max)
+    elif config.MUTATION_TYPE == 'MUT_OBSTACLE':
+        member.fog_density = 0
+        member.wet_foam_density = 0
+        member.number_drop_rain = 0
+        member.wet_ripple_density = 0
+        member.number_of_bump = 0
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+    elif config.MUTATION_TYPE == 'MUT_BUMP':
+        member.fog_density = 0
+        member.wet_foam_density = 0
+        member.number_drop_rain = 0
+        member.wet_ripple_density = 0
+        member.number_of_bump = random.randint(config.NUMBER_BUMP_threshold_min, config.NUMBER_BUMP_threshold_max)
+        member.position_of_obstacle = (0, 0, 0)
+        member.illumination = 0
+
+
 
 
     member.distance_to_boundary = None
