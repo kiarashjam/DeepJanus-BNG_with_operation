@@ -37,7 +37,21 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
 
     def evaluate(self, members: List[BeamNGMember]):
         for member in members:
-            print(member.fog_density)
+            if member.mutation_type == 'MUT_FOG':
+                print(member.fog_density)
+            elif member.mutation_type == 'MUT_RAIN':
+                print(member.number_drop_rain)
+            elif member.mutation_type == 'MUT_WET_FOAM':
+                print(member.wet_foam_density)
+            elif member.mutation_type == 'MUT_WET_RIPPLE':
+                print(member.wet_ripple_density)
+            elif member.mutation_type == 'MUT_ILLUMINATION':
+                print(member.illumination)
+            elif member.mutation_type == 'MUT_OBSTACLE':
+                print(member.position_of_obstacle)
+            elif member.mutation_type == 'MUT_BUMP':
+                print(member.number_of_bump)
+
         for member in members:
 
             if not member.needs_evaluation():
