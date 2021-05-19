@@ -23,7 +23,8 @@ class BeamNGMember(Member):
     counter = 0
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox):
+                 road_bbox: RoadBoundingBox, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
+                           number_of_bump, position_of_obstacle, illumination, mutation_type):
 
         print("BeamNGMember........initial.........")
         super().__init__()
@@ -37,14 +38,14 @@ class BeamNGMember(Member):
         self.config: BeamNGConfig = None
         self.problem: 'BeamNGProblem' = None
         self._evaluator: BeamNGEvaluator = None
-        self.fog_density = 0
-        self.wet_foam_density = 0
-        self.number_drop_rain = 0
-        self.wet_ripple_density = 0
-        self.number_of_bump = 0
-        self.position_of_obstacle = (0, 0, 0)
-        self.illumination = 0
-        self.mutation_type = None
+        self.fog_density = fog_density
+        self.number_drop_rain = number_drop_rain
+        self.wet_foam_density = wet_foam_density
+        self.wet_ripple_density = wet_ripple_density
+        self.number_of_bump = number_of_bump
+        self.position_of_obstacle = position_of_obstacle
+        self.illumination = illumination
+        self.mutation_type = mutation_type
         self.surrounding_type = None
         self.surrounding_amount = {"Trees_amount": 0, "Rocks_amount": 0, "Cabin_amount": 0, "House_amount": 0}
 
@@ -52,7 +53,9 @@ class BeamNGMember(Member):
     def clone(self):
         print("BeamNGMember........clone.........")
 
-        res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox)
+        res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox,
+                           self.fog_density,  self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                           self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type)
         res.config = self.config
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
@@ -77,10 +80,12 @@ class BeamNGMember(Member):
             'road_bbox_size': self.road_bbox.bbox.bounds,
             'distance_to_boundary': self.distance_to_boundary,
             'fog_density': self.fog_density,
-            'wet_foam_density': self.wet_foam_density,
             'number_drop_rain': self.number_drop_rain,
+            'wet_foam_density': self.wet_foam_density,
             'wet_ripple_density': self.wet_ripple_density,
             'number_of_bump': self.number_of_bump,
+            'position_of_obstacle': self.position_of_obstacle,
+            'illumination': self.illumination,
 
             'mutation_type': self.mutation_type
         }
@@ -91,7 +96,9 @@ class BeamNGMember(Member):
         road_bbox = RoadBoundingBox(dict['road_bbox_size'])
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
-                           dict['num_spline_nodes'], road_bbox)
+                           dict['num_spline_nodes'], road_bbox, dict['fog_density'], dict['number_drop_rain'],
+                           dict['wet_foam_density'], dict['wet_ripple_density'], dict['number_of_bump'],
+                           dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'])
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 

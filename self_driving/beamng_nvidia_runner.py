@@ -58,8 +58,8 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     time.sleep(5)
                 sim = self._run_simulation(member)
                 if sim.info.success:
-                    Config.EXECTIME = Config.EXECTIME + sim.states[-1].timer
-                    print("Execution time: ", Config.EXECTIME)
+                    # Config.EXECTIME = Config.EXECTIME + sim.states[-1].timer
+                    # print("Execution time: ", Config.EXECTIME)
                     break
 
             member.distance_to_boundary = sim.min_oob_distance()

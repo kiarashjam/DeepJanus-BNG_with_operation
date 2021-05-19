@@ -78,14 +78,16 @@ class BeamNGProblem(Problem):
             }
             gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
 
-        BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
+        # BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
-    def generate_random_member(self) -> Member:
+    def generate_random_member(self, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
+                               number_of_bump, position_of_obstacle, illumination) -> Member:
         print("BeamNGProblem........generate_random_member.........")
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
-                               seg_length=self.config.SEG_LENGTH).generate()
-        print("donedone")
+                               seg_length=self.config.SEG_LENGTH).generate( fog_density, number_drop_rain,
+                                    wet_foam_density, wet_ripple_density,
+                               number_of_bump, position_of_obstacle, illumination, self.config.MUTATION_TYPE)
         result.config = self.config
         result.problem = self
         result.mutation_type = self.config.MUTATION_TYPE

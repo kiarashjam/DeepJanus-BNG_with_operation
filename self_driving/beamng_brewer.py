@@ -47,8 +47,8 @@ class BeamNGBrewer:
 
     def setup_operation(self, member):
         self.fog_density = member.fog_density
-        self.wet_foam_density = member.wet_foam_density
         self.number_drop_rain = member.number_drop_rain
+        self.wet_foam_density = member.wet_foam_density
         self.wet_ripple_density = member.wet_ripple_density
         self.number_of_bump = member.number_of_bump
         self.number_of_obstacle = member.position_of_obstacle
@@ -60,7 +60,7 @@ class BeamNGBrewer:
 
     def setup_vehicle(self) -> Vehicle:
         assert self.vehicle is None
-        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='TIG', color='Red')
+        self.vehicle = Vehicle('ego_vehicle', model='etk800', licence='sara', color='white')
         return self.vehicle
 
     def setup_scenario_camera(self, resolution=(1280, 1280), fov=120) -> BeamNGCamera:

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fe021a63-a6a3-4a4d-a44b-4a98b6ec6057" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/DeepJanus-BNG_with_operation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DeepJanus-BNG_with_operation.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/nsga2.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/nsga2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-38/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-38/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-38/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-38/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-39/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-39/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-39/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517110437/beamng_nvidia_runner/sim_2021-05-17--11-04-39/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-19/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-19/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-19/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-19/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-20/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-20/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-20/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111218/beamng_nvidia_runner/sim_2021-05-17--11-12-20/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111445/beamng_nvidia_runner/sim_2021-05-17--11-14-47/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111445/beamng_nvidia_runner/sim_2021-05-17--11-14-47/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111445/beamng_nvidia_runner/sim_2021-05-17--11-14-47/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517111445/beamng_nvidia_runner/sim_2021-05-17--11-14-47/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517171415/beamng_nvidia_runner/sim_2021-05-17--17-14-16/road.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517171415/beamng_nvidia_runner/sim_2021-05-17--17-14-16/road.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517171415/beamng_nvidia_runner/sim_2021-05-17--17-14-16/simulation.full.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/simulations_20210517171415/beamng_nvidia_runner/sim_2021-05-17--17-14-16/simulation.partial.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_brewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_brewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_individual_set_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_individual_set_store.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_problem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/initial_population_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/initial_population_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/road_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/road_generator.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1shoRxsOKSkbD5IGAm3bIokllRa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fe021a63-a6a3-4a4d-a44b-4a98b6ec6057" name="Default Changelist" comment="" />
+      <created>1621334178087</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621334178087</updated>
+      <workItem from="1621334179636" duration="17474000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
