@@ -64,6 +64,10 @@ class Config:
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
+        self.MUTATION_FOG_DISCRETE = 0.1
+        self.MUTATION_FOG_EXTENT = 3
+
+
         self.MUTATION_TYPE = Config.MUT_WET_FOAM
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount

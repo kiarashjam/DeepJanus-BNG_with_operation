@@ -157,7 +157,9 @@ class BeamNGMember(Member):
         print("BeamNGMember........mutate.........")
         self.mutation_type = self.problem.config.MUTATION_TYPE
         if self.problem.config.MUTATION_TYPE == 'MUT_FOG':
-            FogMutator(self, min_amount = self.problem.config.FOG_DENSITY_threshold_min, max_amount=self.problem.config.FOG_DENSITY_threshold_max).mutate()
+            FogMutator(self, min_amount=-int(self.problem.config.MUTATION_FOG_EXTENT),
+                       max_amount=int(self.problem.config.MUTATION_FOG_EXTENT),
+                       discrete_value=self.problem.config.MUTATION_FOG_DISCRETE).mutate()
             self.distance_to_boundary = None
         elif self.problem.config.MUTATION_TYPE == 'MUT_RAIN':
             RainMutator(self, min_amount=self.problem.config.NUMBER_OF_DROP_RAIN_threshold_min, max_amount=self.problem.config.NUMBER_OF_DROP_RAIN_threshold_max).mutate()
@@ -259,25 +261,28 @@ class RoadMutator:
         assert self.road.control_nodes != backup_nodes
 
 class FogMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
         while True:
-            new_amount = random.choice(
-                [random.uniform(self.min_amount, self.operation.fog_density), random.uniform(self.operation.fog_density, self.max_amount)])
+            temp = random.randint(self.min_amount, self.max_amount)
+            distance_mutant_value = temp * self.discrete_value
+            new_amount = self.operation.fog_density + distance_mutant_value
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.fog_density:
                     self.operation.fog_density = new_amount
-                break
+                    break
 
 class RainMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
         while True:
@@ -286,13 +291,14 @@ class RainMutator:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.number_drop_rain:
                     self.operation.number_drop_rain = new_amount
-                break
+                    break
 
 class WetFoamMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self,):
         while True:
@@ -300,13 +306,14 @@ class WetFoamMutator:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.wet_foam_density:
                     self.operation.wet_foam_density = new_amount
-                break
+                    break
 
 class WetRippleMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
         while True:
@@ -314,13 +321,14 @@ class WetRippleMutator:
             if self.operation.is_valid(new_amount):
                 if new_amount != self.operation.wet_ripple_density:
                     self.operation.wet_ripple_density = new_amount
-                break
+                    break
 
 class ChangeIlluminationMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
         while True:
@@ -332,20 +340,22 @@ class ChangeIlluminationMutator:
                 break
 
 class AddObstacleMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
             new_amount = (self.operation.position_of_obstacle[0], self.operation.position_of_obstacle[1] + 1, self.operation.position_of_obstacle[2])
             self.operation.position_of_obstacle = new_amount
 
 class AddBumpMutator:
-    def __init__(self, operation, min_amount, max_amount):
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
         self.operation = operation
         self.min_amount = min_amount
         self.max_amount = max_amount
+        self.discrete_value = discrete_value
 
     def mutate(self):
         while True:
