@@ -2,6 +2,8 @@ class Config:
     GEN_RANDOM = 'GEN_RANDOM'
     GEN_RANDOM_SEEDED = 'GEN_RANDOM_SEEDED'
     GEN_SEQUENTIAL_SEEDED = 'GEN_SEQUENTIAL_SEEDED'
+    GEN_DIVERSITY = 'GEN_DIVERSITY'
+
 
     SEG_LENGTH = 25
     NUM_SPLINE_NODES =10
@@ -17,6 +19,18 @@ class Config:
     MUT_OBSTACLE = 'MUT_OBSTACLE'
     MUT_BUMP = 'MUT_BUMP'
 
+    ### surrounding operation
+
+    Sign = 'Sign'
+    Trees = 'Trees'
+    Terrain = 'Terrain'
+    Rocks = 'Rocks'
+    Cabin = 'Cabin'
+    House = 'House'
+    Surrounding_amount ={"Trees_amount": 2000, "Rocks_amount": 2000, "Cabin_amount": 1000, "House_amount": 1000}
+
+
+
     ##### threshold_min
     FOG_DENSITY_threshold_min = 0
     WET_FOAM_threshold_min = 0
@@ -29,7 +43,7 @@ class Config:
     ##### threshold_max
     FOG_DENSITY_threshold_max = 1
     WET_FOAM_threshold_max = 40
-    NUMBER_OF_DROP_RAIN_threshold_max = 30000
+    NUMBER_OF_DROP_RAIN_threshold_max = 3000000
     WET_RIPPLE_threshold_max = 100
     NUMBER_BUMP_threshold_max = 1000
     ADDING_OBSTACLE_max = 100
@@ -41,16 +55,41 @@ class Config:
     def __init__(self):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
-
-        self.POPSIZE = 12
-        self.NUM_GENERATIONS = 150
+        self.POOLSIZE = 40
+        self.POPSIZE = 4
+        self.NUM_GENERATIONS = 2
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_TYPE = Config.MUT_CONTROL_POINTS
+        self.MUTATION_FOG_DISCRETE = 0.04
+        self.MUTATION_FOG_EXTENT = 8
+
+        self.MUTATION_RAIN_DISCRETE = 10
+        self.MUTATION_RAIN_EXTENT = 5
+
+        self.MUTATION_FOAM_DISCRETE = 2
+        self.MUTATION_FOAM_EXTENT = 5
+
+        self.MUTATION_RIPPLE_DISCRETE = 10
+        self.MUTATION_RIPPLE_EXTENT = 5
+
+        self.MUTATION_OBSTACLE_DISCRETE = 0.1
+        self.MUTATION_OBSTACLE_EXTENT = 5
+        self.MUTATION_OBSTACLE_AXIS = 'y'
+
+        self.MUTATION_BUMP_DISCRETE = 10
+        self.MUTATION_BUMP_EXTENT = 5
+
+        self.MUTATION_ILLUMINATION_DISCRETE = 0.1
+        self.MUTATION_ILLUMINATION_EXTENT = 3
+
+
+        self.MUTATION_TYPE = Config.MUT_FOG
+        self.SURROUNDING = []
+        self.Surrounding_amount = Config.Surrounding_amount
 
         self.K_SD = 0.01
 
@@ -62,5 +101,12 @@ class Config:
 
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
-        self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
-        self.seed_folder = 'population_HQ1'
+        # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
+        self.generator_name = Config.GEN_DIVERSITY
+        # self.seed_folder = 'population_HQ1'
+
+        self.seed_folder = 'initial_pool'
+        self.initial_population_folder = "initial_population"
+
+        self.RUNTIME = 36000
+        self.INTERVAL = 3600

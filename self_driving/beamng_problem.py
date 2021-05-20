@@ -20,17 +20,22 @@ from self_driving.beamng_individual import BeamNGIndividual
 from self_driving.beamng_individual_set_store import BeamNGIndividualSetStore
 from self_driving.beamng_member import BeamNGMember
 from self_driving.road_generator import RoadGenerator
-
+from self_driving.initial_population_generator import initial_pool_generator, initial_population_generator
 log = get_logger(__file__)
 
 
 class BeamNGProblem(Problem):
     def __init__(self, config: BeamNGConfig, archive: Archive):
+        print("BeamNGProblem........initial.........")
         self.config: BeamNGConfig = config
         self._evaluator: BeamNGEvaluator = None
         super().__init__(config, archive)
         if self.config.generator_name == self.config.GEN_RANDOM:
             seed_pool = SeedPoolRandom(self, config.POPSIZE)
+        elif self.config.generator_name == self.config.GEN_DIVERSITY:
+            path = initial_pool_generator(self.config, self)
+            initial_population_generator(path, self.config, self)
+            seed_pool = SeedPoolFolder(self, config.initial_population_folder)
         else:
             seed_pool = SeedPoolFolder(self, config.seed_folder)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
@@ -38,6 +43,7 @@ class BeamNGProblem(Problem):
         delete_folder_recursively(self.experiment_path)
 
     def deap_generate_individual(self):
+        print("BeamNGProblem........deap_generate_individual.........")
         seed = self._seed_pool_strategy.get_seed()
         road1 = seed.clone()
         road2 = seed.clone().mutate()
@@ -53,6 +59,7 @@ class BeamNGProblem(Problem):
         return individual.evaluate()
 
     def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
+        print("BeamNGProblem........on_iteration.........")
         # self.archive.process_population(pop)
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
@@ -71,14 +78,20 @@ class BeamNGProblem(Problem):
             }
             gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
 
-        BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
+        # BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
-    def generate_random_member(self) -> Member:
+    def generate_random_member(self, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
+                               number_of_bump, position_of_obstacle, illumination) -> Member:
+        print("BeamNGProblem........generate_random_member.........")
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
-                               seg_length=self.config.SEG_LENGTH).generate()
+                               seg_length=self.config.SEG_LENGTH).generate(fog_density, number_drop_rain,
+                                    wet_foam_density, wet_ripple_density,
+                               number_of_bump, position_of_obstacle, illumination, self.config.MUTATION_TYPE)
         result.config = self.config
         result.problem = self
+        result.mutation_type = self.config.MUTATION_TYPE
+        result.surrounding_type = self.config.SURROUNDING
         return result
 
     def deap_individual_class(self):
@@ -105,6 +118,7 @@ class BeamNGProblem(Problem):
                     pop[i] = ind1
 
     def _get_evaluator(self):
+        print("BeamNGProblem........_get_evaluator.........")
         if self._evaluator:
             return self._evaluator
         ev_name = self.config.beamng_evaluator
@@ -123,6 +137,7 @@ class BeamNGProblem(Problem):
         return self._evaluator
 
     def pre_evaluate_members(self, individuals: List[BeamNGIndividual]):
+        print("BeamNGProblem........pre_evaluate_members.........")
         # return
         # the following code does not work as wanted or expected!
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
