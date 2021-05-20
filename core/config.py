@@ -65,10 +65,29 @@ class Config:
         self.ARCHIVE_THRESHOLD = 35.0
 
         self.MUTATION_FOG_DISCRETE = 0.1
-        self.MUTATION_FOG_EXTENT = 3
+        self.MUTATION_FOG_EXTENT = 4
+
+        self.MUTATION_RAIN_DISCRETE = 10
+        self.MUTATION_RAIN_EXTENT = 5
+
+        self.MUTATION_FOAM_DISCRETE = 2
+        self.MUTATION_FOAM_EXTENT = 5
+
+        self.MUTATION_RIPPLE_DISCRETE = 10
+        self.MUTATION_RIPPLE_EXTENT = 5
+
+        self.MUTATION_OBSTACLE_DISCRETE = 0.1
+        self.MUTATION_OBSTACLE_EXTENT = 5
+        self.MUTATION_OBSTACLE_AXIS = 'y'
+
+        self.MUTATION_BUMP_DISCRETE = 10
+        self.MUTATION_BUMP_EXTENT = 5
+
+        self.MUTATION_ILLUMINATION_DISCRETE = 0.1
+        self.MUTATION_ILLUMINATION_EXTENT = 3
 
 
-        self.MUTATION_TYPE = Config.MUT_WET_FOAM
+        self.MUTATION_TYPE = Config.MUT_FOG
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
