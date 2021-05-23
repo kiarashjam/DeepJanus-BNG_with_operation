@@ -42,9 +42,9 @@ class Config:
 
     ##### threshold_max
     FOG_DENSITY_threshold_max = 1
-    WET_FOAM_threshold_max = 40
+    WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
-    WET_RIPPLE_threshold_max = 100
+    WET_RIPPLE_threshold_max = 700
     NUMBER_BUMP_threshold_max = 1000
     ADDING_OBSTACLE_max = 100
     ILLUMINATION_AMOUNT_threshold_max = 1
@@ -87,7 +87,7 @@ class Config:
         self.MUTATION_ILLUMINATION_EXTENT = 3
 
 
-        self.MUTATION_TYPE = Config.MUT_FOG
+        self.MUTATION_TYPE = Config.MUT_OBSTACLE
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
@@ -102,7 +102,7 @@ class Config:
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
-        self.generator_name = Config.GEN_DIVERSITY
+        self.generator_name = Config.GEN_RANDOM
         # self.seed_folder = 'population_HQ1'
 
         self.seed_folder = 'initial_pool'

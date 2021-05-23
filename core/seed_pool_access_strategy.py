@@ -11,9 +11,11 @@ class SeedPoolAccessStrategy:
         self.counter = -1
 
     def get_member_randomly(self) -> Member:
+        print("SeedPoolAccessStrategy........get_member_randomly.........")
         return random.choice(self.pool)
 
     def get_member_circular(self) -> Member:
+        print("SeedPoolAccessStrategy........get_member_circular.........")
         self.counter += 1
         self.counter = self.counter % len(self.pool)
         return self.pool[self.counter]

@@ -1,5 +1,6 @@
 import itertools
 import json
+import math
 import random
 from typing import List
 
@@ -81,17 +82,84 @@ class BeamNGProblem(Problem):
         # BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
-    def generate_random_member(self, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
-                               number_of_bump, position_of_obstacle, illumination) -> Member:
+    def generate_random_member(self) -> Member:
         print("BeamNGProblem........generate_random_member.........")
+
+
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
-                               seg_length=self.config.SEG_LENGTH).generate(fog_density, number_drop_rain,
-                                    wet_foam_density, wet_ripple_density,
-                               number_of_bump, position_of_obstacle, illumination, self.config.MUTATION_TYPE)
+                               seg_length=self.config.SEG_LENGTH).generate()
         result.config = self.config
-        result.problem = self
         result.mutation_type = self.config.MUTATION_TYPE
         result.surrounding_type = self.config.SURROUNDING
+
+
+        if self.config.MUTATION_TYPE == 'MUT_FOG':
+            result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_min,
+                                                self.config.FOG_DENSITY_threshold_max)
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_RAIN':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
+                                          self.config.NUMBER_OF_DROP_RAIN_threshold_max)
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
+            result.fog_density = 0
+            result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
+                                                     self.config.WET_FOAM_threshold_max)
+            result.number_drop_rain = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
+                                                       self.config.WET_RIPPLE_threshold_max)
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = random.uniform(self.config.ILLUMINATION_AMOUNT_threshold_min,
+                                      self.config.ILLUMINATION_AMOUNT_threshold_max)
+        elif self.config.MUTATION_TYPE == 'MUT_OBSTACLE':
+            while True:
+                new_amount = (
+                    random.randint(-1000, 1000), random.randint(-1000, 1000), -28)
+                if self.positin_valid(result, new_amount):
+                    result.position_of_obstacle = new_amount
+                    break
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_BUMP':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = random.randint(self.config.NUMBER_BUMP_threshold_min,
+                                                   self.config.NUMBER_BUMP_threshold_max)
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
         return result
 
     def deap_individual_class(self):
@@ -99,6 +167,12 @@ class BeamNGProblem(Problem):
 
     def member_class(self):
         return BeamNGMember
+    def positin_valid(self, result, amount):
+        for node in result.control_nodes:
+            distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))
+            if distance < 5:
+                return True
+        return False
 
     def reseed(self, pop, offspring):
         if len(self.archive) > 0:

@@ -13,6 +13,7 @@ log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
+    print("######################b1#######")
     config = problem.config
     random.seed(seed)
 
@@ -77,6 +78,8 @@ def main(problem: Problem = None, seed=None):
             #    ind.fitness.values = fit
 
             # Vary the population
+        print(pop)
+        print(len(pop))
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [ind.clone() for ind in offspring]
 

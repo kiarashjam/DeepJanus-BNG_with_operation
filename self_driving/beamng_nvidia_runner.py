@@ -38,19 +38,19 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
     def evaluate(self, members: List[BeamNGMember]):
         for member in members:
             if member.mutation_type == 'MUT_FOG':
-                print(member.fog_density)
+                print("fog density is  =  "+str(member.fog_density))
             elif member.mutation_type == 'MUT_RAIN':
-                print(member.number_drop_rain)
+                print("number of drops of rain is  =  "+str(member.number_drop_rain))
             elif member.mutation_type == 'MUT_WET_FOAM':
-                print(member.wet_foam_density)
+                print("foam density in water is  =  "+str(member.wet_foam_density))
             elif member.mutation_type == 'MUT_WET_RIPPLE':
-                print(member.wet_ripple_density)
+                print("ripple density in water  is  =  "+str(member.wet_ripple_density))
             elif member.mutation_type == 'MUT_ILLUMINATION':
-                print(member.illumination)
+                print("illumination amount  is  =  "+str(member.illumination))
             elif member.mutation_type == 'MUT_OBSTACLE':
-                print(member.position_of_obstacle)
+                print("position of obstacle  is  =  "+str(member.position_of_obstacle))
             elif member.mutation_type == 'MUT_BUMP':
-                print(member.number_of_bump)
+                print("height of bump  is  =  "+str(member.number_of_bump))
 
         for member in members:
 

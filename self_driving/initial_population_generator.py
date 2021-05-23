@@ -46,18 +46,10 @@ def initial_pool_generator(config, problem):
     #     good_members_found += 1
     #     continue
     attempts += 1
-    fog_density = random.uniform(config.FOG_DENSITY_threshold_min, 0.5)
-    wet_foam_density =  random.randint(config.WET_FOAM_threshold_min, config.WET_FOAM_threshold_max)
-    number_drop_rain = random.randint(config.NUMBER_OF_DROP_RAIN_threshold_min, config.NUMBER_OF_DROP_RAIN_threshold_max)
-    wet_ripple_density = random.randint(config.WET_RIPPLE_threshold_min, config.WET_RIPPLE_threshold_max)
-    number_of_bump = random.randint(config.NUMBER_BUMP_threshold_min, config.NUMBER_BUMP_threshold_max)
-    position_of_obstacle = (0, 0, 0)
-    illumination = random.uniform(config.ILLUMINATION_AMOUNT_threshold_min, config.ILLUMINATION_AMOUNT_threshold_max)
     print(f'attempts {attempts} good {good_members_found} looking for {path}')
-    member = problem.generate_random_member(fog_density,  wet_foam_density, number_drop_rain,
-                                            wet_ripple_density, number_of_bump,
-                                            position_of_obstacle, illumination)
-    member.evaluate()
+
+    member = problem.generate_random_member()
+    # member.evaluate()
     # if member.distance_to_boundary <= 0:
     #     continue
     member = problem.member_class().from_dict(member.to_dict())
@@ -66,62 +58,7 @@ def initial_pool_generator(config, problem):
     member.mutation_type = config.MUTATION_TYPE
     member.surrounding_type = config.SURROUNDING
     #member.clear_evaluation()
-    if config.MUTATION_TYPE == 'MUT_FOG':
-        member.fog_density = fog_density
-        member.wet_foam_density = 0
-        member.number_drop_rain = 0
-        member.wet_ripple_density = 0
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
-    elif config.MUTATION_TYPE == 'MUT_RAIN':
-        member.fog_density = 0
-        member.wet_foam_density = 0
-        member.number_drop_rain = number_drop_rain
-        member.wet_ripple_density = 0
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
-    elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
-        member.fog_density = 0
-        member.wet_foam_density =wet_foam_density
-        member.number_drop_rain = 0
-        member.wet_ripple_density = 0
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
-    elif config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
-        member.fog_density = 0
-        member.wet_foam_density = 0
-        member.number_drop_rain = 0
-        member.wet_ripple_density = wet_ripple_density
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
-    elif config.MUTATION_TYPE == 'MUT_ILLUMINATION':
-        member.fog_density = 0
-        member.wet_foam_density = 0
-        member.number_drop_rain = 0
-        member.wet_ripple_density = 0
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = illumination
-    elif config.MUTATION_TYPE == 'MUT_OBSTACLE':
-        member.fog_density = 0
-        member.wet_foam_density = 0
-        member.number_drop_rain = 0
-        member.wet_ripple_density = 0
-        member.number_of_bump = 0
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
-    elif config.MUTATION_TYPE == 'MUT_BUMP':
-        member.fog_density = 0
-        member.wet_foam_density = 0
-        member.number_drop_rain = 0
-        member.wet_ripple_density = 0
-        member.number_of_bump = random.randint(config.NUMBER_BUMP_threshold_min, config.NUMBER_BUMP_threshold_max)
-        member.position_of_obstacle = (0, 0, 0)
-        member.illumination = 0
+
 
 
 
