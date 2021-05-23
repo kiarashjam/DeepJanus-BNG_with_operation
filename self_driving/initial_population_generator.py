@@ -12,14 +12,12 @@ import random
 
 
 def get_spine(member):
-    print("InitialPopulationGenerator........get_spine.........")
     print("member: ", member)
     with open(member) as json_file:
         spine = json.load(json_file)
         return spine['sample_nodes']
 
 def get_min_distance_from_set(ind, solution):
-    print("InitialPopulationGenerator........get_min_distance_from_set.........")
     distances = list()
     # print("ind:", ind)
     # print("solution:", solution)
@@ -34,7 +32,6 @@ def get_min_distance_from_set(ind, solution):
 
 
 def initial_pool_generator(config, problem):
-    print("InitialPopulationGenerator........initial_pool_generator.........")
     good_members_found = 0
     attempts = 0
     storage = SeedStorage('initial_pool')
@@ -70,7 +67,6 @@ def initial_pool_generator(config, problem):
     return storage.folder
 
 def initial_population_generator(path, config, problem):
-    print("InitialPopulationGenerator........initial_population_generator.........")
     all_roads = [filename for filename in glob.glob(str(path)+"\*.json", recursive=True)]
     #all_roads += [filename for filename in glob.glob(path2)]
 

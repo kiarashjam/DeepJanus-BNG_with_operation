@@ -8,7 +8,6 @@ from core.seed_pool import SeedPool
 
 
 class SeedPoolFolder(SeedPool):
-    print("seed_pool_impl#############SeedPoolFolder#############")
     def __init__(self, problem: Problem, folder_name):
         super().__init__(problem)
         self.storage = SeedStorage(folder_name)
@@ -30,7 +29,6 @@ class SeedPoolFolder(SeedPool):
 
 
 class SeedPoolRandom(SeedPool):
-    print("seed_pool_impl#############SeedPoolRandom#############")
     def __init__(self, problem, n):
         super().__init__(problem)
         self.n = n
@@ -44,7 +42,6 @@ class SeedPoolRandom(SeedPool):
 
 
 class SeedPoolMnist(SeedPool):
-    print("seed_pool_impl#############SeedPoolMnist#############")
     def __init__(self, problem: Problem, filename):
         super().__init__(problem)
         content = folders.member_seeds.joinpath(filename).read_text()

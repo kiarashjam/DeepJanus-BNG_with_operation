@@ -112,7 +112,6 @@ class RoadGenerator:
         return nodes
 
     def generate(self, visualise=False) -> BeamNGMember:
-        print("RoadGenerator###########generate###########")
         self.mutation_type ="MUT_CONTROL_POINTS"
         control_nodes = self.generate_control_nodes(visualise)
         sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)

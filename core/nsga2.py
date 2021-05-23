@@ -13,7 +13,6 @@ log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
-    print("######################b1#######")
     config = problem.config
     random.seed(seed)
 
