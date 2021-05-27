@@ -6,6 +6,7 @@ from typing import List
 
 from deap import creator
 
+
 from core.archive import Archive
 from core.folders import folders
 from core.log_setup import get_logger
@@ -77,7 +78,9 @@ class BeamNGProblem(Problem):
             gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
 
         # BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
-        BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
+        return BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
+
+
 
     def generate_random_member(self) -> Member:
 

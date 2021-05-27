@@ -65,7 +65,7 @@ def main(problem: Problem = None, seed=None):
     print(logbook.stream)
 
     # Initialize the archive.
-    problem.on_iteration(0, pop, logbook)
+    path_ind = problem.on_iteration(0, pop, logbook)
 
     # Begin the generational process
     for gen in range(1, config.NUM_GENERATIONS):
@@ -105,10 +105,10 @@ def main(problem: Problem = None, seed=None):
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
         print(logbook.stream)
-        problem.on_iteration(gen, pop, logbook)
+        path_ind = problem.on_iteration(gen, pop, logbook)
 
-    return pop, logbook
+    return pop, logbook, path_ind
 
 
 if __name__ == "__main__":
-    final_population, search_stats = main()
+    final_population, search_stats , path_ind = main()

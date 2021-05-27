@@ -159,35 +159,35 @@ class BeamNGMember(Member):
     def mutate(self) -> 'BeamNGMember':
         self.mutation_type = self.config.MUTATION_TYPE
         if self.config.MUTATION_TYPE == 'MUT_FOG':
-            FogMutator(self, min_amount=-int(self.config.MUTATION_FOG_EXTENT),
-                       max_amount=int(self.config.MUTATION_FOG_EXTENT),
-                       discrete_value=self.config.MUTATION_FOG_DISCRETE).mutate()
+            FogMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                       max_amount=int(self.config.MUTATION_EXTENT),
+                       discrete_value=self.config.MUTATION_FOG_PRECISE).mutate()
             self.distance_to_boundary = None
         elif self.config.MUTATION_TYPE == 'MUT_RAIN':
-            RainMutator(self, min_amount=-int(self.config.MUTATION_RAIN_EXTENT),
-                       max_amount=int(self.config.MUTATION_RAIN_EXTENT),
-                       discrete_value=self.config.MUTATION_RAIN_DISCRETE).mutate()
+            RainMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                        max_amount=int(self.config.MUTATION_EXTENT),
+                        discrete_value=self.config.MUTATION_RAIN_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
-            WetFoamMutator(self, min_amount=-int(self.config.MUTATION_FOAM_EXTENT),
-                       max_amount=int(self.config.MUTATION_FOAM_EXTENT),
-                       discrete_value=self.config.MUTATION_FOAM_DISCRETE).mutate()
+            WetFoamMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                           max_amount=int(self.config.MUTATION_EXTENT),
+                           discrete_value=self.config.MUTATION_FOAM_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
-            WetRippleMutator(self, min_amount=-int(self.config.MUTATION_RIPPLE_EXTENT),
-                       max_amount=int(self.config.MUTATION_RIPPLE_EXTENT),
-                       discrete_value=self.config.MUTATION_RIPPLE_DISCRETE).mutate()
+            WetRippleMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                             max_amount=int(self.config.MUTATION_EXTENT),
+                             discrete_value=self.config.MUTATION_RIPPLE_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
-            ChangeIlluminationMutator(self, min_amount=-int(self.config.MUTATION_ILLUMINATION_EXTENT),
-                       max_amount=int(self.config.MUTATION_ILLUMINATION_EXTENT),
-                       discrete_value=self.config.MUTATION_ILLUMINATION_DISCRETE).mutate()
+            ChangeIlluminationMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                                      max_amount=int(self.config.MUTATION_EXTENT),
+                                      discrete_value=self.config.MUTATION_ILLUMINATION_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_OBSTACLE':
-            AddObstacleMutator(self, min_amount=-int(self.config.MUTATION_OBSTACLE_EXTENT),
-                       max_amount=int(self.config.MUTATION_OBSTACLE_EXTENT),
-                       discrete_value=self.config.MUTATION_OBSTACLE_DISCRETE,
-                       axis=self.config.MUTATION_OBSTACLE_AXIS).mutate()
+            AddObstacleMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                               max_amount=int(self.config.MUTATION_EXTENT),
+                               discrete_value=self.config.MUTATION_OBSTACLE_PRECISE,
+                               axis=self.config.MUTATION_OBSTACLE_AXIS).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_BUMP':
-            AddBumpMutator(self, min_amount=-int(self.config.MUTATION_BUMP_EXTENT),
-                       max_amount=int(self.config.MUTATION_BUMP_EXTENT),
-                       discrete_value=self.config.MUTATION_BUMP_DISCRETE).mutate()
+            AddBumpMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                           max_amount=int(self.config.MUTATION_EXTENT),
+                           discrete_value=self.config.MUTATION_BUMP_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
             RoadMutator(self, lower_bound=-int(self.config.MUTATION_EXTENT),
                         upper_bound=int(self.config.MUTATION_EXTENT)).mutate()

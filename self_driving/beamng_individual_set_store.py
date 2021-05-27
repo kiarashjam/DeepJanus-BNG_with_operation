@@ -17,6 +17,7 @@ from self_driving.beamng_individual import BeamNGIndividual
 from self_driving.beamng_member import BeamNGMember
 from self_driving.beamng_road_imagery import BeamNGRoadImagery
 from self_driving.road_points import RoadPoints
+from frontier_finder import InitialValue
 
 
 class BeamNGIndividualSetStore:
@@ -25,7 +26,7 @@ class BeamNGIndividualSetStore:
 
     def save(self, individuals: IndividualSet):
         for ind in individuals:
-            _BeamNGIndividualCompositeMembersStore(self.folder).save(ind)
+            return _BeamNGIndividualCompositeMembersStore(self.folder).save(ind)
             # _BeamNGIndividualSimpleStore(self.folder).save(ind)
 
 
@@ -47,6 +48,7 @@ class _BeamNGIndividualCompositeMembersStore:
 
         self.folder.mkdir(parents=True, exist_ok=True)
         ind_path = self.folder.joinpath(prefix + '.json')
+        InitialValue.path = ind_path
         ind_path.write_text(json.dumps(ind.to_dict()))
 
         fig, (left, right) = plt.subplots(ncols=2)
@@ -63,6 +65,7 @@ class _BeamNGIndividualCompositeMembersStore:
         fig.suptitle(f'members distance = {ind.members_distance} ; oob_ff = {ind.oob_ff}')
         fig.savefig(self.folder.joinpath(prefix + '_both_roads.svg'))
         plt.close(fig)
+        return ind_path
 
     def load(self, prefix: str) -> BeamNGIndividual:
         ind_path = self.folder.joinpath(prefix + '.json')

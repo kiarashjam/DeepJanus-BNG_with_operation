@@ -1,3 +1,4 @@
+from frontier_finder import InitialValue
 class Config:
     GEN_RANDOM = 'GEN_RANDOM'
     GEN_RANDOM_SEEDED = 'GEN_RANDOM_SEEDED'
@@ -32,7 +33,7 @@ class Config:
 
 
     ##### threshold_min
-    FOG_DENSITY_threshold_min = 0
+    FOG_DENSITY_threshold_min = InitialValue.fog_min
     WET_FOAM_threshold_min = 0
     NUMBER_OF_DROP_RAIN_threshold_min = 0
     WET_RIPPLE_threshold_min = 0
@@ -41,7 +42,7 @@ class Config:
     ILLUMINATION_AMOUNT_threshold_min = 0
 
     ##### threshold_max
-    FOG_DENSITY_threshold_max = 1
+    FOG_DENSITY_threshold_max = InitialValue.fog_max
     WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
     WET_RIPPLE_threshold_max = 700
@@ -57,37 +58,24 @@ class Config:
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
         self.POPSIZE = 4
-        self.NUM_GENERATIONS = 2
+        self.NUM_GENERATIONS = 1
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_FOG_DISCRETE = 0.04
-        self.MUTATION_FOG_EXTENT = 8
-
-        self.MUTATION_RAIN_DISCRETE = 10
-        self.MUTATION_RAIN_EXTENT = 5
-
-        self.MUTATION_FOAM_DISCRETE = 2
-        self.MUTATION_FOAM_EXTENT = 5
-
-        self.MUTATION_RIPPLE_DISCRETE = 10
-        self.MUTATION_RIPPLE_EXTENT = 5
-
-        self.MUTATION_OBSTACLE_DISCRETE = 0.1
-        self.MUTATION_OBSTACLE_EXTENT = 5
+        self.MUTATION_FOG_PRECISE = InitialValue.precise_fog
+        self.MUTATION_RAIN_PRECISE = 10
+        self.MUTATION_FOAM_PRECISE = 2
+        self.MUTATION_RIPPLE_PRECISE = 10
+        self.MUTATION_OBSTACLE_PRECISE = 0.1
         self.MUTATION_OBSTACLE_AXIS = 'y'
-
-        self.MUTATION_BUMP_DISCRETE = 10
-        self.MUTATION_BUMP_EXTENT = 5
-
-        self.MUTATION_ILLUMINATION_DISCRETE = 0.1
-        self.MUTATION_ILLUMINATION_EXTENT = 3
+        self.MUTATION_BUMP_PRECISE = 10
+        self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
-        self.MUTATION_TYPE = Config.MUT_OBSTACLE
+        self.MUTATION_TYPE = Config.MUT_FOG
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
