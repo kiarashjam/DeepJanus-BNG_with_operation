@@ -10,18 +10,22 @@ from time import sleep
 
 from self_driving.beamng_problem import BeamNGProblem
 
-# class InitialValue:
-#     fog_max = 1
-#     fog_min = 0
-#     precise_fog = 0.2
-#     path = ""
-def start(self):
+class InitialValue:
+    fog_max = 1
+    fog_min = 0
+    precise_fog = 0.2
+    path = ""
+
+def start():
     config = BeamNGConfig()
     problem = BeamNGProblem(config, SmartArchive(config.ARCHIVE_THRESHOLD))
+    new_start(problem)
+
+def new_start(problem):
     i = 0
     while i < 6:
         fog_densities_boundary = []
-
+        self = InitialValue
         p, q, path_ind = nsga2.main(problem)
         if path_ind:
             f = open(path_ind)

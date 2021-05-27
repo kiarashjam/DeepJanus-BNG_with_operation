@@ -34,10 +34,12 @@ class BeamNGProblem(Problem):
         if self.config.generator_name == self.config.GEN_RANDOM:
             seed_pool = SeedPoolRandom(self, config.POPSIZE)
         elif self.config.generator_name == self.config.GEN_DIVERSITY:
+            print("first ####################")
             path = initial_pool_generator(self.config, self)
             initial_population_generator(path, self.config, self)
             seed_pool = SeedPoolFolder(self, config.initial_population_folder)
         else:
+            print("second ################### ")
             seed_pool = SeedPoolFolder(self, config.seed_folder)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
         self.experiment_path = folders.experiments.joinpath(self.config.experiment_name)

@@ -53,7 +53,7 @@ class Config:
 
 
 
-    def __init__(self):
+    def __init__(self,):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40

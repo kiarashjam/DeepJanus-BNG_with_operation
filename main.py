@@ -6,6 +6,4 @@ def start():
 
 
 if __name__ == '__main__':
-    starter = main_beamng.InitialValue
-    main_beamng.InitialValue.start(starter
-                                   )
+    main_beamng.start()

@@ -12,7 +12,7 @@ from core.config import Config
 log = get_logger(__file__)
 
 
-def main(problem: Problem = None, seed=None):
+def main(problem: Problem = None, seed=None,):
     config = problem.config
     random.seed(seed)
 
