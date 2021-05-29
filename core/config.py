@@ -32,7 +32,7 @@ class Config:
 
 
     ##### threshold_min
-    FOG_DENSITY_threshold_min = 0
+    FOG_DENSITY_threshold_min = 0.1
     WET_FOAM_threshold_min = 0
     NUMBER_OF_DROP_RAIN_threshold_min = 0
     WET_RIPPLE_threshold_min = 0
@@ -41,10 +41,10 @@ class Config:
     ILLUMINATION_AMOUNT_threshold_min = 0
 
     ##### threshold_max
-    FOG_DENSITY_threshold_max = 1
-    WET_FOAM_threshold_max = 40
+    FOG_DENSITY_threshold_max = 0.5
+    WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
-    WET_RIPPLE_threshold_max = 100
+    WET_RIPPLE_threshold_max = 700
     NUMBER_BUMP_threshold_max = 1000
     ADDING_OBSTACLE_max = 100
     ILLUMINATION_AMOUNT_threshold_max = 1
@@ -52,11 +52,11 @@ class Config:
 
 
 
-    def __init__(self):
+    def __init__(self,):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
-        self.POPSIZE = 4
+        self.POPSIZE = 8
         self.NUM_GENERATIONS = 2
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
@@ -64,27 +64,14 @@ class Config:
         self.MUTATION_EXTENT = 6.0
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_FOG_DISCRETE = 0.1
-        self.MUTATION_FOG_EXTENT = 4
-
-        self.MUTATION_RAIN_DISCRETE = 10
-        self.MUTATION_RAIN_EXTENT = 5
-
-        self.MUTATION_FOAM_DISCRETE = 2
-        self.MUTATION_FOAM_EXTENT = 5
-
-        self.MUTATION_RIPPLE_DISCRETE = 10
-        self.MUTATION_RIPPLE_EXTENT = 5
-
-        self.MUTATION_OBSTACLE_DISCRETE = 0.1
-        self.MUTATION_OBSTACLE_EXTENT = 5
+        self.MUTATION_FOG_PRECISE = 0.05
+        self.MUTATION_RAIN_PRECISE = 10
+        self.MUTATION_FOAM_PRECISE = 2
+        self.MUTATION_RIPPLE_PRECISE = 10
+        self.MUTATION_OBSTACLE_PRECISE = 0.1
         self.MUTATION_OBSTACLE_AXIS = 'y'
-
-        self.MUTATION_BUMP_DISCRETE = 10
-        self.MUTATION_BUMP_EXTENT = 5
-
-        self.MUTATION_ILLUMINATION_DISCRETE = 0.1
-        self.MUTATION_ILLUMINATION_EXTENT = 3
+        self.MUTATION_BUMP_PRECISE = 10
+        self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
         self.MUTATION_TYPE = Config.MUT_FOG
@@ -102,7 +89,7 @@ class Config:
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
-        self.generator_name = Config.GEN_DIVERSITY
+        self.generator_name = Config.GEN_RANDOM
         # self.seed_folder = 'population_HQ1'
 
         self.seed_folder = 'initial_pool'

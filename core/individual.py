@@ -42,8 +42,8 @@ class Individual:
 
         result = self.members_by_distance_to_boundary()
 
-        assert result[0].distance_to_boundary < 0, str(result[0].distance_to_boundary) + ' ' + str(self)
-        assert result[1].distance_to_boundary >= 0, str(result[1].distance_to_boundary) + ' ' + str(self)
+        # assert result[0].distance_to_boundary < 0, str(result[0].distance_to_boundary) + ' ' + str(self)
+        # assert result[1].distance_to_boundary >= 0, str(result[1].distance_to_boundary) + ' ' + str(self)
         return result
 
     def members_by_distance_to_boundary(self):

@@ -4,14 +4,14 @@ from typing import Tuple, List
 
 import numpy as np
 
-from self_driving.beamng_brewer import BeamNGBrewer
+from data.experiments_20210519085252.self_driving.beamng_brewer import BeamNGBrewer
 from udacity_integration.beamng_car_cameras import BeamNGCarCameras
-from self_driving.road_generator import RoadGenerator
-from self_driving.beamng_tig_maps import maps
-from self_driving.beamng_waypoint import BeamNGWaypoint
-from self_driving.decal_road import DecalRoad
+from data.experiments_20210519085252.self_driving.road_generator import RoadGenerator
+from data.experiments_20210519085252.self_driving.beamng_tig_maps import maps
+from data.experiments_20210519085252.self_driving.beamng_waypoint import BeamNGWaypoint
+from data.experiments_20210519085252.self_driving.decal_road import DecalRoad
 from udacity_integration.training_data_collector_and_writer import TrainingDataCollectorAndWriter
-from self_driving.utils import get_node_coords
+from data.experiments_20210519085252.self_driving.utils import get_node_coords
 
 maps.install_map_if_needed()
 STEPS = 5
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     road = RoadGenerator(num_control_nodes=NODES, max_angle=MAX_ANGLE, seg_length=SEG_LENGTH,
                          num_spline_nodes=NUM_SPLINE_NODES).generate(visualise=False)
 
-    from self_driving.beamng_road_visualizer import plot_road
+    from data.experiments_20210519085252.self_driving.beamng_road_visualizer import plot_road
 
     plot_road(road, save=True)
 

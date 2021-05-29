@@ -13,6 +13,7 @@ log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
+    all_files = []
     config = problem.config
     random.seed(seed)
 
@@ -65,7 +66,9 @@ def main(problem: Problem = None, seed=None):
     print(logbook.stream)
 
     # Initialize the archive.
-    problem.on_iteration(0, pop, logbook)
+    path_ind = problem.on_iteration(0, pop, logbook)
+    print(path_ind)
+    all_files.append(path_ind)
 
     # Begin the generational process
     for gen in range(1, config.NUM_GENERATIONS):
@@ -103,10 +106,12 @@ def main(problem: Problem = None, seed=None):
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
         print(logbook.stream)
-        problem.on_iteration(gen, pop, logbook)
+        path_ind = problem.on_iteration(gen, pop, logbook)
+        print(path_ind)
+        all_files.append(path_ind)
 
-    return pop, logbook
+    return pop, logbook, all_files
 
 
 if __name__ == "__main__":
-    final_population, search_stats = main()
+    final_population, search_stats , path_ind = main()
