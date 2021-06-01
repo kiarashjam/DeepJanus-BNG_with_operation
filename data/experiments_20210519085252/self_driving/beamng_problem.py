@@ -60,6 +60,7 @@ class BeamNGProblem(Problem):
 
     def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
         self.archive.process_population(pop)
+        print("###################")
         print(pop)
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
@@ -69,16 +70,17 @@ class BeamNGProblem(Problem):
         gen_path.mkdir(parents=True, exist_ok=True)
 
         # Generate final report at the end of the last iteration.
-        if idx + 1 == self.config.NUM_GENERATIONS:
-            report = {
-                'archive_len': len(self.archive),
-                'radius': get_radius_seed(self.archive),
-                'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
-                'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
-            }
-            gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
+        # if idx + 1 == self.config.NUM_GENERATIONS:
+        report = {
+            'archive_len': len(self.archive),
+            'radius': get_radius_seed(self.archive),
+            'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
+            'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
+        }
+        gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
 
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
+        BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
         return BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
 

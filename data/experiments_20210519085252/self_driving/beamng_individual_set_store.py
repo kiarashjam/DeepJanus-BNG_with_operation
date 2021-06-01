@@ -26,8 +26,8 @@ class BeamNGIndividualSetStore:
 
     def save(self, individuals: IndividualSet):
         for ind in individuals:
-            return _BeamNGIndividualCompositeMembersStore(self.folder).save(ind)
-            # _BeamNGIndividualSimpleStore(self.folder).save(ind)
+            # return _BeamNGIndividualCompositeMembersStore(self.folder).save(ind)
+            _BeamNGIndividualSimpleStore(self.folder).save(ind)
 
 
 class _BeamNGIndividualStore:

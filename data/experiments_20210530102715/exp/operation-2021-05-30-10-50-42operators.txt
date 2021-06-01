@@ -1,0 +1,3 @@
+changing the operation in type  = MUT_FOG
+max boundary of  is = 0.3424172561177944
+max boundary of  is = 0.2924172561177944
