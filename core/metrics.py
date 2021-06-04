@@ -11,9 +11,32 @@ def get_radius_seed(solution: List[Individual]):
         return None
     distances = list()
     for i in solution:
-        oob_input = i.members_by_sign()[0]
-        dist = oob_input.distance(i.seed)
-        distances.append(dist)
+        if i.seed.mutation_type == 'MUT_FOG':
+            fog_avg = (i.m1.fog_density + i.m2.fog_density) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_RAIN':
+            fog_avg = (i.m1.number_drop_rain + i.m2.number_drop_rain) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_WET_FOAM':
+            fog_avg = (i.m1.wet_foam_density + i.m2.wet_foam_density) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_WET_RIPPLE':
+            fog_avg = (i.m1.wet_ripple_density + i.m2.wet_ripple_density) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_ILLUMINATION':
+            fog_avg = (i.m1.illumination + i.m2.illumination) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_OBSTACLE':
+            fog_avg = (i.m1.position_of_obstacle + i.m2.position_of_obstacle) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_BUMP':
+            fog_avg = (i.m1.number_of_bump + i.m2.number_of_bump) / 2
+            distances.append(fog_avg)
+        elif i.seed.mutation_type == 'MUT_CONTROL_POINTS':
+            oob_input = i.members_by_sign()[0]
+            dist = oob_input.distance(i.seed)
+            distances.append(dist)
+
     radius = np.mean(distances)
     return radius
 

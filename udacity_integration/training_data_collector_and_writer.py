@@ -5,10 +5,10 @@ from typing import List, Dict
 from udacity_integration.beamng_car_cameras import BeamNGCarCameras
 from beamngpy import Vehicle, BeamNGpy
 
-from data.experiments_20210519085252.self_driving.decal_road import DecalRoad
-from data.experiments_20210519085252.self_driving.oob_monitor import OutOfBoundsMonitor
-from data.experiments_20210519085252.self_driving.road_polygon import RoadPolygon
-from data.experiments_20210519085252.self_driving.vehicle_state_reader import VehicleStateReader
+from self_driving.decal_road import DecalRoad
+from self_driving.oob_monitor import OutOfBoundsMonitor
+from self_driving.road_polygon import RoadPolygon
+from self_driving.vehicle_state_reader import VehicleStateReader
 
 CSV_header = ['center', 'left', 'right', 'steering', 'throttle', 'brake', 'speed']
 CSV_idx: Dict[str, int] = {k: v for v, k in enumerate(CSV_header)}

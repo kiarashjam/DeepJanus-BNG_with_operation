@@ -16,7 +16,7 @@ class GreedyArchive(Archive):
     def process_population(self, pop: List[Individual]):
         for candidate in pop:
             if candidate.oob_ff < 0:
-                self._int_add(candidate)
+                self.add(candidate)
 
 
 # class SmartArchive(Archive):
