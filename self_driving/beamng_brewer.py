@@ -86,17 +86,17 @@ class BeamNGBrewer:
         self.beamng.set_tod(amount)
 
     def setup_adding_bump(self, amount):
-        bump_lists = {"upper_length": random.uniform(4, 5), "upper_width": random.uniform(1, 2),
-                      "width": random.uniform(6, 7), "length": random.uniform(10, 11),
-                      "height": random.uniform(1, 2)}
-        i = 30
-        while i < amount:
-            self.beamng.create_bump(name="bump" + str(i / 30), upper_length=bump_lists["upper_length"],
-                                    upper_width=bump_lists["upper_width"],
-                                    rot=(0, 1, 0, 0),
-                                    pos=(self.road_nodes[i][0], self.road_nodes[i][1], self.road_nodes[i][2]),
-                                    width=bump_lists["width"], length=bump_lists["length"], height=bump_lists["height"])
-            i = i + 30
+        # bump_lists = {"upper_length": random.uniform(4, 5), "upper_width": random.uniform(1, 2),
+        #               "width": random.uniform(6, 7), "length": random.uniform(10, 11),
+        #               "height": random.uniform(1, 2)}
+        # i = 30
+        # while i < amount:
+        self.beamng.create_bump(name="bump" , upper_length=5,
+                                upper_width=2,
+                                rot=(0, 1, 0, 0),
+                                pos=(0, 10, self.road_nodes[0][2]),
+                                width=7, length=10, height=amount)
+            # i = i + 30
 
     def setup_adding_obstacle(self, amount):
         i = 0

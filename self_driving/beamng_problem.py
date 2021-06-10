@@ -60,6 +60,7 @@ class BeamNGProblem(Problem):
 
     def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
         self.archive.process_population(pop)
+        print("###################")
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
         self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
@@ -69,9 +70,27 @@ class BeamNGProblem(Problem):
 
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
+        fog, rain , foam , ripple , illumination, bump , position ,shape_road , radius, type_operation, fog_avg, \
+        rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg   =  get_radius_seed(self.archive)
         report = {
             'archive_len': len(self.archive),
-            'radius': get_radius_seed(self.archive),
+            'operation_type': type_operation,
+            'fog_average_amount':fog_avg,
+            'rain_average_amount':rain_avg,
+            'foam_average_amount':foam_avg,
+            'ripple_average_amount':ripple_avg,
+            'bump_average_amount':bump_avg,
+            'position_obstacle_average_amount':obstacle_avg,
+            'illumintaion_average_amount':illumination_avg,
+            'normalize_distance_fog':fog,
+            'normalize_distance_rain':rain,
+            'normalize_distance_foam':foam,
+            'normalize_distance_ripple':ripple,
+            'normalize_distance_bump':bump,
+            'normalize_distance_obstacle':position,
+            'normalize_distance_illumination':illumination,
+            'normalize_distance_road_shape':shape_road,
+            'radius': radius,
             'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
             'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
         }

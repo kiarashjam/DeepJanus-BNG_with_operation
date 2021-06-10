@@ -124,9 +124,14 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                 sim_data_collector.collect_current_data(oob_bb=False)
                 last_state: SimulationDataRecord = sim_data_collector.states[-1]
                 if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
+                    print("success")
                     break
 
                 if last_state.is_oob:
+                    print("fail")
+                    break
+                if last_state.damage:
+                    print("fail")
                     break
                 img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
                 steering_angle, throttle = predict.predict(img, last_state)

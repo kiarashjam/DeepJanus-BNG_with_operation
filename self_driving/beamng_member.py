@@ -145,7 +145,7 @@ class BeamNGMember(Member):
             return abs(self.illumination - other.illumination)
         elif self.mutation_type == 'MUT_OBSTACLE':
             return math.sqrt(((self.position_of_obstacle[0] - other.position_of_obstacle[0]) ** 2) + (
-                                        (self.position_of_obstacl[1] - other.position_of_obstacle[1]) ** 2))
+                                        (self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
         elif self.mutation_type == 'MUT_BUMP':
             return abs(self.number_of_bump - other.number_of_bump)
         elif self.mutation_type == 'MUT_CONTROL_POINTS':

@@ -25,7 +25,9 @@ class BeamNGIndividualSetStore:
         self.folder = folder
 
     def save(self, individuals: IndividualSet):
+        print("######################!!!!!!!!!!!!!!!!!!!!!!")
         for ind in individuals:
+            print(ind)
             # return _BeamNGIndividualCompositeMembersStore(self.folder).save(ind)
             _BeamNGIndividualSimpleStore(self.folder).save(ind)
 
@@ -82,6 +84,7 @@ class _BeamNGIndividualSimpleStore:
         self.folder = folder
 
     def save(self, ind: BeamNGIndividual, prefix=None):
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         if not prefix:
             prefix = ind.name
 

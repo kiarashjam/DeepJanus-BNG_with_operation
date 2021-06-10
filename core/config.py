@@ -32,7 +32,7 @@ class Config:
 
 
     ##### threshold_min
-    FOG_DENSITY_threshold_min = 0.1
+    FOG_DENSITY_threshold_min = 0
     WET_FOAM_threshold_min = 0
     NUMBER_OF_DROP_RAIN_threshold_min = 0
     WET_RIPPLE_threshold_min = 0
@@ -41,11 +41,11 @@ class Config:
     ILLUMINATION_AMOUNT_threshold_min = 0
 
     ##### threshold_max
-    FOG_DENSITY_threshold_max = 0.5
+    FOG_DENSITY_threshold_max = 0.4
     WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
     WET_RIPPLE_threshold_max = 700
-    NUMBER_BUMP_threshold_max = 1000
+    NUMBER_BUMP_threshold_max = 3
     ADDING_OBSTACLE_max = 100
     ILLUMINATION_AMOUNT_threshold_max = 1
 
@@ -56,7 +56,7 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
-        self.POPSIZE = 32
+        self.POPSIZE = 12
         self.NUM_GENERATIONS = 1
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
@@ -70,11 +70,11 @@ class Config:
         self.MUTATION_RIPPLE_PRECISE = 10
         self.MUTATION_OBSTACLE_PRECISE = 0.1
         self.MUTATION_OBSTACLE_AXIS = 'y'
-        self.MUTATION_BUMP_PRECISE = 10
+        self.MUTATION_BUMP_PRECISE = 0.1
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
-        self.MUTATION_TYPE = Config.MUT_FOG
+        self.MUTATION_TYPE = Config.MUT_BUMP
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 

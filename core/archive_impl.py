@@ -14,8 +14,12 @@ class FogArchive(Archive):
 
 class GreedyArchive(Archive):
     def process_population(self, pop: List[Individual]):
+        print("collecting the archive #########")
         for candidate in pop:
+            print(candidate.oob_ff)
+
             if candidate.oob_ff < 0:
+                print ("archive added ################")
                 self.add(candidate)
 
 

@@ -16,5 +16,5 @@ def start():
     print('done')
     plt.ioff()
     plt.show()
-    return path_ind
+
 
