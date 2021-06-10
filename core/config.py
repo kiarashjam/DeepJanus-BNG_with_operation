@@ -74,7 +74,7 @@ class Config:
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
-        self.MUTATION_TYPE = Config.MUT_BUMP
+        self.MUTATION_TYPE = Config.MUT_FOG
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
