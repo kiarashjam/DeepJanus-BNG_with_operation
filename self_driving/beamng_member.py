@@ -24,7 +24,7 @@ class BeamNGMember(Member):
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
                  road_bbox: RoadBoundingBox, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
-                           number_of_bump, position_of_obstacle, illumination, mutation_type):
+                           number_of_bump, position_of_obstacle, illumination, mutation_type, angles , highest_angles):
 
 
         super().__init__()
@@ -46,6 +46,8 @@ class BeamNGMember(Member):
         self.position_of_obstacle = position_of_obstacle
         self.illumination = illumination
         self.mutation_type = mutation_type
+        self.angles = angles
+        self.highest_angles = highest_angles
         self.surrounding_type = None
         self.surrounding_amount = {"Trees_amount": 0, "Rocks_amount": 0, "Cabin_amount": 0, "House_amount": 0}
 
@@ -54,7 +56,7 @@ class BeamNGMember(Member):
 
         res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox,
                            self.fog_density,  self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
-                           self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type)
+                           self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type, self.angles, self.highest_angles)
         res.config = self.config
         res.problem = self.problem
         res.distance_to_boundary = self.distance_to_boundary
@@ -77,8 +79,9 @@ class BeamNGMember(Member):
             'number_of_bump': self.number_of_bump,
             'position_of_obstacle': self.position_of_obstacle,
             'illumination': self.illumination,
-
-            'mutation_type': self.mutation_type
+            'mutation_type': self.mutation_type,
+            'angles': self.angles,
+            'highest_angles': self.highest_angles
         }
 
     @classmethod
@@ -88,7 +91,7 @@ class BeamNGMember(Member):
                            [tuple(t) for t in dict['sample_nodes']],
                            dict['num_spline_nodes'], road_bbox, dict['fog_density'], dict['number_drop_rain'],
                            dict['wet_foam_density'], dict['wet_ripple_density'], dict['number_of_bump'],
-                           dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'])
+                           dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'], dict['angles'], dict['highest_angles'])
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 

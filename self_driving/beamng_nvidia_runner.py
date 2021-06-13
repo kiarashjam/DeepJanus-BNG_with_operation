@@ -128,10 +128,10 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     break
 
                 if last_state.is_oob:
-                    print("fail")
+                    print("border boundary failure")
                     break
                 if last_state.damage:
-                    print("fail")
+                    print("accident failure")
                     break
                 img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
                 steering_angle, throttle = predict.predict(img, last_state)

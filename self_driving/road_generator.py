@@ -28,7 +28,7 @@ class RoadGenerator:
                  num_spline_nodes=NUM_SPLINE_NODES, initial_node=(0.0, 0.0, -28.0, 8.0),
                  bbox_size=(-250, 0, 250, 500), fog_density=0, number_drop_rain=0,
                  wet_foam_density=0, wet_ripple_density=0,number_of_bump=0, position_of_obstacle=(0, 0, 0),
-                 illumination=0, mutation_type="MUT_ROAD"):
+                 illumination=0, mutation_type="MUT_ROAD", angles =[], highest_angles = 0):
         assert num_control_nodes > 1 and num_spline_nodes > 0
         assert 0 <= max_angle <= 360
         assert seg_length > 0
@@ -47,6 +47,8 @@ class RoadGenerator:
         self.illumination = illumination
         self.mutation_type = mutation_type
         self.road_bbox = RoadBoundingBox(bbox_size)
+        self.angles = angles
+        self.highest_angles = highest_angles
         assert not self.road_bbox.intersects_vertices(self._get_initial_point())
         assert self.road_bbox.intersects_sides(self._get_initial_point())
 
@@ -117,13 +119,13 @@ class RoadGenerator:
         sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
         road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
                             self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
-                            self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type)
+                            self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type, self.angles, self.highest_angles)
         while not road.is_valid(0):
             control_nodes = self.generate_control_nodes(visualise)
             sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
             road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
                                 self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
-                                self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type)
+                                self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type , self.angles, self.highest_angles)
         return road
 
     def _get_initial_point(self) -> Point:

@@ -41,7 +41,7 @@ class Config:
     ILLUMINATION_AMOUNT_threshold_min = 0
 
     ##### threshold_max
-    FOG_DENSITY_threshold_max = 0.4
+    FOG_DENSITY_threshold_max = 1
     WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
     WET_RIPPLE_threshold_max = 700
@@ -56,7 +56,7 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
-        self.POPSIZE = 12
+        self.POPSIZE = 4
         self.NUM_GENERATIONS = 1
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)

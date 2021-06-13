@@ -24,6 +24,7 @@ from self_driving.beamng_member import BeamNGMember
 from self_driving.road_generator import RoadGenerator
 from self_driving.initial_population_generator import initial_pool_generator, initial_population_generator
 log = get_logger(__file__)
+import numpy as np
 
 
 class BeamNGProblem(Problem):
@@ -71,7 +72,7 @@ class BeamNGProblem(Problem):
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
         fog, rain , foam , ripple , illumination, bump , position ,shape_road , radius, type_operation, fog_avg, \
-        rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg   =  get_radius_seed(self.archive)
+        rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg , angles   =  get_radius_seed(self.archive)
         report = {
             'archive_len': len(self.archive),
             'operation_type': type_operation,
@@ -91,6 +92,7 @@ class BeamNGProblem(Problem):
             'normalize_distance_illumination':illumination,
             'normalize_distance_road_shape':shape_road,
             'radius': radius,
+            'angle': angles,
             'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
             'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
         }
@@ -111,6 +113,25 @@ class BeamNGProblem(Problem):
         result.mutation_type = self.config.MUTATION_TYPE
         result.surrounding_type = self.config.SURROUNDING
 
+        pointes = result.control_nodes
+        n = len(pointes)
+        i = 0
+        array_angles = []
+        while i < n-3 :
+            a = np.array([pointes[i][0], pointes[i][1]])
+            b = np.array([pointes[i + 1][0], pointes[i + 1][1]])
+            c = np.array([pointes[i + 2][0], pointes[i + 2][1]])
+
+            ba = a - b
+            bc = c - b
+
+            cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+            angle = np.arccos(cosine_angle)
+
+            array_angles.append(180 - np.degrees(angle))
+            i = i + 1
+        result.angles = array_angles
+        result.highest_angles = max(array_angles)
 
         if self.config.MUTATION_TYPE == 'MUT_FOG':
             result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_min,

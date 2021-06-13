@@ -56,6 +56,8 @@ class BeamNGBrewer:
         self.type_operation = member.mutation_type
         self.surrounding_type = member.surrounding_type
         self.surrounding_amount= member.surrounding_amount
+        self.angles = member.angles
+        self.highest_angles = member.highest_angles
 
 
     def setup_vehicle(self) -> Vehicle:
@@ -91,11 +93,7 @@ class BeamNGBrewer:
         #               "height": random.uniform(1, 2)}
         # i = 30
         # while i < amount:
-        self.beamng.create_bump(name="bump" , upper_length=5,
-                                upper_width=2,
-                                rot=(0, 1, 0, 0),
-                                pos=(0, 10, self.road_nodes[0][2]),
-                                width=7, length=10, height=amount)
+        self.beamng.create_bump(name="bump" ,rot=(0, 0, 0, 1), width=7, length=10, height=amount, pos=(0, 10, self.road_nodes[0][2]), upper_length= 1, upper_width = 5,)
             # i = i + 30
 
     def setup_adding_obstacle(self, amount):

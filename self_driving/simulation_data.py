@@ -37,6 +37,7 @@ class SimulationData:
     f_params = 'params'
     f_road = 'road'
     f_records = 'records'
+    f_accident = 'accident'
 
     def __init__(self, simulation_name: str):
         self.name = simulation_name
