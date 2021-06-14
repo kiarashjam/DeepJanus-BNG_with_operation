@@ -136,7 +136,6 @@ class BeamNGMember(Member):
         return (amount - min) / (max - min)
 
     def distance(self, other: 'BeamNGMember'):
-        print("distances ##########################")
 
         fog_distances =  self.normalize(self.fog_density - other.fog_density , self.config.FOG_DENSITY_threshold_max,self.config.FOG_DENSITY_threshold_min)
         rain_distance = self.normalize(self.number_drop_rain - other.number_drop_rain , self.config.NUMBER_OF_DROP_RAIN_threshold_max,self.config.NUMBER_OF_DROP_RAIN_threshold_min)
@@ -150,13 +149,11 @@ class BeamNGMember(Member):
         distances = fog_distances+ rain_distance + foam_distance + illumination_distance + ripple_distance +\
                     bump_distance + road_shape_distance + obstacle_distance
 
-        print(iterative_levenshtein(self.sample_nodes, other.sample_nodes))
         if self.mutation_type == 'MUT_FOG':
             if self.sample_nodes == other.sample_nodes:
                 # the distance of two identical road is zero
                 assert road_shape_distance == 0
-                # distance between two roads with the same shape but with different fog levels f1 and f2, should be
-                # fog difference
+                # distance between two roads with the same shape but with different fog levels f1 and f2, should be fog difference
                 assert distances == fog_distances
                 print("two assertion in distances passed")
 

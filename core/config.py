@@ -56,7 +56,7 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
-        self.POPSIZE = 40
+        self.POPSIZE = 12
         self.NUM_GENERATIONS = 2
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
