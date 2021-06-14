@@ -7,11 +7,13 @@ from deap import tools
 
 from core.log_setup import get_logger
 from core.problem import Problem
+from core.config import Config
 
 log = get_logger(__file__)
 
 
 def main(problem: Problem = None, seed=None):
+    all_files = []
     config = problem.config
     random.seed(seed)
 
@@ -70,12 +72,12 @@ def main(problem: Problem = None, seed=None):
     for gen in range(1, config.NUM_GENERATIONS):
         # invalid_ind = [ind for ind in pop]
 
+        # if Config.EXECTIME <= config.RUNTIME:
+            # fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+            # for ind, fit in zip(invalid_ind, fitnesses):
+            #    ind.fitness.values = fit
 
-        # fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
-        # for ind, fit in zip(invalid_ind, fitnesses):
-        #    ind.fitness.values = fit
-
-        # Vary the population
+            # Vary the population
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [ind.clone() for ind in offspring]
 
@@ -103,8 +105,10 @@ def main(problem: Problem = None, seed=None):
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
         print(logbook.stream)
         problem.on_iteration(gen, pop, logbook)
-    return pop, logbook
+
+
+
 
 
 if __name__ == "__main__":
-    final_population, search_stats = main()
+    final_population, search_stats , path_ind = main()

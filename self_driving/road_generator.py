@@ -26,7 +26,9 @@ class RoadGenerator:
 
     def __init__(self, num_control_nodes=15, max_angle=MAX_ANGLE, seg_length=SEG_LENGTH,
                  num_spline_nodes=NUM_SPLINE_NODES, initial_node=(0.0, 0.0, -28.0, 8.0),
-                 bbox_size=(-250, 0, 250, 500)):
+                 bbox_size=(-250, 0, 250, 500), fog_density=0, number_drop_rain=0,
+                 wet_foam_density=0, wet_ripple_density=0,number_of_bump=0, position_of_obstacle=(0, 0, 0),
+                 illumination=0, mutation_type="MUT_ROAD", angles =[], highest_angles = 0):
         assert num_control_nodes > 1 and num_spline_nodes > 0
         assert 0 <= max_angle <= 360
         assert seg_length > 0
@@ -36,7 +38,17 @@ class RoadGenerator:
         self.initial_node = initial_node
         self.max_angle = max_angle
         self.seg_length = seg_length
+        self.fog_density = fog_density
+        self.number_drop_rain = number_drop_rain
+        self.wet_foam_density = wet_foam_density
+        self.wet_ripple_density = wet_ripple_density
+        self.number_of_bump = number_of_bump
+        self.position_of_obstacle = position_of_obstacle
+        self.illumination = illumination
+        self.mutation_type = mutation_type
         self.road_bbox = RoadBoundingBox(bbox_size)
+        self.angles = angles
+        self.highest_angles = highest_angles
         assert not self.road_bbox.intersects_vertices(self._get_initial_point())
         assert self.road_bbox.intersects_sides(self._get_initial_point())
 
@@ -57,14 +69,15 @@ class RoadGenerator:
                 nodes.append(self._get_next_node(nodes[-2], nodes[-1], self._get_next_max_angle(i)))
                 road_polygon = RoadPolygon.from_nodes(nodes)
 
+
                 # budget is the number of iterations used to attempt to add a valid next control node
                 # before also removing the previous control node.
                 budget = self.num_control_nodes - i
                 assert budget >= 1
 
-                if visualise:
-                    fig = plot_road_bbox(self.road_bbox)
-                    plot_road_polygon(road_polygon, title="RoadPolygon i=%s" % i, fig=fig)
+                # if visualise:
+                #     fig = plot_road_bbox(self.road_bbox)
+                #     plot_road_polygon(road_polygon, title="RoadPolygon i=%s" % i, fig=fig)
 
                 intersect_boundary = self.road_bbox.intersects_boundary(road_polygon.polygons[-1])
                 is_valid = road_polygon.is_valid() and (((i==0) and intersect_boundary) or ((i>0) and not intersect_boundary))
@@ -79,9 +92,9 @@ class RoadGenerator:
                     intersect_boundary = self.road_bbox.intersects_boundary(road_polygon.polygons[-1])
                     is_valid = road_polygon.is_valid() and (
                                 ((i == 0) and intersect_boundary) or ((i > 0) and not intersect_boundary))
-                    if visualise:
-                        fig = plot_road_bbox(self.road_bbox)
-                        plot_road_polygon(road_polygon, title="RoadPolygon i=%s" % i, fig=fig)
+                    # if visualise:
+                    #     fig = plot_road_bbox(self.road_bbox)
+                    #     plot_road_polygon(road_polygon, title="RoadPolygon i=%s" % i, fig=fig)
 
                 if is_valid:
                     i += 1
@@ -92,23 +105,27 @@ class RoadGenerator:
                         nodes.pop()
                         i -= 1
 
+
                 assert RoadPolygon.from_nodes(nodes).is_valid()
                 assert 0 <= i <= self.num_control_nodes
-            print(len(nodes))
-            print(self.num_control_nodes)
             # The road generation ends when there are the control nodes plus the two extra nodes needed by the current Catmull-Rom model
             if len(nodes) - 2 == self.num_control_nodes:
                 condition = False
         return nodes
 
     def generate(self, visualise=False) -> BeamNGMember:
+        self.mutation_type ="MUT_CONTROL_POINTS"
         control_nodes = self.generate_control_nodes(visualise)
         sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
-        road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox)
-        while not road.is_valid():
+        road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
+                            self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                            self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type, self.angles, self.highest_angles)
+        while not road.is_valid(0):
             control_nodes = self.generate_control_nodes(visualise)
             sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
-            road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox)
+            road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
+                                self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                                self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type , self.angles, self.highest_angles)
         return road
 
     def _get_initial_point(self) -> Point:
