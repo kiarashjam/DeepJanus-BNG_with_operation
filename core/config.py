@@ -19,7 +19,7 @@ class Config:
     MUT_OBSTACLE = 'MUT_OBSTACLE'
     MUT_BUMP = 'MUT_BUMP'
 
-    ### surrounding operation
+    # surrounding operation
 
     Sign = 'Sign'
     Trees = 'Trees'
@@ -31,7 +31,7 @@ class Config:
 
 
 
-    ##### threshold_min
+    # threshold_min
     FOG_DENSITY_threshold_min = 0
     WET_FOAM_threshold_min = 0
     NUMBER_OF_DROP_RAIN_threshold_min = 0
@@ -40,7 +40,7 @@ class Config:
     ADDING_OBSTACLE_min = 0
     ILLUMINATION_AMOUNT_threshold_min = 0
 
-    ##### threshold_max
+    # threshold_max
     FOG_DENSITY_threshold_max = 1
     WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 3000000
@@ -56,8 +56,8 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 40
-        self.POPSIZE = 4
-        self.NUM_GENERATIONS = 1
+        self.POPSIZE = 40
+        self.NUM_GENERATIONS = 2
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 

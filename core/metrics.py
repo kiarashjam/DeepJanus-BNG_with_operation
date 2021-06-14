@@ -54,33 +54,41 @@ def get_radius_seed(solution: List[Individual]):
         # obstacle_avg = (i.m1.position_of_obstacle + i.m2.position_of_obstacle) / 2
         obstacle_avg = 0
         distances_obstacle.append(obstacle_avg)
+        # bump distance
         bump_avg= (i.m1.number_of_bump + i.m2.number_of_bump) / 2
-        ### previous distance
         distances_bump.append(bump_avg)
+        ### previous distance
         oob_input = i.members_by_sign()[0]
         dist = oob_input.distance(i.seed)
         distances_road_shape.append(dist)
         # the highest angle
         angles.append(i.m1.highest_angles)
         angles.append(i.m2.highest_angles)
+    # average normalize  distance of fog
     fog_avg =np.mean(distances_fog)
     fog_radius = normalization(fog_avg, Config.FOG_DENSITY_threshold_max,Config.FOG_DENSITY_threshold_min)
+    # average normalize  distance of rain
     rain_avg =np.mean(distances_rain)
     rain_radius = normalization(rain_avg, Config.NUMBER_OF_DROP_RAIN_threshold_max,Config.NUMBER_OF_DROP_RAIN_threshold_min)
+    # average normalize  distance of foam
     foam_avg =np.mean(distances_foam)
     foam_radius = normalization(foam_avg, Config.WET_FOAM_threshold_max,Config.WET_FOAM_threshold_min)
+    # average normalize  distance of ripple
     ripple_avg =np.mean(distances_ripple)
     ripple_radius = normalization(ripple_avg, Config.WET_RIPPLE_threshold_max,Config.WET_RIPPLE_threshold_min)
+    # average normalize  distance of bbumo
     bump_avg =np.mean(distances_bump)
     bump_radius = normalization(bump_avg, Config.NUMBER_BUMP_threshold_max,Config.NUMBER_BUMP_threshold_min)
+    # average normalize  distance of obstacle
     obstacle_avg = np.mean(distances_obstacle)
     obstacle_radius = normalization(obstacle_avg, Config.ADDING_OBSTACLE_max,Config.ADDING_OBSTACLE_min)
+    # average normalize  distance of illumination
     illumination_avg = np.mean(distances_illumination)
     illumination_radius = normalization(illumination_avg, Config.ILLUMINATION_AMOUNT_threshold_max,Config.ILLUMINATION_AMOUNT_threshold_min)
+    # average normalize  distance of whole syatem the operation plus road shape
     road_shape_radius = np.mean(distances_road_shape)
     highest_angle = np.mean(angles)
-    radius = fog_radius + rain_radius + foam_radius + ripple_radius + bump_radius + obstacle_radius + \
-             illumination_radius + road_shape_radius
+    radius =  road_shape_radius
     return fog_radius, rain_radius , foam_radius , ripple_radius , illumination_radius, bump_radius , \
            obstacle_radius ,road_shape_radius , radius, mutation_type , fog_avg, rain_avg, foam_avg, ripple_avg, \
            bump_avg, obstacle_avg, illumination_avg , highest_angle
