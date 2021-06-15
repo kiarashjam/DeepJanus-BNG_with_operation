@@ -36,21 +36,21 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         self.model = None
 
     def evaluate(self, members: List[BeamNGMember]):
-        for member in members:
-            if member.mutation_type == 'MUT_FOG':
-                print("fog density is  =  "+str(member.fog_density))
-            elif member.mutation_type == 'MUT_RAIN':
-                print("number of drops of rain is  =  "+str(member.number_drop_rain))
-            elif member.mutation_type == 'MUT_WET_FOAM':
-                print("foam density in water is  =  "+str(member.wet_foam_density))
-            elif member.mutation_type == 'MUT_WET_RIPPLE':
-                print("ripple density in water  is  =  "+str(member.wet_ripple_density))
-            elif member.mutation_type == 'MUT_ILLUMINATION':
-                print("illumination amount  is  =  "+str(member.illumination))
-            elif member.mutation_type == 'MUT_OBSTACLE':
-                print("position of obstacle  is  =  "+str(member.position_of_obstacle))
-            elif member.mutation_type == 'MUT_BUMP':
-                print("height of bump  is  =  "+str(member.number_of_bump))
+        # for member in members:
+            # if member.mutation_type == 'MUT_FOG':
+            #     print("fog density is  =  "+str(member.fog_density))
+            # elif member.mutation_type == 'MUT_RAIN':
+            #     print("number of drops of rain is  =  "+str(member.number_drop_rain))
+            # elif member.mutation_type == 'MUT_WET_FOAM':
+            #     print("foam density in water is  =  "+str(member.wet_foam_density))
+            # elif member.mutation_type == 'MUT_WET_RIPPLE':
+            #     print("ripple density in water  is  =  "+str(member.wet_ripple_density))
+            # elif member.mutation_type == 'MUT_ILLUMINATION':
+            #     print("illumination amount  is  =  "+str(member.illumination))
+            # elif member.mutation_type == 'MUT_OBSTACLE':
+            #     print("position of obstacle  is  =  "+str(member.position_of_obstacle))
+            # elif member.mutation_type == 'MUT_BUMP':
+            #     print("height of bump  is  =  "+str(member.number_of_bump))
 
         for member in members:
 
@@ -130,9 +130,9 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                 if last_state.is_oob:
                     print("border boundary failure")
                     break
-                if last_state.damage:
-                    print("accident failure")
-                    break
+                # if last_state.damage:
+                #     print("accident failure")
+                #     break
                 img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
                 steering_angle, throttle = predict.predict(img, last_state)
                 self.vehicle.control(throttle=throttle, steering=steering_angle, brake=0)

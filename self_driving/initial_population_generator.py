@@ -2,30 +2,41 @@ import json
 
 from core.config import Config
 from core.folder_storage import SeedStorage
-import os, glob, json
+import math, glob, json
 from random import shuffle, choice
 from shutil import copy
 from core.seed_pool_impl import SeedPoolFolder, SeedPoolRandom
 from self_driving.edit_distance_polyline import iterative_levenshtein
+from self_driving.beamng_member import BeamNGMember
 
 
-
-def get_spine(member):
-    print("member: ", member)
+def get_member(member):
     with open(member) as json_file:
-        spine = json.load(json_file)
-        return spine['sample_nodes']
+        data = json.load(json_file)
+        return BeamNGMember.from_dict(data)
 
-def get_min_distance_from_set(ind, solution):
+def distance(road1, road2, config):
+
+    fog_distances =  road1.normalize(abs(road1.fog_density - road2.fog_density) , config.FOG_DENSITY_threshold_max, config.FOG_DENSITY_threshold_min)
+    rain_distance = road1.normalize(abs(road1.number_drop_rain - road2.number_drop_rain) , config.NUMBER_OF_DROP_RAIN_threshold_max, config.NUMBER_OF_DROP_RAIN_threshold_min)
+    foam_distance = road1.normalize(abs(road1.wet_foam_density - road2.wet_foam_density), config.WET_FOAM_threshold_max, config.WET_FOAM_threshold_min)
+    illumination_distance = road1.normalize(abs(road1.illumination - road2.illumination) , config.ILLUMINATION_AMOUNT_threshold_max, config.ILLUMINATION_AMOUNT_threshold_min)
+    ripple_distance = road1.normalize(abs(road1.wet_ripple_density - road2.wet_ripple_density), config.WET_RIPPLE_threshold_max, config.WET_RIPPLE_threshold_min)
+    bump_distance =  road1.normalize(abs(road1.number_of_bump - road2.number_of_bump), config.NUMBER_BUMP_threshold_max, config.NUMBER_BUMP_threshold_min)
+    road_shape_distance = iterative_levenshtein(road1.sample_nodes, road2.sample_nodes)
+    obstacle_distance = math.sqrt(((road1.position_of_obstacle[0] - road2.position_of_obstacle[0]) ** 2) +
+                                    ((road1.position_of_obstacle[1] - road2.position_of_obstacle[1]) ** 2))
+    distances = fog_distances+ rain_distance + foam_distance + illumination_distance + ripple_distance +\
+                bump_distance + road_shape_distance + obstacle_distance
+    return distances
+
+
+def get_min_distance_from_set(ind, solution, config):
     distances = list()
-    # print("ind:", ind)
-    # print("solution:", solution)
-    ind_spine = get_spine(ind)
-
-
-    for road in solution:
-        road_spine = get_spine(road)
-        distances.append(iterative_levenshtein(ind_spine, road_spine))
+    road = get_member(ind)
+    for s in solution:
+        member = get_member(s)
+        distances.append(distance(member, road, config))
     distances.sort()
     return distances[0]
 
@@ -50,8 +61,6 @@ def initial_pool_generator(config, problem):
         member = problem.member_class().from_dict(member.to_dict())
         member.config = config
         member.problem = problem
-        member.mutation_type = config.MUTATION_TYPE
-        member.surrounding_type = config.SURROUNDING
         #member.clear_evaluation()
 
         member.distance_to_boundary = None
@@ -79,8 +88,7 @@ def initial_population_generator(path, config, problem):
     while i < popsize-1:
         max_dist = 0
         for ind in roads:
-
-            dist = get_min_distance_from_set(ind, original_set)
+            dist = get_min_distance_from_set(ind, original_set, config)
             if dist > max_dist:
                 max_dist = dist
                 best_ind = ind
