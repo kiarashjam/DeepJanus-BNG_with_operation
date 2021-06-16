@@ -10,7 +10,7 @@ sys.path.append(str(path.parent.parent))
 
 
 from core import nsga2
-from core.archive_impl import GreedyArchive
+from core.archive_impl import SmartArchive
 from self_driving.beamng_config import BeamNGConfig
 import matplotlib.pyplot as plt
 from self_driving.beamng_problem import BeamNGProblem
