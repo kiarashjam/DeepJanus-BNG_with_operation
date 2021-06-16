@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from self_driving.beamng_problem import BeamNGProblem
 
 config = BeamNGConfig()
-problem = BeamNGProblem(config, GreedyArchive())
+problem = BeamNGProblem(config, SmartArchive())
 
 if __name__ == '__main__':
     nsga2.main(problem)
