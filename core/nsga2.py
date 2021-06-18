@@ -77,7 +77,7 @@ def main(problem: Problem = None, seed=None):
             # for ind, fit in zip(invalid_ind, fitnesses):
             #    ind.fitness.values = fit
 
-        # Vary the population
+            # Vary the population
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [ind.clone() for ind in offspring]
 

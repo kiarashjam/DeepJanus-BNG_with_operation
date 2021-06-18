@@ -46,7 +46,7 @@ class BeamNGIndividual(Individual):
         self.sparseness = evaluate_sparseness(self, self.archive)
 
         stop = timeit.default_timer()
-        print('Time to sparseness: '+ str(stop - start)+ 'archive len: '+ str(len(self.archive)))
+        # print('Time to sparseness: '+ str(stop - start)+ 'archive len: '+ str(len(self.archive)))
 
         self.m1.evaluate()
         self.m2.evaluate()
@@ -83,7 +83,6 @@ class BeamNGIndividual(Individual):
         i2_posi, i2_nega = i2.members_by_sign()
 
         return np.mean([i1_posi.distance(i2_posi), i1_nega.distance(i2_nega)])
-
     def is_not_equal(self):
         if (self.m1.control_nodes == self.m2.control_nodes and self.m1.fog_density == self.m2.fog_density
             and self.m1.number_drop_rain == self.m2.number_drop_rain
@@ -95,6 +94,7 @@ class BeamNGIndividual(Individual):
             return False
         else:
             return True
+
 
     def _assert_members_not_equals(self):
         assert self.is_not_equal()
@@ -129,6 +129,5 @@ class BeamNGIndividual(Individual):
                 condition = True
         self.members_distance = None
         log.info(f'mutated {road_to_mutate}')
-        
     def get_members(self):
         return self.m1, self.m2

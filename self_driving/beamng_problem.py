@@ -37,9 +37,9 @@ class BeamNGProblem(Problem):
         elif self.config.generator_name == self.config.GEN_DIVERSITY:
             path = initial_pool_generator(self.config, self)
             initial_population_generator(path, self.config, self)
-            seed_pool = SeedPoolFolder(self, config, config.initial_population_folder)
+            seed_pool = SeedPoolFolder(self, config.initial_population_folder)
         else:
-            seed_pool = SeedPoolFolder(self, config, config.seed_folder)
+            seed_pool = SeedPoolFolder(self, config.seed_folder)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
         self.experiment_path = folders.experiments.joinpath(self.config.experiment_name)
         # delete_folder_recursively(self.experiment_path)
@@ -109,7 +109,6 @@ class BeamNGProblem(Problem):
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
         result.config = self.config
-        result.problem = self
         result.mutation_type = self.config.MUTATION_TYPE
         result.surrounding_type = self.config.SURROUNDING
 
@@ -207,7 +206,6 @@ class BeamNGProblem(Problem):
 
     def member_class(self):
         return BeamNGMember
-        
     def positin_valid(self, result, amount):
         for node in result.control_nodes:
             distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))
@@ -256,4 +254,4 @@ class BeamNGProblem(Problem):
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
         log.info('----evaluation warmup')
         self._get_evaluator().evaluate(all_members)
-        log.info('----warmup completed')
+        log.info('----warmpup completed')
