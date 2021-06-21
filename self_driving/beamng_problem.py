@@ -37,9 +37,9 @@ class BeamNGProblem(Problem):
         elif self.config.generator_name == self.config.GEN_DIVERSITY:
             path = initial_pool_generator(self.config, self)
             initial_population_generator(path, self.config, self)
-            seed_pool = SeedPoolFolder(self, config.initial_population_folder)
+            seed_pool = SeedPoolFolder(self, config, config.initial_population_folder)
         else:
-            seed_pool = SeedPoolFolder(self, config.seed_folder)
+            seed_pool = SeedPoolFolder(self, config, config.seed_folder)
         self._seed_pool_strategy = SeedPoolAccessStrategy(seed_pool)
         self.experiment_path = folders.experiments.joinpath(self.config.experiment_name)
         # delete_folder_recursively(self.experiment_path)
@@ -59,7 +59,7 @@ class BeamNGProblem(Problem):
     def deap_evaluate_individual(self, individual: BeamNGIndividual):
         return individual.evaluate()
 
-    def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook):
+    def on_iteration(self, idx, pop: List[BeamNGIndividual], logbook, time_records):
         self.archive.process_population(pop)
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
@@ -67,39 +67,45 @@ class BeamNGProblem(Problem):
 
         gen_path = self.experiment_path.joinpath(f'gen{idx}')
         gen_path.mkdir(parents=True, exist_ok=True)
+        print(time_records)
 
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
-        fog, rain , foam , ripple , illumination, bump , position ,shape_road , radius, type_operation, fog_avg, \
-        rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg , angles   =  get_radius_seed(self.archive)
-        report = {
-            'archive_len': len(self.archive),
-            'operation_type': type_operation,
-            'fog_average_amount':fog_avg,
-            'rain_average_amount':rain_avg,
-            'foam_average_amount':foam_avg,
-            'ripple_average_amount':ripple_avg,
-            'bump_average_amount':bump_avg,
-            'position_obstacle_average_amount':obstacle_avg,
-            'illumintaion_average_amount':illumination_avg,
-            'normalize_distance_fog':fog,
-            'normalize_distance_rain':rain,
-            'normalize_distance_foam':foam,
-            'normalize_distance_ripple':ripple,
-            'normalize_distance_bump':bump,
-            'normalize_distance_obstacle':position,
-            'normalize_distance_illumination':illumination,
-            'normalize_distance_road_shape':shape_road,
-            'radius': radius,
-            'angle': angles,
-            'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
-            'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
-        }
-        gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
+        if (len(self.archive)>0):
+            fog, rain , foam , ripple , illumination, bump , position ,shape_road , radius, type_operation, fog_avg, \
+            rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg , angles   =  get_radius_seed(self.archive)
+            report = {
+                'archive_len': len(self.archive),
+                'initial population time':str(time_records[0]),
+                'evaluation process time':str(time_records[1]),
+                'distance calculation time':str(time_records[2]),
+                'whole generation time':str(time_records[3]),
+                'operation_type': type_operation,
+                'fog_average_amount':fog_avg,
+                'rain_average_amount':rain_avg,
+                'foam_average_amount':foam_avg,
+                'ripple_average_amount':ripple_avg,
+                'bump_average_amount':bump_avg,
+                'position_obstacle_average_amount':obstacle_avg,
+                'illumintaion_average_amount':illumination_avg,
+                'normalize_distance_fog':fog,
+                'normalize_distance_rain':rain,
+                'normalize_distance_foam':foam,
+                'normalize_distance_ripple':ripple,
+                'normalize_distance_bump':bump,
+                'normalize_distance_obstacle':position,
+                'normalize_distance_illumination':illumination,
+                'normalize_distance_road_shape':shape_road,
+                'radius': radius,
+                'angle': angles,
+                'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
+                'diameter_in': get_diameter([ind.members_by_sign()[1] for ind in self.archive])
+            }
+            gen_path.joinpath(f'report{idx}.json').write_text(json.dumps(report))
 
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
-        return BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
+        return len(self.archive)
 
 
 
@@ -109,6 +115,7 @@ class BeamNGProblem(Problem):
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
         result.config = self.config
+        result.problem = self
         result.mutation_type = self.config.MUTATION_TYPE
         result.surrounding_type = self.config.SURROUNDING
 
@@ -134,7 +141,7 @@ class BeamNGProblem(Problem):
 
         if self.config.MUTATION_TYPE == 'MUT_FOG':
             result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_min,
-                                                self.config.FOG_DENSITY_threshold_max)
+                                                0.3)
             result.wet_foam_density = 0
             result.number_drop_rain = 0
             result.wet_ripple_density = 0
@@ -206,6 +213,7 @@ class BeamNGProblem(Problem):
 
     def member_class(self):
         return BeamNGMember
+        
     def positin_valid(self, result, amount):
         for node in result.control_nodes:
             distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))
@@ -254,4 +262,4 @@ class BeamNGProblem(Problem):
         all_members = list(itertools.chain(*[(ind.m1, ind.m2) for ind in individuals]))
         log.info('----evaluation warmup')
         self._get_evaluator().evaluate(all_members)
-        log.info('----warmpup completed')
+        log.info('----warmup completed')

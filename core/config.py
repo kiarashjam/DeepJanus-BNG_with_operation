@@ -55,16 +55,16 @@ class Config:
     def __init__(self,):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
-        self.POOLSIZE = 40
+        self.POOLSIZE = 20
         self.POPSIZE = 12
-        self.NUM_GENERATIONS = 2
+        self.NUM_GENERATIONS = 10
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
-        self.MUTATION_EXTENT = 6.0
+        self.MUTATION_EXTENT = 6
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_FOG_PRECISE = 0.05
+        self.MUTATION_FOG_PRECISE = 0.01
         self.MUTATION_RAIN_PRECISE = 10
         self.MUTATION_FOAM_PRECISE = 2
         self.MUTATION_RIPPLE_PRECISE = 10
@@ -90,7 +90,8 @@ class Config:
         #self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
         self.generator_name = Config.GEN_RANDOM
-        # self.seed_folder = 'population_HQ1'
+        # self.generator_name = Config.GEN_DIVERSITY
+        #self.seed_folder = 'population_HQ1'
 
         self.seed_folder = 'initial_pool'
         self.initial_population_folder = "initial_population"

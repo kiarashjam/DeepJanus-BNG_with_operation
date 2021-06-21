@@ -4,6 +4,7 @@ import numpy
 from deap import base
 from deap import creator
 from deap import tools
+from datetime import datetime
 
 from core.log_setup import get_logger
 from core.problem import Problem
@@ -12,8 +13,10 @@ from core.config import Config
 log = get_logger(__file__)
 
 
-def main(problem: Problem = None, seed=None):
-    all_files = []
+def main(problem: Problem = None,start_time=None, seed=None):
+    start_process_time = datetime.now()
+    print("###########start_process_time############"+str(start_process_time))
+    print("###########start_time############" + str(start_time))
     config = problem.config
     random.seed(seed)
 
@@ -41,16 +44,19 @@ def main(problem: Problem = None, seed=None):
     stats.register("std", numpy.std, axis=0)
     logbook = tools.Logbook()
     logbook.header = "gen", "evals", "min", "max", "avg", "std"
-
     # Generate initial population.
     log.info("### Initializing population....")
     pop = toolbox.population(n=config.POPSIZE)
-
+    initial_population_time = datetime.now() -  start_time
+    start2 = datetime.now()
     # Evaluate the initial population.
     # Note: the fitness functions are all invalid before the first iteration since they have not been evaluated.
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
 
     problem.pre_evaluate_members(invalid_ind)
+    evaluation_population_time = datetime.now() - start2
+
+    start3 = datetime.now()
 
     fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
     for ind, fit in zip(invalid_ind, fitnesses):
@@ -64,12 +70,17 @@ def main(problem: Problem = None, seed=None):
     record = stats.compile(pop)
     logbook.record(gen=0, evals=len(invalid_ind), **record)
     print(logbook.stream)
+    assigning_distance_time = datetime.now() - start3
+    whole_process_time = datetime.now() - start_time
+    time_records = [initial_population_time, evaluation_population_time, assigning_distance_time, whole_process_time]
 
     # Initialize the archive.
-    problem.on_iteration(0, pop, logbook)
+    problem.on_iteration(0, pop, logbook, time_records)
+
 
     # Begin the generational process
     for gen in range(1, config.NUM_GENERATIONS):
+        start_process_time = datetime.now()
         # invalid_ind = [ind for ind in pop]
 
         # if Config.EXECTIME <= config.RUNTIME:
@@ -77,7 +88,8 @@ def main(problem: Problem = None, seed=None):
             # for ind, fit in zip(invalid_ind, fitnesses):
             #    ind.fitness.values = fit
 
-            # Vary the population
+        start1 = datetime.now()
+        # Vary the population
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [ind.clone() for ind in offspring]
 
@@ -88,23 +100,38 @@ def main(problem: Problem = None, seed=None):
             toolbox.mutate(ind2)
             del ind1.fitness.values, ind2.fitness.values
 
+        initial_population_time = datetime.now() - start1
+        start2 = datetime.now()
+
         # Evaluate the individuals with an invalid fitness
         to_eval = offspring + pop
         invalid_ind = [ind for ind in to_eval]
 
         problem.pre_evaluate_members(invalid_ind)
 
+        evaluation_population_time = datetime.now() - start2
+
+        start3 = datetime.now()
+
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
         problem.archive.process_population(offspring + pop)
+
+
         # Select the next generation population
         pop = toolbox.select(pop + offspring, config.POPSIZE)
         record = stats.compile(pop)
         logbook.record(gen=gen, evals=len(invalid_ind), **record)
         print(logbook.stream)
-        problem.on_iteration(gen, pop, logbook)
+        assigning_distance_time = datetime.now() - start3
+        whole_process_time = datetime.now() - start_process_time
+        time_records = [initial_population_time, evaluation_population_time, assigning_distance_time, whole_process_time]
+
+        # Initialize the archive.
+        problem.on_iteration(gen, pop, logbook, time_records)
+
 
 
 

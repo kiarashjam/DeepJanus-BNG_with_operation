@@ -1,6 +1,7 @@
 from typing import Dict
 
 from core.problem import Problem
+from core.config import Config
 from core.member import Member
 from core.folder_storage import SeedStorage
 from core.folders import folders
@@ -8,12 +9,13 @@ from core.seed_pool import SeedPool
 
 
 class SeedPoolFolder(SeedPool):
-    def __init__(self, problem: Problem, folder_name):
+    def __init__(self, problem: Problem, config: Config, folder_name):
         super().__init__(problem)
         self.storage = SeedStorage(folder_name)
         self.file_path_list = self.storage.all_files()
         assert (len(self.file_path_list)) > 0
         self.cache: Dict[str, Member] = {}
+        self.config = config
 
     def __len__(self):
         return len(self.file_path_list)
@@ -24,6 +26,7 @@ class SeedPoolFolder(SeedPool):
         if not result:
             result = self.problem.member_class().from_dict(self.storage.read(path))
             self.cache[path] = result
+        result.config = self.config
         result.problem = self.problem
         return result
 

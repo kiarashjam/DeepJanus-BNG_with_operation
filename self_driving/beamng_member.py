@@ -91,7 +91,7 @@ class BeamNGMember(Member):
                            [tuple(t) for t in dict['sample_nodes']],
                            dict['num_spline_nodes'], road_bbox, dict['fog_density'], dict['number_drop_rain'],
                            dict['wet_foam_density'], dict['wet_ripple_density'], dict['number_of_bump'],
-                           dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'], dict['angles'], dict['highest_angles'])
+                           dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'], 0, 0)
         res.distance_to_boundary = dict['distance_to_boundary']
         return res
 
@@ -132,46 +132,34 @@ class BeamNGMember(Member):
         elif self.mutation_type == 'MUT_CONTROL_POINTS':
             return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                     self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+    
     def normalize(self , amount , max , min):
-        return (amount - min) / (max - min)
+        value =  (amount - min) / (max - min)
+        assert 0 <= value and value <= 1
+        return value
 
     def distance(self, other: 'BeamNGMember'):
 
-        fog_distances =  self.normalize(self.fog_density - other.fog_density , self.config.FOG_DENSITY_threshold_max,self.config.FOG_DENSITY_threshold_min)
-        rain_distance = self.normalize(self.number_drop_rain - other.number_drop_rain , self.config.NUMBER_OF_DROP_RAIN_threshold_max,self.config.NUMBER_OF_DROP_RAIN_threshold_min)
-        foam_distance = self.normalize(self.wet_foam_density - other.wet_foam_density, self.config.WET_FOAM_threshold_max,self.config.WET_FOAM_threshold_min)
-        illumination_distance = self.normalize(self.illumination - other.illumination , self.config.ILLUMINATION_AMOUNT_threshold_max,self.config.ILLUMINATION_AMOUNT_threshold_min)
-        ripple_distance = self.normalize(self.wet_ripple_density - other.wet_ripple_density, self.config.WET_RIPPLE_threshold_max,self.config.WET_RIPPLE_threshold_min)
-        bump_distance =  self.normalize(self.number_of_bump - other.number_of_bump, self.config.NUMBER_BUMP_threshold_max,self.config.NUMBER_BUMP_threshold_min)
+        fog_distances =  self.normalize(abs(self.fog_density - other.fog_density) , self.config.FOG_DENSITY_threshold_max,self.config.FOG_DENSITY_threshold_min)
+        rain_distance = self.normalize(abs(self.number_drop_rain - other.number_drop_rain) , self.config.NUMBER_OF_DROP_RAIN_threshold_max,self.config.NUMBER_OF_DROP_RAIN_threshold_min)
+        foam_distance = self.normalize(abs(self.wet_foam_density - other.wet_foam_density), self.config.WET_FOAM_threshold_max,self.config.WET_FOAM_threshold_min)
+        illumination_distance = self.normalize(abs(self.illumination - other.illumination) , self.config.ILLUMINATION_AMOUNT_threshold_max,self.config.ILLUMINATION_AMOUNT_threshold_min)
+        ripple_distance = self.normalize(abs(self.wet_ripple_density - other.wet_ripple_density), self.config.WET_RIPPLE_threshold_max,self.config.WET_RIPPLE_threshold_min)
+        bump_distance =  self.normalize(abs(self.number_of_bump - other.number_of_bump), self.config.NUMBER_BUMP_threshold_max,self.config.NUMBER_BUMP_threshold_min)
         road_shape_distance = iterative_levenshtein(self.sample_nodes, other.sample_nodes)
         obstacle_distance = math.sqrt(((self.position_of_obstacle[0] - other.position_of_obstacle[0]) ** 2) +
                                       ((self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
         distances = fog_distances+ rain_distance + foam_distance + illumination_distance + ripple_distance +\
                     bump_distance + road_shape_distance + obstacle_distance
 
-        if self.mutation_type == 'MUT_FOG':
-            if self.sample_nodes == other.sample_nodes:
-                # the distance of two identical road is zero
-                assert road_shape_distance == 0
-                # distance between two roads with the same shape but with different fog levels f1 and f2, should be fog difference
-                assert distances == fog_distances
-                print("two assertion in distances passed")
+        # if self.mutation_type == 'MUT_FOG':
+        #     if self.sample_nodes == other.sample_nodes:
+        #         # the distance of two identical road is zero
+        #         assert road_shape_distance == 0
+        #         # distance between two roads with the same shape but with different fog levels f1 and f2, should be fog difference
+        #         assert distances == fog_distances
+        #         print("two assertion in distances passed")
 
-        # elif self.mutation_type == 'MUT_RAIN':
-        #     return abs(self.number_drop_rain - other.number_drop_rain)
-        # elif self.mutation_type == 'MUT_WET_FOAM':
-        #     return abs(self.wet_foam_density - other.wet_foam_density)
-        # elif self.mutation_type == 'MUT_WET_RIPPLE':
-        #     return abs(self.wet_ripple_density - other.wet_ripple_density)
-        # elif self.mutation_type == 'MUT_ILLUMINATION':
-        #     return abs(self.illumination - other.illumination)
-        # elif self.mutation_type == 'MUT_OBSTACLE':
-        #     return math.sqrt(((self.position_of_obstacle[0] - other.position_of_obstacle[0]) ** 2) + (
-        #                                 (self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
-        # elif self.mutation_type == 'MUT_BUMP':
-        #     return abs(self.number_of_bump - other.number_of_bump)
-        # elif self.mutation_type == 'MUT_CONTROL_POINTS':
-        #     return iterative_levenshtein(self.sample_nodes, other.sample_nodes)
         return  distances
 
     def to_tuple(self):
