@@ -140,8 +140,8 @@ class BeamNGProblem(Problem):
         result.highest_angles = max(array_angles)
 
         if self.config.MUTATION_TYPE == 'MUT_FOG':
-            result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_min,
-                                                0.3)
+            result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
+                                                self.config.FOG_DENSITY_threshold_for_generating_seed_max)
             result.wet_foam_density = 0
             result.number_drop_rain = 0
             result.wet_ripple_density = 0

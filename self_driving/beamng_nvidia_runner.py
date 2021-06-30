@@ -113,7 +113,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             if not self.model:
                 self.model = load_model(self.model_file)
             predict = NvidiaPrediction(self.model, self.config)
-            iterations_count = 1000
+            iterations_count = 10000
             idx = 0
             while True:
                 idx += 1

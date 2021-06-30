@@ -11,7 +11,7 @@ sys.path.append(str(path.parent.parent))
 
 from self_driving.beamng_problem import BeamNGProblem
 from core import nsga2
-from core.archive_impl import SmartArchive
+from core.archive_impl import GreedyArchive, SmartArchive
 from self_driving.beamng_config import BeamNGConfig
 from datetime import datetime
 
@@ -20,10 +20,11 @@ print(start_time)
 config = BeamNGConfig()
 
 problem = BeamNGProblem(config, SmartArchive(config.ARCHIVE_THRESHOLD))
+# problem = BeamNGProblem(config, GreedyArchive())
 
 if __name__ == '__main__':
 
-    print("################start")
+    print("start")
     print(str(datetime.now() - start_time))
 
     nsga2.main(problem, start_time)

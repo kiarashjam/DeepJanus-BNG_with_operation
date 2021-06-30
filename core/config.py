@@ -49,6 +49,10 @@ class Config:
     ADDING_OBSTACLE_max = 100
     ILLUMINATION_AMOUNT_threshold_max = 1
 
+    # threshold for generating the seed
+    FOG_DENSITY_threshold_for_generating_seed_max = 0.3
+    FOG_DENSITY_threshold_for_generating_seed_min = 0
+
 
 
 
@@ -57,14 +61,14 @@ class Config:
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 20
         self.POPSIZE = 12
-        self.NUM_GENERATIONS = 10
+        self.NUM_GENERATIONS = 50
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
         self.MUTATION_EXTENT = 6
         self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_FOG_PRECISE = 0.01
+        self.MUTATION_FOG_PRECISE = 0.015
         self.MUTATION_RAIN_PRECISE = 10
         self.MUTATION_FOAM_PRECISE = 2
         self.MUTATION_RIPPLE_PRECISE = 10
@@ -89,8 +93,8 @@ class Config:
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
-        self.generator_name = Config.GEN_RANDOM
-        # self.generator_name = Config.GEN_DIVERSITY
+        # self.generator_name = Config.GEN_RANDOM
+        self.generator_name = Config.GEN_DIVERSITY
         #self.seed_folder = 'population_HQ1'
 
         self.seed_folder = 'initial_pool'
