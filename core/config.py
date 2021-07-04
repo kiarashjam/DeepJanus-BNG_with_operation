@@ -3,6 +3,8 @@ class Config:
     GEN_RANDOM_SEEDED = 'GEN_RANDOM_SEEDED'
     GEN_SEQUENTIAL_SEEDED = 'GEN_SEQUENTIAL_SEEDED'
     GEN_DIVERSITY = 'GEN_DIVERSITY'
+    NSGA2 = "NSGA2"
+    BINARY_SEARCH = "BINARY_SEARCH"
 
 
     SEG_LENGTH = 25
@@ -50,7 +52,7 @@ class Config:
     ILLUMINATION_AMOUNT_threshold_max = 1
 
     # threshold for generating the seed
-    FOG_DENSITY_threshold_for_generating_seed_max = 0.3
+    FOG_DENSITY_threshold_for_generating_seed_max = 0.1
     FOG_DENSITY_threshold_for_generating_seed_min = 0
 
 
@@ -60,8 +62,9 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 20
-        self.POPSIZE = 12
-        self.NUM_GENERATIONS = 50
+        self.POPSIZE = 20
+        self.NUM_GENERATIONS = 1
+        self.NUM_ITERATIONS_BINARY_SEARCH = 7
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
@@ -79,6 +82,7 @@ class Config:
 
 
         self.MUTATION_TYPE = Config.MUT_FOG
+        self.SEARCH_ALGORITHM = Config.BINARY_SEARCH
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 
@@ -93,8 +97,8 @@ class Config:
         #self.generator_name = Config.GEN_RANDOM
         #self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
-        # self.generator_name = Config.GEN_RANDOM
-        self.generator_name = Config.GEN_DIVERSITY
+        self.generator_name = Config.GEN_RANDOM
+        # self.generator_name = Config.GEN_DIVERSITY
         #self.seed_folder = 'population_HQ1'
 
         self.seed_folder = 'initial_pool'

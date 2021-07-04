@@ -56,6 +56,30 @@ class BeamNGProblem(Problem):
 
         return individual
 
+    def deap_generate_individual_binary_search(self):
+        seed = self._seed_pool_strategy.get_seed()
+        road1 = seed.clone().mutate_biggest(0)
+        road2 = seed.clone().mutate_biggest(1)
+        road1.config = self.config
+        road2.config = self.config
+        individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
+        individual.seed = seed
+        log.info(f'generated {individual}')
+
+        return individual
+    def deap_generate_individual_binary_search_two(self, amount, another_amount):
+        seed = self._seed_pool_strategy.get_seed()
+        road1 = seed.clone().mutate_biggest(amount)
+        road2 = seed.clone().mutate_biggest(another_amount)
+        road1.config = self.config
+        road2.config = self.config
+        individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
+        individual.seed = seed
+        log.info(f'generated {individual}')
+
+        return individual
+
+
     def deap_evaluate_individual(self, individual: BeamNGIndividual):
         return individual.evaluate()
 
@@ -67,7 +91,6 @@ class BeamNGProblem(Problem):
 
         gen_path = self.experiment_path.joinpath(f'gen{idx}')
         gen_path.mkdir(parents=True, exist_ok=True)
-        print(time_records)
 
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
@@ -105,7 +128,27 @@ class BeamNGProblem(Problem):
 
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
-        return len(self.archive)
+
+    def binary_save_data(self, pop: List[BeamNGIndividual]):
+        print("saving the data ")
+        print("length of the pop =  " + str(len(pop)))
+
+        self.experiment_path.mkdir(parents=True, exist_ok=True)
+        self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
+
+        gen_path = self.experiment_path.joinpath('individuals')
+        gen_path.mkdir(parents=True, exist_ok=True)
+        successful_fogs = []
+        failure_fogs = []
+        for ind in pop:
+            successful_fogs.append(ind.m1.fog_density)
+            failure_fogs.append(ind.m2.fog_density)
+        report ={
+            "amount for successful fog densities":successful_fogs,
+            "amount for failure fog densities":failure_fogs
+        }
+        gen_path.joinpath('report.json').write_text(json.dumps(report))
+        BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
 
 
 
@@ -263,3 +306,15 @@ class BeamNGProblem(Problem):
         log.info('----evaluation warmup')
         self._get_evaluator().evaluate(all_members)
         log.info('----warmup completed')
+
+    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual], i ):
+        counter = 0
+        for inds in individuals:
+            if counter == i :
+                ind = inds
+            counter = counter + 1
+        all_members = list(itertools.chain(*[(ind.m1, ind.m2) ]))
+        log.info('----evaluation of two members ')
+        result = self._get_evaluator().evaluate_binary_search(all_members)
+        log.info('----evaluation of two members completed')
+        return result

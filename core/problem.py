@@ -14,6 +14,9 @@ class Problem:
     def deap_generate_individual(self) -> Individual:
         raise NotImplemented()
 
+    def deap_generate_individual_binary_search(self) -> Individual:
+        raise NotImplemented()
+
     def deap_mutate_individual(self, individual: Individual):
         individual.mutate()
 
@@ -26,6 +29,9 @@ class Problem:
     def on_iteration(self, idx, pop: List[Individual], logbook):
         raise NotImplemented()
 
+    def binary_save_data(self, pop: List[Individual]):
+        raise NotImplemented()
+
     def member_class(self):
         raise NotImplemented()
 
@@ -36,4 +42,7 @@ class Problem:
         raise NotImplemented()
 
     def pre_evaluate_members(self, individuals: List[Individual]):
+        pass
+
+    def pre_evaluate_members_binary_search(self, individuals: List[Individual], i):
         pass

@@ -35,6 +35,34 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             raise Exception(f'File {self.model_file} does not exist!')
         self.model = None
 
+
+    def evaluate_binary_search(self, members: List[BeamNGMember]):
+        result_of_test = []
+        for member in members:
+            counter = 20
+            attempt = 0
+            while True:
+                attempt += 1
+                if attempt == counter:
+                    raise Exception('Exhausted attempts')
+                if attempt > 1:
+                    log.info(f'RETRYING TO run simulation {attempt}')
+                    self._close()
+                else:
+                    log.info(f'{member} BeamNG evaluation start')
+                if attempt > 2:
+                    time.sleep(5)
+                sim , successful_member = self._run_simulation(member)
+                print(successful_member)
+                result_of_test.append(successful_member)
+                if sim.info.success:
+                    break
+
+
+            member.distance_to_boundary = sim.min_oob_distance()
+            log.info(f'{member} BeamNG evaluation completed')
+        return result_of_test
+
     def evaluate(self, members: List[BeamNGMember]):
         # for member in members:
             # if member.mutation_type == 'MUT_FOG':
@@ -70,7 +98,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     log.info(f'{member} BeamNG evaluation start')
                 if attempt > 2:
                     time.sleep(5)
-                sim = self._run_simulation(member)
+                sim , successful_member = self._run_simulation(member)
                 if sim.info.success:
                     # Config.EXECTIME = Config.EXECTIME + sim.states[-1].timer
                     # print("Execution time: ", Config.EXECTIME)
@@ -80,6 +108,9 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             log.info(f'{member} BeamNG evaluation completed')
 
     def _run_simulation(self, member) -> SimulationData:
+
+        successful_member = True
+
         if not self.brewer:
             self.brewer = BeamNGBrewer()
             self.vehicle = self.brewer.setup_vehicle()
@@ -125,10 +156,12 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                 last_state: SimulationDataRecord = sim_data_collector.states[-1]
                 if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
                     print("success")
+                    successful_member = True
                     break
 
                 if last_state.is_oob:
                     print("border boundary failure")
+                    successful_member = False
                     break
                 # if last_state.damage:
                 #     print("accident failure")
@@ -153,7 +186,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
 
             self.end_iteration()
 
-        return sim_data_collector.simulation_data
+        return sim_data_collector.simulation_data , successful_member
 
     def end_iteration(self):
         try:

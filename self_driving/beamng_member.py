@@ -166,6 +166,12 @@ class BeamNGMember(Member):
         import numpy as np
         barycenter = np.mean(self.control_nodes, axis=0)[:2]
         return barycenter
+    def mutate_biggest(self,amount_of_fog):
+        FogMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                   max_amount=int(self.config.MUTATION_EXTENT),
+                   discrete_value=self.config.MUTATION_FOG_PRECISE).mutate_biggest(amount_of_fog)
+        return self
+
 
     def mutate(self) -> 'BeamNGMember':
         self.mutation_type = self.config.MUTATION_TYPE
@@ -302,6 +308,9 @@ class FogMutator:
                 if new_amount != self.operation.fog_density:
                     self.operation.fog_density = new_amount
                     break
+
+    def mutate_biggest(self,amount_of_fog):
+        self.operation.fog_density = amount_of_fog
 
 class RainMutator:
     def __init__(self, operation, min_amount, max_amount, discrete_value):
