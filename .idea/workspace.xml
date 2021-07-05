@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e90434e1-7530-4acd-91cd-fa137430f93b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/problem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/log.ini" beforeDir="false" afterPath="$PROJECT_DIR$/data/log.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_brewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_brewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_member.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/beamng_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_problem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/self_driving/main_beamng.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/main_beamng.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +50,7 @@
       <option name="presentableId" value="Default" />
       <updated>1625136475884</updated>
       <workItem from="1625136477717" duration="13643000" />
-      <workItem from="1625389836209" duration="19220000" />
+      <workItem from="1625389836209" duration="20541000" />
     </task>
     <servers />
   </component>
