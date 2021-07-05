@@ -29,7 +29,7 @@ class Problem:
     def on_iteration(self, idx, pop: List[Individual], logbook):
         raise NotImplemented()
 
-    def binary_save_data(self, pop: List[Individual]):
+    def binary_save_data(self, pop: List[Individual], time):
         raise NotImplemented()
 
     def member_class(self):

@@ -15,8 +15,6 @@ log = get_logger(__file__)
 
 def main(problem: Problem = None,start_time=None, seed=None):
     start_process_time = datetime.now()
-    print("###########start_process_time############"+str(start_process_time))
-    print("###########start_time############" + str(start_time))
     config = problem.config
     random.seed(seed)
 

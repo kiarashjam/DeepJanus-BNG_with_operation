@@ -62,9 +62,9 @@ class Config:
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
         self.POOLSIZE = 20
-        self.POPSIZE = 20
+        self.POPSIZE = 10
         self.NUM_GENERATIONS = 1
-        self.NUM_ITERATIONS_BINARY_SEARCH = 7
+        self.NUM_ITERATIONS_BINARY_SEARCH = 6
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 

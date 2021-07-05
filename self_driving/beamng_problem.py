@@ -129,7 +129,7 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
-    def binary_save_data(self, pop: List[BeamNGIndividual]):
+    def binary_save_data(self, pop: List[BeamNGIndividual],times_of_process):
         print("saving the data ")
         print("length of the pop =  " + str(len(pop)))
 
@@ -145,7 +145,11 @@ class BeamNGProblem(Problem):
             failure_fogs.append(ind.m2.fog_density)
         report ={
             "amount for successful fog densities":successful_fogs,
-            "amount for failure fog densities":failure_fogs
+            "amount for failure fog densities":failure_fogs,
+            "evaluation_population_time":str(times_of_process["evaluation_population_time"]),
+            "whole_process_time":str(times_of_process["whole_process_time"]),
+            "initial_population_time":str(times_of_process["initial_population_time"]),
+            "every_evaluation_time":times_of_process["every_evaluation_time"],
         }
         gen_path.joinpath('report.json').write_text(json.dumps(report))
         BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
