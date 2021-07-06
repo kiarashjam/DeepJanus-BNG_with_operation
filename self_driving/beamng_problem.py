@@ -187,7 +187,10 @@ class BeamNGProblem(Problem):
         result.highest_angles = max(array_angles)
 
         if self.config.MUTATION_TYPE == 'MUT_FOG':
-            result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH":
+                result.fog_density = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
                                                 self.config.FOG_DENSITY_threshold_for_generating_seed_max)
             result.wet_foam_density = 0
             result.number_drop_rain = 0
