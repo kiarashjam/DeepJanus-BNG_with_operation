@@ -314,14 +314,14 @@ class BeamNGProblem(Problem):
         self._get_evaluator().evaluate(all_members)
         log.info('----warmup completed')
 
-    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual], i ):
-        counter = 0
-        for inds in individuals:
-            if counter == i :
-                ind = inds
-            counter = counter + 1
-        all_members = list(itertools.chain(*[(ind.m1, ind.m2) ]))
+    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual], i , dict_already_done ):
+        # counter = 0
+        # for inds in individuals:
+        #     if counter == i :
+        #         ind = inds
+        #     counter = counter + 1
+        all_members = list(itertools.chain(*[(individuals.m1, individuals.m2) ]))
         log.info('----evaluation of two members ')
-        result = self._get_evaluator().evaluate_binary_search(all_members)
+        result = self._get_evaluator().evaluate_binary_search(all_members, dict_already_done)
         log.info('----evaluation of two members completed')
         return result

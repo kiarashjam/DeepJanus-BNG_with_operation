@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e90434e1-7530-4acd-91cd-fa137430f93b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/NSGA2_analyzer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/binary_search_analyzer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/trained_models_colab/self-driving-car-189-2020.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/binary_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/binary_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0002.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0002.json" afterDir="false" />
@@ -14,6 +18,16 @@
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0008.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0008.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0009.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0009.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0010.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0010.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0011.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0011.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0012.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0012.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0013.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0013.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0014.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0014.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0015.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0015.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0016.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0016.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0017.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0017.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0018.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0018.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0019.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0019.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0020.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0020.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0002.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0002.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0003.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0003.json" afterDir="false" />
@@ -24,7 +38,10 @@
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0008.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0008.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0009.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0009.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0010.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0010.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0011.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0011.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0012.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0012.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/self_driving/beamng_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_problem.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,9 +76,148 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data/trained_models_colab" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Tara\Kiarash\thesis2\DeepJanus-BNG_with_operation\data\trained_models_colab" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -78,5 +234,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

@@ -69,32 +69,42 @@ def main(problem: Problem = None,start_time=None, seed=None):
     every_evaluation_time=[]
 
     while i < len(pop):
+        dict_already_done ={0:True}
         start3 = datetime.now()
         counter = 0
         min_amount = 0
         max_amount = 1
         middle = (max_amount + min_amount) / 2
+        pop[i].m1.fog_density = min_amount
         pop[i].m2.fog_density = middle
         while counter < config.NUM_ITERATIONS_BINARY_SEARCH:
-            result = problem.pre_evaluate_members_binary_search(pop, i)
-
+            result = problem.pre_evaluate_members_binary_search(pop[i], i, dict_already_done)
+            dict_already_done.update(result)
             # fitnesses = toolbox.map(toolbox.evaluate, [pop[i]])
             # for ind, fit in zip([pop[i]], fitnesses):
             #     ind.fitness.values = fit
             # problem.archive.process_population(pop)
-            if result[0] != result[1]:
+            if result[pop[i].m1.fog_density] != result[pop[i].m2.fog_density]:
                 max_amount = middle
                 middle = (min_amount + max_amount)/2
                 pop[i].m2.fog_density = middle
                 print("one succcess one failure")
                 counter = counter + 1
-            else:
+            elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == True:
                 print("both are the same")
                 min_amount = middle
                 pop[i].m1.fog_density = min_amount
                 middle = (min_amount + max_amount) / 2
                 pop[i].m2.fog_density = middle
                 counter = counter + 1
+            elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == False:
+                min_amount =0 
+                max_amount = 1
+                middle = (max_amount+ min_amount) / 2
+                pop[i].m1.fog_density = 0
+                pop[i].m1.fog_density = 1
+                counter = 0
+                
             print("## fog amount fo the first member = "+str(pop[i].m1.fog_density))
             print("## fog amount fo the second member = " + str(pop[i].m2.fog_density))
             print("## min_amount = " + str(min_amount))

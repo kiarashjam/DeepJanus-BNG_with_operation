@@ -36,30 +36,29 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         self.model = None
 
 
-    def evaluate_binary_search(self, members: List[BeamNGMember]):
-        result_of_test = []
+    def evaluate_binary_search(self, members: List[BeamNGMember],dict_already_done):
+        result_of_test = {}
         for member in members:
             counter = 20
             attempt = 0
-            while True:
-                attempt += 1
-                if attempt == counter:
-                    raise Exception('Exhausted attempts')
-                if attempt > 1:
-                    log.info(f'RETRYING TO run simulation {attempt}')
-                    self._close()
-                else:
-                    log.info(f'{member} BeamNG evaluation start')
-                if attempt > 2:
-                    time.sleep(5)
-                sim , successful_member = self._run_simulation(member)
-                print(successful_member)
-                result_of_test.append(successful_member)
-                if sim.info.success:
-                    break
-
-
-            member.distance_to_boundary = sim.min_oob_distance()
+            if member.fog_density in dict_already_done:
+                result_of_test.update({member.fog_density : dict_already_done[member.fog_density]})
+            else:
+                while True:
+                    attempt += 1
+                    if attempt == counter:
+                        raise Exception('Exhausted attempts')
+                    if attempt > 1:
+                        log.info(f'RETRYING TO run simulation {attempt}')
+                        self._close()
+                    else:
+                        log.info(f'{member} BeamNG evaluation start')
+                    if attempt > 2:
+                        time.sleep(5)
+                    sim , successful_member = self._run_simulation(member)
+                    result_of_test.update({member.fog_density : successful_member})
+                    if sim.info.success:
+                        break
             log.info(f'{member} BeamNG evaluation completed')
         return result_of_test
 
@@ -156,6 +155,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                 last_state: SimulationDataRecord = sim_data_collector.states[-1]
                 if points_distance(last_state.pos, waypoint_goal.position) < 6.0:
                     print("success")
+                    print(member.fog_density)
                     successful_member = True
                     break
 
