@@ -7,7 +7,7 @@ from core.individual import Individual
 from core.misc import closest_elements
 
 
-class FogArchive(Archive):
+class AllInArchive(Archive):
     def process_population(self, pop: List[Individual]):
         for candidate in pop:
             self.add(candidate)

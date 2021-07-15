@@ -44,7 +44,24 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             attempt = 0
             if member.mutation_type == "MUT_FOG":
                 if member.fog_density in dict_already_done:
-                    result_of_test.update({member.fog_density : dict_already_done[member.fog_density]})
+                    result_of_test.update({member.fog_density: dict_already_done[member.fog_density]})
+                else:
+                    while True:
+                        attempt += 1
+                        if attempt == counter:
+                            raise Exception('Exhausted attempts')
+                        if attempt > 1:
+                            log.info(f'RETRYING TO run simulation {attempt}')
+                            self._close()
+                        else:
+                            log.info(f'{member} BeamNG evaluation start')
+                        if attempt > 2:
+                            time.sleep(5)
+                        sim, successful_member = self._run_simulation(member)
+                        result_of_test.update({member.fog_density : successful_member})
+                        if sim.info.success:
+                            break
+                    log.info(f'{member} BeamNG evaluation completed')
             elif member.mutation_type == "MUT_ILLUMINATION":
                 if member.illumination in dict_already_done:
                     result_of_test.update({member.illumination: dict_already_done[member.illumination]})
@@ -61,34 +78,57 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim , successful_member = self._run_simulation(member)
-                        if member.mutation_type == "MUT_FOG":
-                            result_of_test.update({member.fog_density : successful_member})
-                        elif member.mutation_type == "MUT_ILLUMINATION":
-                            result_of_test.update({member.illumination: successful_member})
+                        result_of_test.update({member.illumination: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
+            elif member.mutation_type == "MUT_WET_FOAM":
+                if member.wet_ripple_density in dict_already_done:
+                    result_of_test.update({member.wet_ripple_density: dict_already_done[member.wet_ripple_density]})
+                else:
+                    while True:
+                        attempt += 1
+                        if attempt == counter:
+                            raise Exception('Exhausted attempts')
+                        if attempt > 1:
+                            log.info(f'RETRYING TO run simulation {attempt}')
+                            self._close()
+                        else:
+                            log.info(f'{member} BeamNG evaluation start')
+                        if attempt > 2:
+                            time.sleep(5)
+                        sim, successful_member = self._run_simulation(member)
+                        result_of_test.update({member.wet_ripple_density: successful_member})
+                        if sim.info.success:
+                            break
+                    log.info(f'{member} BeamNG evaluation completed')
+
+            elif member.mutation_type == "MUT_WET_RIPPLE":
+                if member.wet_ripple_density in dict_already_done:
+                    result_of_test.update({member.wet_ripple_density: dict_already_done[member.wet_ripple_density]})
+                else:
+                    while True:
+                        attempt += 1
+                        if attempt == counter:
+                            raise Exception('Exhausted attempts')
+                        if attempt > 1:
+                            log.info(f'RETRYING TO run simulation {attempt}')
+                            self._close()
+                        else:
+                            log.info(f'{member} BeamNG evaluation start')
+                        if attempt > 2:
+                            time.sleep(5)
+                        sim, successful_member = self._run_simulation(member)
+                        result_of_test.update({member.wet_ripple_density : successful_member})
+                        if sim.info.success:
+                            break
+                    log.info(f'{member} BeamNG evaluation completed')
+
         return result_of_test
 
     def evaluate(self, members: List[BeamNGMember]):
-        # for member in members:
-            # if member.mutation_type == 'MUT_FOG':
-            #     print("fog density is  =  "+str(member.fog_density))
-            # elif member.mutation_type == 'MUT_RAIN':
-            #     print("number of drops of rain is  =  "+str(member.number_drop_rain))
-            # elif member.mutation_type == 'MUT_WET_FOAM':
-            #     print("foam density in water is  =  "+str(member.wet_foam_density))
-            # elif member.mutation_type == 'MUT_WET_RIPPLE':
-            #     print("ripple density in water  is  =  "+str(member.wet_ripple_density))
-            # elif member.mutation_type == 'MUT_ILLUMINATION':
-            #     print("illumination amount  is  =  "+str(member.illumination))
-            # elif member.mutation_type == 'MUT_OBSTACLE':
-            #     print("position of obstacle  is  =  "+str(member.position_of_obstacle))
-            # elif member.mutation_type == 'MUT_BUMP':
-            #     print("height of bump  is  =  "+str(member.number_of_bump))
 
         for member in members:
-
             if not member.needs_evaluation():
                 log.info(f'{member} is already evaluated. skipping')
                 continue

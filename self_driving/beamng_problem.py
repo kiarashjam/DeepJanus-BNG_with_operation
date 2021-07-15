@@ -58,19 +58,8 @@ class BeamNGProblem(Problem):
 
     def deap_generate_individual_binary_search(self):
         seed = self._seed_pool_strategy.get_seed()
-        road1 = seed.clone().mutate_biggest(0)
-        road2 = seed.clone().mutate_biggest(1)
-        road1.config = self.config
-        road2.config = self.config
-        individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
-        individual.seed = seed
-        log.info(f'generated {individual}')
-
-        return individual
-    def deap_generate_individual_binary_search_two(self, amount, another_amount):
-        seed = self._seed_pool_strategy.get_seed()
-        road1 = seed.clone().mutate_biggest(amount)
-        road2 = seed.clone().mutate_biggest(another_amount)
+        road1 = seed.clone().mutate_binary_search(0)
+        road2 = seed.clone().mutate_binary_search(1)
         road1.config = self.config
         road2.config = self.config
         individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
@@ -79,6 +68,17 @@ class BeamNGProblem(Problem):
 
         return individual
 
+    # def deap_generate_individual_binary_search_two(self, amount, another_amount):
+    #     seed = self._seed_pool_strategy.get_seed()
+    #     road1 = seed.clone().mutate_binary_search(amount)
+    #     road2 = seed.clone().mutate_binary_search(another_amount)
+    #     road1.config = self.config
+    #     road2.config = self.config
+    #     individual: BeamNGIndividual = creator.Individual(road1, road2, self.config, self.archive)
+    #     individual.seed = seed
+    #     log.info(f'generated {individual}')
+    #
+    #     return individual
 
     def deap_evaluate_individual(self, individual: BeamNGIndividual):
         return individual.evaluate()
@@ -129,32 +129,40 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
-    def binary_save_data(self, pop: List[BeamNGIndividual],times_of_process):
+    def binary_save_data(self, pop: List[BeamNGIndividual], times_of_process):
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
         self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
 
         gen_path = self.experiment_path.joinpath('individuals')
         gen_path.mkdir(parents=True, exist_ok=True)
-        successful_fogs = []
-        failure_fogs = []
+        successful_array = []
+        failure_array = []
         for ind in pop:
-            successful_fogs.append(ind.m1.fog_density)
-            failure_fogs.append(ind.m2.fog_density)
-        report ={
-            "amount for successful fog densities":successful_fogs,
-            "amount for failure fog densities":failure_fogs,
-            "evaluation_population_time":str(times_of_process["evaluation_population_time"]),
-            "whole_process_time":str(times_of_process["whole_process_time"]),
-            "initial_population_time":str(times_of_process["initial_population_time"]),
-            "every_evaluation_time":times_of_process["every_evaluation_time"],
+            if ind.m1.mutation_type == "MUT_FOG":
+                successful_array.append(ind.m1.fog_density)
+                failure_array.append(ind.m2.fog_density)
+            elif ind.m1.mutation_type == "MUT_WET_FOAM":
+                successful_array.append(ind.m1.wet_foam_density)
+                failure_array.append(ind.m2.wet_foam_density)
+            elif ind.m1.mutation_type == "MUT_WET_RIPPLE":
+                successful_array.append(ind.m1.wet_ripple_density)
+                failure_array.append(ind.m2.wet_ripple_density)
+            elif ind.m1.mutation_type == "MUT_ILLUMINATION":
+                successful_array.append(ind.m1.illumination)
+                failure_array.append(ind.m2.illumination)
+
+        report = {"amount for successful": successful_array,
+                  "amount for failure": failure_array,
+                  "evaluation_population_time": str(times_of_process["evaluation_population_time"]),
+                  "whole_process_time": str(times_of_process["whole_process_time"]),
+                  "initial_population_time": str(times_of_process["initial_population_time"]),
+                  "every_evaluation_time": times_of_process["every_evaluation_time"],
         }
         gen_path.joinpath('report.json').write_text(json.dumps(report))
         BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
 
-
     def failure_finder_save_data(self, dicts):
-
         self.experiment_path.mkdir(parents=True, exist_ok=True)
         self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
         gen_path = self.experiment_path.joinpath('reports')
@@ -175,9 +183,9 @@ class BeamNGProblem(Problem):
                 amounts.append(amount)
             all_status.append(statuses)
             all_amount.append(amounts)
-        report ={
-            "amount":all_amount,
-            "status":all_status,
+        report = {
+            "amount": all_amount,
+            "status": all_status,
         }
         gen_path.joinpath('report.json').write_text(json.dumps(report))
 
@@ -226,7 +234,10 @@ class BeamNGProblem(Problem):
         elif self.config.MUTATION_TYPE == 'MUT_RAIN':
             result.fog_density = 0
             result.wet_foam_density = 0
-            result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+                result.number_drop_rain = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
                                           self.config.NUMBER_OF_DROP_RAIN_threshold_max)
             result.wet_ripple_density = 0
             result.number_of_bump = 0
@@ -234,7 +245,10 @@ class BeamNGProblem(Problem):
             result.illumination = 0
         elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
             result.fog_density = 0
-            result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+                result.wet_foam_density = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
                                                      self.config.WET_FOAM_threshold_max)
             result.number_drop_rain = 0
             result.wet_ripple_density = 0
@@ -245,7 +259,10 @@ class BeamNGProblem(Problem):
             result.fog_density = 0
             result.wet_foam_density = 0
             result.number_drop_rain = 0
-            result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+                result.wet_ripple_density = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
                                                        self.config.WET_RIPPLE_threshold_max)
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
@@ -291,7 +308,7 @@ class BeamNGProblem(Problem):
 
     def member_class(self):
         return BeamNGMember
-        
+
     def positin_valid(self, result, amount):
         for node in result.control_nodes:
             distance = math.sqrt(((node[0] - amount[0]) ** 2) + ((node[1] - amount[1]) ** 2))

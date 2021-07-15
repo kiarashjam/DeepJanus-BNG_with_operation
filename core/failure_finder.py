@@ -13,10 +13,7 @@ from core.config import Config
 
 log = get_logger(__file__)
 def main(problem: Problem = None,start_time=None, seed=None):
-    csv_columns = ["amount", "result"]
-    start_process_time = datetime.now()
-    print("###########start_process_time############" + str(start_process_time))
-    print("###########start_time############" + str(start_time))
+
     config = problem.config
     random.seed(seed)
     creator.create("FitnessMulti", base.Fitness, weights=config.fitness_weights)
@@ -28,35 +25,58 @@ def main(problem: Problem = None,start_time=None, seed=None):
 
     log.info("### Initializing population....")
     pop = toolbox.population(n=config.POPSIZE)
-    initial_population_time = datetime.now() -  start_time
-    start2 = datetime.now()
     i = 0
-    every_evaluation_time=[]
     all_statuses =[]
     while i < len(pop):
 
+
+        dict_already_done = {0: True}
+        counter = 0
         if config.MUTATION_TYPE == "MUT_ILLUMINATION":
-
-            dict_already_done = {0: True}
-            start3 = datetime.now()
-            counter = 0
-            pop[i].m1.illumination = 0
-            pop[i].m2.illumination = 1/config.FAILURE_FINDER_PRECISE
-            while counter < config.FAILURE_FINDER_PRECISE:
-                pop[i].m1.illumination = pop[i].m1.illumination + (1 / config.FAILURE_FINDER_PRECISE)
-                pop[i].m2.illumination = pop[i].m2.illumination + (1 / config.FAILURE_FINDER_PRECISE)
-                if pop[i].m2.illumination > 1 :
-                    pop[i].m2.illumination = 1
-                result  = problem.pre_evaluate_members_binary_search(pop[i], dict_already_done)
-                dict_already_done.update(result)
-                print(dict_already_done)
-                counter = counter + 1
-
-
-
-        if config.MUTATION_TYPE == "MUT_FOG":
-            while i < len(pop):
-                dict_already_done ={0: True}
+            pop[i].m1.illumination = config.ILLUMINATION_AMOUNT_threshold_min
+            pop[i].m2.illumination = config.ILLUMINATION_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE
+        elif config.MUTATION_TYPE == "MUT_FOG":
+            pop[i].m1.fog_density = config.FOG_DENSITY_threshold_min
+            pop[i].m2.fog_density = config.FOG_DENSITY_threshold_max / config.FAILURE_FINDER_PRECISE
+        elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
+            pop[i].m1.wet_foam_density = config.WET_FOAM_threshold_min
+            pop[i].m2.wet_foam_density = config.WET_FOAM_threshold_max / config.FAILURE_FINDER_PRECISE
+        elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+            pop[i].m1.wet_ripple_density = config.WET_RIPPLE_threshold_min
+            pop[i].m2.wet_ripple_density = config.WET_RIPPLE_threshold_max / config.FAILURE_FINDER_PRECISE
+        while counter < config.FAILURE_FINDER_PRECISE:
+            if config.MUTATION_TYPE == "MUT_ILLUMINATION":
+                pop[i].m1.illumination = pop[i].m1.illumination + \
+                                         (config.ILLUMINATION_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.illumination = pop[i].m2.illumination + \
+                                         (config.ILLUMINATION_AMOUNT_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.illumination > config.ILLUMINATION_AMOUNT_threshold_max  :
+                    pop[i].m2.illumination = config.ILLUMINATION_AMOUNT_threshold_max
+            elif config.MUTATION_TYPE == "MUT_FOG":
+                pop[i].m1.fog_density = pop[i].m1.fog_density +\
+                                        (config.FOG_DENSITY_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.fog_density = pop[i].m2.fog_density +\
+                                        (config.FOG_DENSITY_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.fog_density > config.FOG_DENSITY_threshold_max :
+                    pop[i].m2.fog_density = config.FOG_DENSITY_threshold_max
+            elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
+                pop[i].m1.wet_foam_density = pop[i].m1.wet_foam_density +\
+                                         (config.WET_FOAM_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.wet_foam_density = pop[i].m2.wet_foam_density +\
+                                         (config.WET_FOAM_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.wet_foam_density > config.WET_FOAM_threshold_max :
+                    pop[i].m2.wet_foam_density = config.WET_FOAM_threshold_max
+            elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+                pop[i].m1.wet_ripple_density = pop[i].m1.wet_ripple_density +\
+                                         (config.WET_RIPPLE_threshold_max / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.wet_ripple_density = pop[i].m2.wet_ripple_density +\
+                                         (config.WET_RIPPLE_threshold_max / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.wet_ripple_density > config.WET_RIPPLE_threshold_max:
+                    pop[i].m2.wet_ripple_density = config.WET_RIPPLE_threshold_max
+            result  = problem.pre_evaluate_members_binary_search(pop[i], dict_already_done)
+            dict_already_done.update(result)
+            print(dict_already_done)
+            counter = counter + 1
         all_statuses.append(dict_already_done)
         i = i + 1
     problem.failure_finder_save_data(all_statuses)

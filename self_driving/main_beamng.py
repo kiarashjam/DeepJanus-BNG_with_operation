@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     if config.SEARCH_ALGORITHM == "NSGA2":
         nsga2.main(problem, start_time)
-    elif  config.SEARCH_ALGORITHM == "BINARY_SEARCH":
+    elif config.SEARCH_ALGORITHM == "BINARY_SEARCH":
         binary_search.main(problem, start_time)
     elif config.SEARCH_ALGORITHM == "FAILURE_FINDER":
         failure_finder.main(problem, start_time)
