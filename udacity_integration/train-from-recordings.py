@@ -1,3 +1,14 @@
+import sys
+import os
+from pathlib import Path
+from datetime import datetime
+#sys.path.insert(0, r'C:\DeepHyperion-BNG')
+#sys.path.append(os.path.dirname(os.path.dirname(os.path.join(__file__))))
+path = Path(os.path.abspath(__file__))
+# This corresponds to DeepHyperion-BNG
+sys.path.append(str(path.parent))
+sys.path.append(str(path.parent.parent))
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split

@@ -74,9 +74,13 @@ class Config:
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
-        self.MUTATION_TYPE = Config.MUT_FOG
+        self.MUTATION_TYPE = Config.MUT_ILLUMINATION
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
+        self.FRONTIER = 0.2
+
+        self.FRONTIER_ILLUMINATION_MAX = 0.6
+        self.FRONTIER_ILLUMINATION_MIN = 0.3
 
         self.K_SD = 0.01
 

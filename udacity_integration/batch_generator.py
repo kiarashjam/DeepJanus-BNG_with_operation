@@ -1,5 +1,5 @@
 from keras.utils import Sequence
-from keras.layers import np
+from numpy import np
 from udacity_utils import IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS, load_image, augment, preprocess
 
 

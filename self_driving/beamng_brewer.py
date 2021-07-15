@@ -227,7 +227,7 @@ class BeamNGBrewer:
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
         # setup the surrounding
-        self.setup_surrounding()
+        # self.setup_surrounding()
 
         ## addiing the obstacle operator
         if self.type_operation == "MUT_OBSTACLE":

@@ -62,6 +62,10 @@ class BeamNGOperations:
         default_weather()
         modification_weather(amount_of_ripple, "MUT_WET_RIPPLE")
 
+    def change_illumination_amount(self, amount_of_illumination):
+        default_weather()
+        modification_weather(amount_of_illumination, "MUT_ILLUMINATION")
+
 
 global operations
 operations = BeamNGOperations()
@@ -134,6 +138,13 @@ def modification_weather(amount, type_operation):
                 json_version[i]["overallFoamOpacity"] = amount
                 json_version[i]["nodes"] = [[-1000, -1000, -27.9, 1000, 5, 0, 0, 1],
                                             [1000, 1000, -27.9, 1000, 5, 0, 0, 1]]
+            i = i + 1
+
+    if type_operation == "MUT_ILLUMINATION":
+        while i < len(json_version):
+            if json_version[i]["class"] == "tod":
+                json_version[i]["time"] = amount
+                json_version[i]["startTime"] = amount
             i = i + 1
     if type_operation == "MUT_WET_RIPPLE":
         while i < len(json_version):
