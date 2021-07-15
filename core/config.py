@@ -5,6 +5,7 @@ class Config:
     GEN_DIVERSITY = 'GEN_DIVERSITY'
     NSGA2 = "NSGA2"
     BINARY_SEARCH = "BINARY_SEARCH"
+    Failure_Finder = "FAILURE_FINDER"
 
 
     SEG_LENGTH = 25
@@ -61,10 +62,11 @@ class Config:
     def __init__(self,):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
-        self.POOLSIZE = 10
-        self.POPSIZE = 10
+        self.POOLSIZE = 8
+        self.POPSIZE = 8
         self.NUM_GENERATIONS = 1
         self.NUM_ITERATIONS_BINARY_SEARCH = 5
+        self.FAILURE_FINDER_PRECISE = 10
 
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
@@ -81,8 +83,8 @@ class Config:
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
 
-        self.MUTATION_TYPE = Config.MUT_FOG
-        self.SEARCH_ALGORITHM = Config.BINARY_SEARCH
+        self.MUTATION_TYPE = Config.MUT_ILLUMINATION
+        self.SEARCH_ALGORITHM = Config.Failure_Finder
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
 

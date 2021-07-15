@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e90434e1-7530-4acd-91cd-fa137430f93b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/NSGA2_analyzer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/binary_search_analyzer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/trained_models_colab/self-driving-car-189-2020.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FailureFinderAnalyzer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/failure_finder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/binary_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/binary_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/log.ini" beforeDir="false" afterPath="$PROJECT_DIR$/data/log.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0001.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0002.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0002.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0003.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0003.json" afterDir="false" />
@@ -16,18 +16,6 @@
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0006.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0006.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0007.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0007.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0008.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0008.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0009.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0009.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0010.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0010.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0011.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0011.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0012.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0012.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0013.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0013.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0014.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0014.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0015.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0015.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0016.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0016.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0017.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0017.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0018.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0018.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0019.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0019.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0020.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_pool/member_seeds0020.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0001.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0002.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0002.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0003.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0003.json" afterDir="false" />
@@ -36,13 +24,10 @@
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0006.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0006.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0007.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0007.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0008.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0008.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0009.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0009.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0010.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0010.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0011.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0011.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0012.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/member_seeds/initial_population/member_seeds0012.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels_template/tig/main/MissionGroup/sky_and_sun/items.level.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_nvidia_runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/self_driving/beamng_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/beamng_problem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/self_driving/main_beamng.py" beforeDir="false" afterPath="$PROJECT_DIR$/self_driving/main_beamng.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +61,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data/trained_models_colab" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../thesis4/DeepJanus-BNG_with_operation" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
   </component>
@@ -229,6 +214,7 @@
       <updated>1625136475884</updated>
       <workItem from="1625136477717" duration="13643000" />
       <workItem from="1625389836209" duration="29592000" />
+      <workItem from="1625760331982" duration="39850000" />
     </task>
     <servers />
   </component>

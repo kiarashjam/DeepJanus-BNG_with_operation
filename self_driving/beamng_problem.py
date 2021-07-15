@@ -130,8 +130,6 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
 
     def binary_save_data(self, pop: List[BeamNGIndividual],times_of_process):
-        print("saving the data ")
-        print("length of the pop =  " + str(len(pop)))
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
         self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
@@ -155,6 +153,33 @@ class BeamNGProblem(Problem):
         BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
 
 
+    def failure_finder_save_data(self, dicts):
+
+        self.experiment_path.mkdir(parents=True, exist_ok=True)
+        self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
+        gen_path = self.experiment_path.joinpath('reports')
+        gen_path.mkdir(parents=True, exist_ok=True)
+        all_amount = []
+        all_status = []
+        for whole_data in dicts:
+            amounts=[]
+            statuses = []
+            print(whole_data)
+            print(type(whole_data))
+            for status in whole_data.values():
+                if status:
+                    statuses.append("success")
+                elif not status:
+                    statuses.append("failure")
+            for amount in whole_data.keys():
+                amounts.append(amount)
+            all_status.append(statuses)
+            all_amount.append(amounts)
+        report ={
+            "amount":all_amount,
+            "status":all_status,
+        }
+        gen_path.joinpath('report.json').write_text(json.dumps(report))
 
     def generate_random_member(self) -> Member:
 
@@ -187,7 +212,7 @@ class BeamNGProblem(Problem):
         result.highest_angles = max(array_angles)
 
         if self.config.MUTATION_TYPE == 'MUT_FOG':
-            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH":
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
                 result.fog_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
@@ -232,8 +257,11 @@ class BeamNGProblem(Problem):
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
-            result.illumination = random.uniform(self.config.ILLUMINATION_AMOUNT_threshold_min,
-                                      self.config.ILLUMINATION_AMOUNT_threshold_max)
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+                result.illumination = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.illumination = random.uniform(self.config.ILLUMINATION_AMOUNT_threshold_min,
+                                          self.config.ILLUMINATION_AMOUNT_threshold_max)
         elif self.config.MUTATION_TYPE == 'MUT_OBSTACLE':
             while True:
                 new_amount = (
@@ -314,12 +342,8 @@ class BeamNGProblem(Problem):
         self._get_evaluator().evaluate(all_members)
         log.info('----warmup completed')
 
-    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual], i , dict_already_done ):
-        # counter = 0
-        # for inds in individuals:
-        #     if counter == i :
-        #         ind = inds
-        #     counter = counter + 1
+    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual],  dict_already_done ):
+
         all_members = list(itertools.chain(*[(individuals.m1, individuals.m2) ]))
         log.info('----evaluation of two members ')
         result = self._get_evaluator().evaluate_binary_search(all_members, dict_already_done)

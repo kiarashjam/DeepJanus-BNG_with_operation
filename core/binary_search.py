@@ -13,8 +13,6 @@ from core.config import Config
 log = get_logger(__file__)
 def main(problem: Problem = None,start_time=None, seed=None):
     start_process_time = datetime.now()
-    print("###########start_process_time############" + str(start_process_time))
-    print("###########start_time############" + str(start_time))
     config = problem.config
     random.seed(seed)
 
@@ -68,50 +66,63 @@ def main(problem: Problem = None,start_time=None, seed=None):
     i = 0
     every_evaluation_time=[]
 
-    while i < len(pop):
-        dict_already_done ={0:True}
+    if config.MUTATION_TYPE == "MUT_ILLUMINATION":
+        dict_already_done = {0: True}
         start3 = datetime.now()
         counter = 0
         min_amount = 0
         max_amount = 1
+        pop[0].m1.illumination = 0
+        pop[0].m2.illumination = middle
         middle = (max_amount + min_amount) / 2
-        pop[i].m1.fog_density = min_amount
-        pop[i].m2.fog_density = middle
-        while counter < config.NUM_ITERATIONS_BINARY_SEARCH:
-            result = problem.pre_evaluate_members_binary_search(pop[i], i, dict_already_done)
+        while counter < 20:
+
+            pop[0].m1.illumination = pop[0].m1.illumination + (counter * (1/20))
+            pop[0].m2.illumination = pop[0].m1.illumination + (counter * (1/20))
+            problem.pre_evaluate_members_binary_search(pop[0], dict_already_done)
             dict_already_done.update(result)
-            # fitnesses = toolbox.map(toolbox.evaluate, [pop[i]])
-            # for ind, fit in zip([pop[i]], fitnesses):
-            #     ind.fitness.values = fit
-            # problem.archive.process_population(pop)
-            if result[pop[i].m1.fog_density] != result[pop[i].m2.fog_density]:
-                max_amount = middle
-                middle = (min_amount + max_amount)/2
-                pop[i].m2.fog_density = middle
-                print("one succcess one failure")
-                counter = counter + 1
-            elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == True:
-                print("both are the same")
-                min_amount = middle
-                pop[i].m1.fog_density = min_amount
-                middle = (min_amount + max_amount) / 2
-                pop[i].m2.fog_density = middle
-                counter = counter + 1
-            elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == False:
-                min_amount =0 
-                max_amount = 1
-                middle = (max_amount+ min_amount) / 2
-                pop[i].m1.fog_density = 0
-                pop[i].m1.fog_density = 1
-                counter = 0
-                
-            print("## fog amount fo the first member = "+str(pop[i].m1.fog_density))
-            print("## fog amount fo the second member = " + str(pop[i].m2.fog_density))
-            print("## min_amount = " + str(min_amount))
-            print("## max_amount = " + str(max_amount))
-            print("## middle_amount = " + str(middle))
-        every_evaluation_time.append(str(datetime.now() - start3))
-        i = i + 1
+            counter = counter +  1
+    if config.MUTATION_TYPE == "MUT_FOG":
+        while i < len(pop):
+            dict_already_done ={0:True}
+            start3 = datetime.now()
+            counter = 0
+            min_amount = 0
+            max_amount = 1
+            middle = (max_amount + min_amount) / 2
+            pop[i].m1.fog_density = min_amount
+            pop[i].m2.fog_density = middle
+            while counter < config.NUM_ITERATIONS_BINARY_SEARCH:
+                result = problem.pre_evaluate_members_binary_search(pop[i], dict_already_done)
+                dict_already_done.update(result)
+                if result[pop[i].m1.fog_density] != result[pop[i].m2.fog_density]:
+                    max_amount = middle
+                    middle = (min_amount + max_amount)/2
+                    pop[i].m2.fog_density = middle
+                    print("one succcess one failure")
+                    counter = counter + 1
+                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == True:
+                    print("both are the same")
+                    min_amount = middle
+                    pop[i].m1.fog_density = min_amount
+                    middle = (min_amount + max_amount) / 2
+                    pop[i].m2.fog_density = middle
+                    counter = counter + 1
+                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == False:
+                    min_amount =0
+                    max_amount = 1
+                    middle = (max_amount+ min_amount) / 2
+                    pop[i].m1.fog_density = 0
+                    pop[i].m1.fog_density = 1
+                    counter = 0
+
+                print("## fog amount fo the first member = "+str(pop[i].m1.fog_density))
+                print("## fog amount fo the second member = " + str(pop[i].m2.fog_density))
+                print("## min_amount = " + str(min_amount))
+                print("## max_amount = " + str(max_amount))
+                print("## middle_amount = " + str(middle))
+            every_evaluation_time.append(str(datetime.now() - start3))
+            i = i + 1
     evaluation_population_time = datetime.now() - start2
     whole_process_time = datetime.now() - start_process_time
     time_binary_search = {

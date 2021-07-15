@@ -12,6 +12,7 @@ sys.path.append(str(path.parent.parent))
 from self_driving.beamng_problem import BeamNGProblem
 from core import nsga2
 from core import binary_search
+from core import failure_finder
 from core.archive_impl import GreedyArchive, SmartArchive , FogArchive
 from self_driving.beamng_config import BeamNGConfig
 from datetime import datetime
@@ -28,8 +29,10 @@ if __name__ == '__main__':
 
     if config.SEARCH_ALGORITHM == "NSGA2":
         nsga2.main(problem, start_time)
-    elif  config.BINARY_SEARCH == "BINARY_SEARCH":
+    elif  config.SEARCH_ALGORITHM == "BINARY_SEARCH":
         binary_search.main(problem, start_time)
+    elif config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+        failure_finder.main(problem, start_time)
     print('done')
 
 

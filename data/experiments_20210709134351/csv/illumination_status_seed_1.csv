@@ -1,0 +1,13 @@
+,amount,status
+0,0.0,success
+1,0.1,failure
+2,0.2,success
+3,0.30000000000000004,success
+4,0.4,success
+5,0.5,success
+6,0.6,success
+7,0.7,success
+8,0.7999999999999999,failure
+9,0.8999999999999999,failure
+10,0.9999999999999999,failure
+11,1.0,failure
