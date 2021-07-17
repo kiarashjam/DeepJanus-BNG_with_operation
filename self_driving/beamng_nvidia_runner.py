@@ -182,7 +182,12 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
         sim_data_collector = SimulationDataCollector(self.vehicle, beamng, brewer.decal_road, brewer.params,
                                                      vehicle_state_reader=vehicle_state_reader,
                                                      camera=self.camera,
-                                                     simulation_name=name)
+                                                     simulation_name=name,
+                                                     fog_density=member.fog_density,
+                                                     illumination=member.illumination,
+                                                     number_drop_rain=member.number_drop_rain,
+                                                     wet_foam_density=member.wet_foam_density,
+                                                     wet_ripple_density=member.wet_ripple_density)
 
         sim_data_collector.get_simulation_data().start()
         try:
