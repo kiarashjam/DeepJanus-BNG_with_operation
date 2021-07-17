@@ -99,7 +99,7 @@ def producing_plot(df, path, name_of_file):
         plt.figure(figsize=(12, 5))
         plt.plot(df["Generation id"], df["Standard deviation of fog density"])
         plt.xlabel('Generation id')
-        plt.ylabel('Standard deviation of fog densityl')
+        plt.ylabel('Standard deviation of fog density')
         plt.title("standard deviation per generation")
         plot_path = Path(path + "plots")
         plot_path.mkdir(parents=True, exist_ok=True)
