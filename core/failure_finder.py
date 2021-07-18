@@ -38,10 +38,13 @@ def main(problem: Problem = None,start_time=None, seed=None):
         elif config.MUTATION_TYPE == "MUT_FOG":
             pop[i].m1.fog_density = config.FOG_DENSITY_threshold_min
             pop[i].m2.fog_density = config.FOG_DENSITY_threshold_max / config.FAILURE_FINDER_PRECISE
+        elif config.MUTATION_TYPE == "MUT_DROP_SIZE":
+            pop[i].m1.size_of_drop = config.SIZE_OF_DROP_threshold_min
+            pop[i].m2.size_of_drop = config.SIZE_OF_DROP_threshold_max / config.FAILURE_FINDER_PRECISE
         elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
             pop[i].m1.wet_foam_density = config.WET_FOAM_threshold_min
             pop[i].m2.wet_foam_density = config.WET_FOAM_threshold_max / config.FAILURE_FINDER_PRECISE
-        elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+        elif config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
             pop[i].m1.wet_ripple_density = config.WET_RIPPLE_threshold_min
             pop[i].m2.wet_ripple_density = config.WET_RIPPLE_threshold_max / config.FAILURE_FINDER_PRECISE
         while counter < config.FAILURE_FINDER_PRECISE:
@@ -54,11 +57,20 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.illumination = config.ILLUMINATION_AMOUNT_threshold_max
             elif config.MUTATION_TYPE == "MUT_FOG":
                 pop[i].m1.fog_density = pop[i].m1.fog_density +\
-                                        (config.FOG_DENSITY_threshold_max  / config.FAILURE_FINDER_PRECISE)
+                                        (config.FOG_DENSITY_threshold_max / config.FAILURE_FINDER_PRECISE)
                 pop[i].m2.fog_density = pop[i].m2.fog_density +\
-                                        (config.FOG_DENSITY_threshold_max  / config.FAILURE_FINDER_PRECISE)
-                if pop[i].m2.fog_density > config.FOG_DENSITY_threshold_max :
+                                        (config.FOG_DENSITY_threshold_max / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.fog_density > config.FOG_DENSITY_threshold_max:
                     pop[i].m2.fog_density = config.FOG_DENSITY_threshold_max
+
+            elif config.MUTATION_TYPE == 'MUT_DROP_SIZE':
+                pop[i].m1.size_of_drop = pop[i].m1.size_of_drop +\
+                                         (config.SIZE_OF_DROP_threshold_max / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.size_of_drop = pop[i].m2.size_of_drop +\
+                                         (config.SIZE_OF_DROP_threshold_max / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.size_of_drop > config.SIZE_OF_DROP_threshold_max:
+                    pop[i].m2.size_of_drop = config.SIZE_OF_DROP_threshold_max
+
             elif config.MUTATION_TYPE == 'MUT_WET_FOAM':
                 pop[i].m1.wet_foam_density = pop[i].m1.wet_foam_density +\
                                          (config.WET_FOAM_threshold_max  / config.FAILURE_FINDER_PRECISE)
@@ -66,7 +78,8 @@ def main(problem: Problem = None,start_time=None, seed=None):
                                          (config.WET_FOAM_threshold_max  / config.FAILURE_FINDER_PRECISE)
                 if pop[i].m2.wet_foam_density > config.WET_FOAM_threshold_max :
                     pop[i].m2.wet_foam_density = config.WET_FOAM_threshold_max
-            elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
+
+            elif config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
                 pop[i].m1.wet_ripple_density = pop[i].m1.wet_ripple_density +\
                                          (config.WET_RIPPLE_threshold_max / config.FAILURE_FINDER_PRECISE)
                 pop[i].m2.wet_ripple_density = pop[i].m2.wet_ripple_density +\

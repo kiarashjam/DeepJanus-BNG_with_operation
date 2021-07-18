@@ -59,13 +59,45 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.fog_density = middle
                     counter = counter + 1
                 elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density]\
-                        and result[pop[i].m1.fog_density] == False:
+                        and result[pop[i].m1.fog_density]==False:
                     min_amount = config.FOG_DENSITY_threshold_min
                     max_amount = config.FOG_DENSITY_threshold_max
                     middle = (max_amount+ min_amount) / 2
                     pop[i].m1.fog_density = min_amount
                     pop[i].m2.fog_density = middle
                     counter = 0
+        elif config.MUTATION_TYPE == "MUT_DROP_SIZE":
+            min_amount = config.SIZE_OF_DROP_threshold_min
+            max_amount = config.SIZE_OF_DROP_threshold_max
+            middle = (max_amount + min_amount) / 2
+            pop[i].m1.size_of_drop = min_amount
+            pop[i].m2.size_of_drop = middle
+            while counter < config.NUM_ITERATIONS_BINARY_SEARCH:
+                result = problem.pre_evaluate_members_binary_search(pop[i], dict_already_done)
+                dict_already_done.update(result)
+                if result[pop[i].m1.size_of_drop] != result[pop[i].m2.size_of_drop]:
+                    max_amount = middle
+                    middle = (min_amount + max_amount) / 2
+                    pop[i].m2.size_of_drop = middle
+                    print("one success one failure")
+                    counter = counter + 1
+                elif result[pop[i].m1.size_of_drop] == result[pop[i].m2.size_of_drop] and\
+                        result[pop[i].m1.size_of_drop] == True:
+                    print("both are the same")
+                    min_amount = middle
+                    pop[i].m1.size_of_drop = min_amount
+                    middle = (min_amount + max_amount) / 2
+                    pop[i].m2.size_of_drop = middle
+                    counter = counter + 1
+                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] \
+                        and result[pop[i].m1.wet_foam_density] == False:
+                    min_amount = config.WET_FOAM_threshold_min
+                    max_amount = config.WET_FOAM_threshold_max
+                    middle = (max_amount + min_amount) / 2
+                    pop[i].m1.wet_foam_density = min_amount
+                    pop[i].m2.wet_foam_density = middle
+                    counter = 0
+
         elif config.MUTATION_TYPE == "MUT_WET_FOAM":
             min_amount = config.WET_FOAM_threshold_min
             max_amount = config.WET_FOAM_threshold_max
@@ -97,6 +129,7 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m1.wet_foam_density = min_amount
                     pop[i].m2.wet_foam_density = middle
                     counter = 0
+
         elif config.MUTATION_TYPE == "MUT_WET_RIPPLE":
             min_amount = config.WET_RIPPLE_threshold_min
             max_amount = config.WET_RIPPLE_threshold_max
