@@ -11,7 +11,7 @@ class Folders:
         self.log_ini: Path = self.data.joinpath('log.ini').absolute()
         self.member_seeds: Path = self.data.joinpath('member_seeds').absolute()
         self.experiments: Path = self.data.joinpath('experiments_'+str(now)).absolute()
-        self.simulations: Path = self.data.joinpath('simulations_'+str(now)).absolute()
+        self.siTmulations: Path = self.data.joinpath('simulations_'+str(now)).absolute()
         self.trained_models_colab: Path = self.data.joinpath('trained_models_colab').absolute()
 
 

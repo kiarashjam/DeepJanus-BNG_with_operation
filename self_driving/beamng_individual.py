@@ -87,6 +87,7 @@ class BeamNGIndividual(Individual):
     def is_not_equal(self):
         if (self.m1.control_nodes == self.m2.control_nodes and self.m1.fog_density == self.m2.fog_density
             and self.m1.number_drop_rain == self.m2.number_drop_rain
+            and self.m1.size_of_drop == self.m2.size_of_drop
             and self.m1.wet_ripple_density == self.m2.wet_ripple_density
             and self.m1.wet_foam_density == self.m2.wet_foam_density
             and self.m1.illumination == self.m2.illumination

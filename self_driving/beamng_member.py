@@ -23,7 +23,7 @@ class BeamNGMember(Member):
     counter = 0
 
     def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox, fog_density, number_drop_rain, wet_foam_density, wet_ripple_density,
+                 road_bbox: RoadBoundingBox, fog_density, number_drop_rain, size_of_drop, wet_foam_density, wet_ripple_density,
                  number_of_bump, position_of_obstacle, illumination, mutation_type, angles, highest_angles):
 
         super().__init__()
@@ -39,6 +39,7 @@ class BeamNGMember(Member):
         self._evaluator: BeamNGEvaluator = None
         self.fog_density = fog_density
         self.number_drop_rain = number_drop_rain
+        self.size_of_drop = size_of_drop
         self.wet_foam_density = wet_foam_density
         self.wet_ripple_density = wet_ripple_density
         self.number_of_bump = number_of_bump
@@ -53,7 +54,7 @@ class BeamNGMember(Member):
     def clone(self):
 
         res = BeamNGMember(list(self.control_nodes), list(self.sample_nodes), self.num_spline_nodes, self.road_bbox,
-                           self.fog_density, self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                           self.fog_density, self.number_drop_rain, self.size_of_drop, self.wet_foam_density, self.wet_ripple_density,
                            self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type,
                            self.angles, self.highest_angles)
         res.config = self.config
@@ -73,6 +74,7 @@ class BeamNGMember(Member):
             'distance_to_boundary': self.distance_to_boundary,
             'fog_density': self.fog_density,
             'number_drop_rain': self.number_drop_rain,
+            'size_of_drop':self.size_of_drop,
             'wet_foam_density': self.wet_foam_density,
             'wet_ripple_density': self.wet_ripple_density,
             'number_of_bump': self.number_of_bump,
@@ -89,6 +91,7 @@ class BeamNGMember(Member):
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
                            dict['num_spline_nodes'], road_bbox, dict['fog_density'], dict['number_drop_rain'],
+                           dict['size_of_drop'],
                            dict['wet_foam_density'], dict['wet_ripple_density'], dict['number_of_bump'],
                            dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'], 0, 0)
         res.distance_to_boundary = dict['distance_to_boundary']
@@ -112,6 +115,8 @@ class BeamNGMember(Member):
             return self.config.FOG_DENSITY_threshold_min < amount < self.config.FOG_DENSITY_threshold_max
         elif self.mutation_type == 'MUT_RAIN':
             return self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount < self.config.NUMBER_OF_DROP_RAIN_threshold_max
+        elif self.mutation_type == 'MUT_DROP_SIZE':
+            return self.config.SIZE_OF_DROP_threshold_min < amount < self.config.SIZE_OF_DROP_threshold_max
         elif self.mutation_type == 'MUT_WET_FOAM':
             return Config.WET_FOAM_threshold_min < amount < Config.WET_FOAM_threshold_max
         elif self.mutation_type == 'MUT_WET_RIPPLE':
@@ -144,6 +149,9 @@ class BeamNGMember(Member):
         rain_distance = self.normalize(abs(self.number_drop_rain - other.number_drop_rain),
                                        self.config.NUMBER_OF_DROP_RAIN_threshold_max,
                                        self.config.NUMBER_OF_DROP_RAIN_threshold_min)
+        size_drop__distance = self.normalize(abs(self.size_of_drop - other.size_of_drop),
+                                       self.config.SIZE_OF_DROP_threshold_max,
+                                       self.config.SIZE_OF_DROP_threshold_min)
         foam_distance = self.normalize(abs(self.wet_foam_density - other.wet_foam_density),
                                        self.config.WET_FOAM_threshold_max, self.config.WET_FOAM_threshold_min)
         illumination_distance = self.normalize(abs(self.illumination - other.illumination),
@@ -156,8 +164,8 @@ class BeamNGMember(Member):
         road_shape_distance = iterative_levenshtein(self.sample_nodes, other.sample_nodes)
         obstacle_distance = math.sqrt(((self.position_of_obstacle[0] - other.position_of_obstacle[0]) ** 2) +
                                       ((self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
-        distances = fog_distances + rain_distance + foam_distance + illumination_distance + ripple_distance + \
-                    bump_distance + road_shape_distance + obstacle_distance
+        distances = fog_distances + rain_distance + size_drop__distance + foam_distance + illumination_distance + \
+                    ripple_distance + bump_distance + road_shape_distance + obstacle_distance
 
         # if self.mutation_type == 'MUT_FOG':
         #     if self.sample_nodes == other.sample_nodes:
@@ -175,19 +183,23 @@ class BeamNGMember(Member):
         return barycenter
 
     def mutate_binary_search(self, amount):
-        if self.config.MUTATION_EXTENT == 'MUT_FOG':
+        if self.config.MUTATION_TYPE == 'MUT_FOG':
             FogMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                        max_amount=int(self.config.MUTATION_EXTENT),
                        discrete_value=self.config.MUTATION_FOG_PRECISE).mutate_binary_search(amount)
-        elif self.config.MUTATION_EXTENT == 'MUT_WET_FOAM':
+        elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
             WetFoamMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                            max_amount=int(self.config.MUTATION_EXTENT),
                            discrete_value=self.config.MUTATION_FOAM_PRECISE).mutate_binary_search(amount)
-        elif self.config.MUTATION_EXTENT == 'MUT_WET_RIPPLE':
+        elif self.config.MUTATION_TYPE == 'MUT_DROP_SIZE':
+            SizeDropMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                           max_amount=int(self.config.MUTATION_EXTENT),
+                           discrete_value=self.config.MUTATION_SIZE_OF_DROP_PRECISE).mutate_binary_search(amount)
+        elif self.config.MUTATION_TYPE == 'MUT_WET_RIPPLE':
             WetRippleMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                              max_amount=int(self.config.MUTATION_EXTENT),
                              discrete_value=self.config.MUTATION_RIPPLE_PRECISE).mutate_binary_search(amount)
-        elif self.config.MUTATION_EXTENT == 'MUT_ILLUMINATION':
+        elif self.config.MUTATION_TYPE == 'MUT_ILLUMINATION':
             ChangeIlluminationMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                                       max_amount=int(self.config.MUTATION_EXTENT),
                                       discrete_value=self.config.MUTATION_ILLUMINATION_PRECISE).mutate_binary_search(
@@ -206,6 +218,10 @@ class BeamNGMember(Member):
             RainMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                         max_amount=int(self.config.MUTATION_EXTENT),
                         discrete_value=self.config.MUTATION_RAIN_PRECISE).mutate()
+        elif self.config.MUTATION_TYPE == 'MUT_DROP_SIZE':
+            SizeDropMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                        max_amount=int(self.config.MUTATION_EXTENT),
+                        discrete_value=self.config.MUTATION_SIZE_OF_DROP_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
             WetFoamMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                            max_amount=int(self.config.MUTATION_EXTENT),
@@ -353,6 +369,25 @@ class RainMutator:
                 if new_amount != self.operation.number_drop_rain:
                     self.operation.number_drop_rain = new_amount
                     break
+
+class SizeDropMutator:
+    def __init__(self, operation, min_amount, max_amount, discrete_value):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+        self.discrete_value = discrete_value
+
+    def mutate(self):
+        while True:
+            temp = random.randint(self.min_amount, self.max_amount)
+            distance_mutant_value = temp * self.discrete_value
+            new_amount = self.operation.size_of_drop + distance_mutant_value
+            if self.operation.is_valid(new_amount):
+                if new_amount != self.operation.size_of_drop:
+                    self.operation.size_of_drop = new_amount
+                    break
+    def mutate_binary_search(self, amount):
+        self.operation.size_of_drop = amount
 
 
 class WetFoamMutator:

@@ -48,6 +48,7 @@ class BeamNGBrewer:
     def setup_operation(self, member):
         self.fog_density = member.fog_density
         self.number_drop_rain = member.number_drop_rain
+        self.size_of_drop = member.size_of_drop
         self.wet_foam_density = member.wet_foam_density
         self.wet_ripple_density = member.wet_ripple_density
         self.number_of_bump = member.number_of_bump
@@ -77,6 +78,9 @@ class BeamNGBrewer:
 
     def setup_rain(self, amount):
         operations.change_rain_amount(amount)
+
+    def setup_size_of_drop(self, amount):
+        operations.size_of_drop(amount)
 
     def setup_wet_foam(self, amount):
         operations.change_foam_amount(amount)
@@ -216,6 +220,8 @@ class BeamNGBrewer:
             self.setup_fog(self.fog_density)
         elif self.type_operation == "MUT_RAIN":
             self.setup_rain(self.number_drop_rain)
+        elif self.type_operation == "MUT_DROP_SIZE":
+            self.setup_size_of_drop(self.size_of_drop)
         elif self.type_operation == "MUT_WET_FOAM":
             self.setup_wet_foam(self.wet_foam_density)
         elif self.type_operation == "MUT_WET_RIPPLE":

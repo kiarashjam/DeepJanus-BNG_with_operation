@@ -26,7 +26,7 @@ class RoadGenerator:
 
     def __init__(self, num_control_nodes=15, max_angle=MAX_ANGLE, seg_length=SEG_LENGTH,
                  num_spline_nodes=NUM_SPLINE_NODES, initial_node=(0.0, 0.0, -28.0, 8.0),
-                 bbox_size=(-250, 0, 250, 500), fog_density=0, number_drop_rain=0,
+                 bbox_size=(-250, 0, 250, 500), fog_density=0, number_drop_rain=0, size_of_drop = 0,
                  wet_foam_density=0, wet_ripple_density=0,number_of_bump=0, position_of_obstacle=(0, 0, 0),
                  illumination=0, mutation_type="MUT_ROAD", angles =[], highest_angles = 0):
         assert num_control_nodes > 1 and num_spline_nodes > 0
@@ -40,6 +40,7 @@ class RoadGenerator:
         self.seg_length = seg_length
         self.fog_density = fog_density
         self.number_drop_rain = number_drop_rain
+        self.size_of_drop = size_of_drop
         self.wet_foam_density = wet_foam_density
         self.wet_ripple_density = wet_ripple_density
         self.number_of_bump = number_of_bump
@@ -118,13 +119,13 @@ class RoadGenerator:
         control_nodes = self.generate_control_nodes(visualise)
         sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
         road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
-                            self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                            self.number_drop_rain, self.size_of_drop, self.wet_foam_density, self.wet_ripple_density,
                             self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type, self.angles, self.highest_angles)
         while not road.is_valid(0):
             control_nodes = self.generate_control_nodes(visualise)
             sample_nodes = catmull_rom(control_nodes, self.num_spline_nodes)
             road = BeamNGMember(control_nodes, sample_nodes, self.num_spline_nodes, self.road_bbox, self.fog_density,
-                                self.number_drop_rain, self.wet_foam_density, self.wet_ripple_density,
+                                self.number_drop_rain, self.size_of_drop, self.wet_foam_density, self.wet_ripple_density,
                                 self.number_of_bump, self.position_of_obstacle, self.illumination, self.mutation_type , self.angles, self.highest_angles)
         return road
 

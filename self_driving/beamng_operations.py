@@ -32,9 +32,9 @@ overallFoamOpacity_default = 0
 
 
 
-## rain default variable =
+# rain default variable =
 default_drop_size = 0.0799999982
-default_max_Speed =0.4
+default_max_Speed = 0.4
 default_num_of_drops = 0
 default_max_mass = 0.5
 
@@ -53,6 +53,10 @@ class BeamNGOperations:
     def change_rain_amount(self, amount_of_rain):
         default_weather()
         modification_weather(amount_of_rain, "MUT_RAIN")
+
+    def change_size_of_drop_amount(self, size_of_drop):
+        default_weather()
+        modification_weather(size_of_drop, "MUT_DROP_SIZE")
 
     def change_foam_amount(self, amount_of_foam):
         default_weather()
@@ -158,6 +162,23 @@ def modification_weather(amount, type_operation):
                 json_version[i]["sunScale"] = [0.686275, 0.686275, 0.686275, 1]
                 json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
             i = i + 1
+    if type_operation == "MUT_DROP_SIZE":
+        while i < len(json_version):
+            if json_version[i]["class"] == "LevelInfo":
+                json_version[i]["fogDensity"] = 0.02
+            elif json_version[i]["class"] == "Precipitation":
+                json_version[i]["numDrops"] = 10000
+                json_version[i]["dropSize"] = amount
+            elif json_version[i]["class"] == "CloudLayer":
+                json_version[i]["coverage"] = 1
+            elif json_version[i]["class"] == "ScatterSky":
+                json_version[i]["shadowSoftness"] = 1
+                json_version[i]["colorize"] = [0.427451, 0.427451, 0.427451, 1]
+                json_version[i]["ambientScale"] = [0.545098, 0.545098, 0.54902, 1]
+                json_version[i]["sunScale"] = [0.686275, 0.686275, 0.686275, 1]
+                json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
+            i = i + 1
+
     if type_operation == "MUT_FOG":
         while i < len(json_version):
             if json_version[i]["class"] == "LevelInfo":

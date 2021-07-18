@@ -186,6 +186,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                                                      fog_density=member.fog_density,
                                                      illumination=member.illumination,
                                                      number_drop_rain=member.number_drop_rain,
+                                                     size_of_drop= member.size_of_drop,
                                                      wet_foam_density=member.wet_foam_density,
                                                      wet_ripple_density=member.wet_ripple_density)
 

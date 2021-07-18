@@ -16,6 +16,7 @@ class Config:
     MUT_CONTROL_POINTS = 'MUT_CONTROL_POINTS'
     MUT_FOG = 'MUT_FOG'
     MUT_RAIN = 'MUT_RAIN'
+    MUT_DROP_SIZE = "MUT_DROP_SIZE"
     MUT_WET_FOAM = 'MUT_WET_FOAM'
     MUT_WET_RIPPLE = 'MUT_WET_RIPPLE'
     MUT_ILLUMINATION = 'MUT_ILLUMINATION'
@@ -38,6 +39,7 @@ class Config:
     FOG_DENSITY_threshold_min = 0
     WET_FOAM_threshold_min = 0
     NUMBER_OF_DROP_RAIN_threshold_min = 0
+    SIZE_OF_DROP_threshold_min = 0.1
     WET_RIPPLE_threshold_min = 0
     NUMBER_BUMP_threshold_min = 0
     ADDING_OBSTACLE_min = 0
@@ -46,7 +48,8 @@ class Config:
     # threshold_max
     FOG_DENSITY_threshold_max = 1
     WET_FOAM_threshold_max = 30
-    NUMBER_OF_DROP_RAIN_threshold_max = 3000000
+    NUMBER_OF_DROP_RAIN_threshold_max = 100000
+    SIZE_OF_DROP_threshold_max = 20
     WET_RIPPLE_threshold_max = 700
     NUMBER_BUMP_threshold_max = 3
     ADDING_OBSTACLE_max = 100
@@ -75,6 +78,7 @@ class Config:
 
         self.MUTATION_FOG_PRECISE = 0.015
         self.MUTATION_RAIN_PRECISE = 10
+        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.2
         self.MUTATION_FOAM_PRECISE = 2
         self.MUTATION_RIPPLE_PRECISE = 10
         self.MUTATION_OBSTACLE_PRECISE = 0.1

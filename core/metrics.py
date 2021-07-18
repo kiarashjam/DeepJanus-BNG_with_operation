@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 from core.individual import Individual
 from core.member import Member
-from core.config import  Config
+from core.config import Config
 
 
 def get_radius_seed(solution: List[Individual]):
@@ -12,6 +12,7 @@ def get_radius_seed(solution: List[Individual]):
         return None
     distances_fog = list()
     distances_rain = list()
+    distances_size_of_drop = list()
     distances_foam = list()
     distances_ripple = list()
     distances_obstacle = list()
@@ -24,6 +25,8 @@ def get_radius_seed(solution: List[Individual]):
             mutation_type = "changing the fog density"
         elif i.seed.mutation_type == 'MUT_RAIN':
             mutation_type = "changing the amount of rain"
+        elif i.seed.mutation_type == 'MUT_DROP_SIZE':
+            mutation_type = "changing the size of the drop in rain"
         elif i.seed.mutation_type == 'MUT_WET_FOAM':
             mutation_type = "changing the density of foam in the wet road"
         elif i.seed.mutation_type == 'MUT_WET_RIPPLE':
@@ -36,12 +39,16 @@ def get_radius_seed(solution: List[Individual]):
             mutation_type = "changing the height of the bump "
         elif i.seed.mutation_type == 'MUT_CONTROL_POINTS':
             mutation_type = "changing the shape of the road"
-        ## fog distance
+
+        # fog distance
         fog_avg = (i.m1.fog_density + i.m2.fog_density) / 2
         distances_fog.append(fog_avg)
         # rain distance
         rain_avg = (i.m1.number_drop_rain + i.m2.number_drop_rain) / 2
         distances_rain.append(rain_avg)
+        # size of the drop
+        size_drop_avg = (i.m1.size_of_drop + i.m2.size_of_drop) / 2
+        distances_size_of_drop.append(size_drop_avg)
         # foam distance
         foam_avg = (i.m1.wet_foam_density + i.m2.wet_foam_density) / 2
         distances_foam.append(foam_avg)
@@ -55,7 +62,7 @@ def get_radius_seed(solution: List[Individual]):
         obstacle_avg = 0
         distances_obstacle.append(obstacle_avg)
         # bump distance
-        bump_avg= (i.m1.number_of_bump + i.m2.number_of_bump) / 2
+        bump_avg = (i.m1.number_of_bump + i.m2.number_of_bump) / 2
         distances_bump.append(bump_avg)
         ### previous distance
         oob_input = i.members_by_sign()[0]
@@ -65,35 +72,48 @@ def get_radius_seed(solution: List[Individual]):
         angles.append(i.m1.highest_angles)
         angles.append(i.m2.highest_angles)
     # average normalize  distance of fog
-    fog_avg =np.mean(distances_fog)
-    fog_radius = normalization(fog_avg, Config.FOG_DENSITY_threshold_max,Config.FOG_DENSITY_threshold_min)
+    fog_avg = np.mean(distances_fog)
+    fog_radius = normalization(fog_avg, Config.FOG_DENSITY_threshold_max,
+                               Config.FOG_DENSITY_threshold_min)
     # average normalize  distance of rain
-    rain_avg =np.mean(distances_rain)
-    rain_radius = normalization(rain_avg, Config.NUMBER_OF_DROP_RAIN_threshold_max,Config.NUMBER_OF_DROP_RAIN_threshold_min)
+    rain_avg = np.mean(distances_rain)
+    rain_radius = normalization(rain_avg, Config.NUMBER_OF_DROP_RAIN_threshold_max,
+                                Config.NUMBER_OF_DROP_RAIN_threshold_min)
+    # average normalize  distance of drop size
+    size_drop_avg = np.mean(distances_size_of_drop)
+    drop_size_radius = normalization(size_drop_avg, Config.SIZE_OF_DROP_threshold_max,
+                                     Config.SIZE_OF_DROP_threshold_min)
+
     # average normalize  distance of foam
-    foam_avg =np.mean(distances_foam)
-    foam_radius = normalization(foam_avg, Config.WET_FOAM_threshold_max,Config.WET_FOAM_threshold_min)
+    foam_avg = np.mean(distances_foam)
+    foam_radius = normalization(foam_avg, Config.WET_FOAM_threshold_max,
+                                Config.WET_FOAM_threshold_min)
     # average normalize  distance of ripple
-    ripple_avg =np.mean(distances_ripple)
-    ripple_radius = normalization(ripple_avg, Config.WET_RIPPLE_threshold_max,Config.WET_RIPPLE_threshold_min)
-    # average normalize  distance of bbumo
-    bump_avg =np.mean(distances_bump)
-    bump_radius = normalization(bump_avg, Config.NUMBER_BUMP_threshold_max,Config.NUMBER_BUMP_threshold_min)
+    ripple_avg = np.mean(distances_ripple)
+    ripple_radius = normalization(ripple_avg, Config.WET_RIPPLE_threshold_max,
+                                  Config.WET_RIPPLE_threshold_min)
+    # average normalize  distance of bump
+    bump_avg = np.mean(distances_bump)
+    bump_radius = normalization(bump_avg, Config.NUMBER_BUMP_threshold_max,
+                                Config.NUMBER_BUMP_threshold_min)
     # average normalize  distance of obstacle
     obstacle_avg = np.mean(distances_obstacle)
-    obstacle_radius = normalization(obstacle_avg, Config.ADDING_OBSTACLE_max,Config.ADDING_OBSTACLE_min)
+    obstacle_radius = normalization(obstacle_avg, Config.ADDING_OBSTACLE_max,
+                                    Config.ADDING_OBSTACLE_min)
     # average normalize  distance of illumination
     illumination_avg = np.mean(distances_illumination)
-    illumination_radius = normalization(illumination_avg, Config.ILLUMINATION_AMOUNT_threshold_max,Config.ILLUMINATION_AMOUNT_threshold_min)
-    # average normalize  distance of whole syatem the operation plus road shape
+    illumination_radius = normalization(illumination_avg, Config.ILLUMINATION_AMOUNT_threshold_max,
+                                        Config.ILLUMINATION_AMOUNT_threshold_min)
+    # average normalize  distance of whole system the operation plus road shape
     road_shape_radius = np.mean(distances_road_shape)
     highest_angle = np.mean(angles)
-    radius =  road_shape_radius
-    return fog_radius, rain_radius , foam_radius , ripple_radius , illumination_radius, bump_radius , \
-           obstacle_radius ,road_shape_radius , radius, mutation_type , fog_avg, rain_avg, foam_avg, ripple_avg, \
-           bump_avg, obstacle_avg, illumination_avg , highest_angle
+    radius = road_shape_radius
+    return fog_radius, rain_radius,size_drop_avg, foam_radius, ripple_radius, illumination_radius, bump_radius, \
+           obstacle_radius, road_shape_radius, radius, mutation_type, fog_avg, rain_avg, size_drop_avg, foam_avg, ripple_avg, \
+           bump_avg, obstacle_avg, illumination_avg, highest_angle
 
-def normalization(value, max , min):
+
+def normalization(value, max, min):
     return (value - min) / (max - min)
 
 

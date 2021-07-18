@@ -17,6 +17,7 @@ class SimulationDataCollector:
                  fog_density=None,
                  illumination=None,
                  number_drop_rain=None,
+                 size_of_drop =None,
                  wet_foam_density=None,
                  wet_ripple_density=None):
         self.vehicle_state_reader = vehicle_state_reader if vehicle_state_reader \
@@ -34,6 +35,7 @@ class SimulationDataCollector:
         self.fog_density = fog_density,
         self.illumination = illumination,
         self.number_drop_rain = number_drop_rain,
+        self.size_of_drop = size_of_drop,
         self.wet_foam_density = wet_foam_density,
         self.wet_ripple_density = wet_ripple_density
 

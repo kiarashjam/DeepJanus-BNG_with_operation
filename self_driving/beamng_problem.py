@@ -6,7 +6,6 @@ from typing import List
 
 from deap import creator
 
-
 from core.archive import Archive
 from core.folders import folders
 from core.log_setup import get_logger
@@ -23,6 +22,7 @@ from self_driving.beamng_individual_set_store import BeamNGIndividualSetStore
 from self_driving.beamng_member import BeamNGMember
 from self_driving.road_generator import RoadGenerator
 from self_driving.initial_population_generator import initial_pool_generator, initial_population_generator
+
 log = get_logger(__file__)
 import numpy as np
 
@@ -94,31 +94,34 @@ class BeamNGProblem(Problem):
 
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
-        if (len(self.archive)>0):
-            fog, rain , foam , ripple , illumination, bump , position ,shape_road , radius, type_operation, fog_avg, \
-            rain_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg , angles   =  get_radius_seed(self.archive)
+        if (len(self.archive) > 0):
+            fog, rain, size_of_drop, foam, ripple, illumination, bump, position, shape_road, radius, type_operation, \
+            fog_avg, rain_avg, size_of_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, \
+            angles = get_radius_seed(self.archive)
             report = {
                 'archive_len': len(self.archive),
-                'initial population time':str(time_records[0]),
-                'evaluation process time':str(time_records[1]),
-                'distance calculation time':str(time_records[2]),
-                'whole generation time':str(time_records[3]),
+                'initial population time': str(time_records[0]),
+                'evaluation process time': str(time_records[1]),
+                'distance calculation time': str(time_records[2]),
+                'whole generation time': str(time_records[3]),
                 'operation_type': type_operation,
-                'fog_average_amount':fog_avg,
-                'rain_average_amount':rain_avg,
-                'foam_average_amount':foam_avg,
-                'ripple_average_amount':ripple_avg,
-                'bump_average_amount':bump_avg,
-                'position_obstacle_average_amount':obstacle_avg,
-                'illumintaion_average_amount':illumination_avg,
-                'normalize_distance_fog':fog,
-                'normalize_distance_rain':rain,
-                'normalize_distance_foam':foam,
-                'normalize_distance_ripple':ripple,
-                'normalize_distance_bump':bump,
-                'normalize_distance_obstacle':position,
-                'normalize_distance_illumination':illumination,
-                'normalize_distance_road_shape':shape_road,
+                'fog_average_amount': fog_avg,
+                'rain_average_amount': rain_avg,
+                'size_of_drop_average_amount': size_of_drop_avg,
+                'foam_average_amount': foam_avg,
+                'ripple_average_amount': ripple_avg,
+                'bump_average_amount': bump_avg,
+                'position_obstacle_average_amount': obstacle_avg,
+                'illumintaion_average_amount': illumination_avg,
+                'normalize_distance_fog': fog,
+                'normalize_distance_rain': rain,
+                'normalize_distance_size_of_drop': size_of_drop,
+                'normalize_distance_foam': foam,
+                'normalize_distance_ripple': ripple,
+                'normalize_distance_bump': bump,
+                'normalize_distance_obstacle': position,
+                'normalize_distance_illumination': illumination,
+                'normalize_distance_road_shape': shape_road,
                 'radius': radius,
                 'angle': angles,
                 'diameter_out': get_diameter([ind.members_by_sign()[0] for ind in self.archive]),
@@ -158,7 +161,7 @@ class BeamNGProblem(Problem):
                   "whole_process_time": str(times_of_process["whole_process_time"]),
                   "initial_population_time": str(times_of_process["initial_population_time"]),
                   "every_evaluation_time": times_of_process["every_evaluation_time"],
-        }
+                  }
         gen_path.joinpath('report.json').write_text(json.dumps(report))
         BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
 
@@ -170,7 +173,7 @@ class BeamNGProblem(Problem):
         all_amount = []
         all_status = []
         for whole_data in dicts:
-            amounts=[]
+            amounts = []
             statuses = []
             print(whole_data)
             print(type(whole_data))
@@ -191,7 +194,6 @@ class BeamNGProblem(Problem):
 
     def generate_random_member(self) -> Member:
 
-
         result = RoadGenerator(num_control_nodes=self.config.num_control_nodes,
                                seg_length=self.config.SEG_LENGTH).generate()
         result.config = self.config
@@ -203,7 +205,7 @@ class BeamNGProblem(Problem):
         n = len(pointes)
         i = 0
         array_angles = []
-        while i < n-3 :
+        while i < n - 3:
             a = np.array([pointes[i][0], pointes[i][1]])
             b = np.array([pointes[i + 1][0], pointes[i + 1][1]])
             c = np.array([pointes[i + 2][0], pointes[i + 2][1]])
@@ -224,9 +226,10 @@ class BeamNGProblem(Problem):
                 result.fog_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
-                                                self.config.FOG_DENSITY_threshold_for_generating_seed_max)
+                                                    self.config.FOG_DENSITY_threshold_for_generating_seed_max)
             result.wet_foam_density = 0
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
@@ -234,23 +237,43 @@ class BeamNGProblem(Problem):
         elif self.config.MUTATION_TYPE == 'MUT_RAIN':
             result.fog_density = 0
             result.wet_foam_density = 0
-            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or\
+                    result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
                 result.number_drop_rain = 0
+
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
-                                          self.config.NUMBER_OF_DROP_RAIN_threshold_max)
+                                                         self.config.NUMBER_OF_DROP_RAIN_threshold_max)
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
+
+        elif self.config.MUTATION_TYPE == 'MUT_DROP_SIZE':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
+                result.size_of_drop = 0
+            elif result.config.SEARCH_ALGORITHM == "NSGA2":
+                result.size_of_drop = random.randint(self.config.SIZE_OF_DROP_threshold_min,
+                                                     self.config.SIZE_OF_DROP_threshold_max)
+            result.number_drop_rain = 0
+            result.size_of_drop = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+
         elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
             result.fog_density = 0
             if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
                 result.wet_foam_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
-                                                     self.config.WET_FOAM_threshold_max)
+                                                         self.config.WET_FOAM_threshold_max)
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
@@ -259,11 +282,12 @@ class BeamNGProblem(Problem):
             result.fog_density = 0
             result.wet_foam_density = 0
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
                 result.wet_ripple_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
-                                                       self.config.WET_RIPPLE_threshold_max)
+                                                           self.config.WET_RIPPLE_threshold_max)
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
@@ -271,6 +295,7 @@ class BeamNGProblem(Problem):
             result.fog_density = 0
             result.wet_foam_density = 0
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
@@ -278,7 +303,7 @@ class BeamNGProblem(Problem):
                 result.illumination = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.illumination = random.uniform(self.config.ILLUMINATION_AMOUNT_threshold_min,
-                                          self.config.ILLUMINATION_AMOUNT_threshold_max)
+                                                     self.config.ILLUMINATION_AMOUNT_threshold_max)
         elif self.config.MUTATION_TYPE == 'MUT_OBSTACLE':
             while True:
                 new_amount = (
@@ -289,6 +314,7 @@ class BeamNGProblem(Problem):
             result.fog_density = 0
             result.wet_foam_density = 0
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.illumination = 0
@@ -296,6 +322,7 @@ class BeamNGProblem(Problem):
             result.fog_density = 0
             result.wet_foam_density = 0
             result.number_drop_rain = 0
+            result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = random.randint(self.config.NUMBER_BUMP_threshold_min,
                                                    self.config.NUMBER_BUMP_threshold_max)
@@ -320,8 +347,8 @@ class BeamNGProblem(Problem):
         if len(self.archive) > 0:
             stop = self.config.RESEED_UPPER_BOUND + 1
             seed_range = min(random.randrange(0, stop), len(pop))
-            #log.info(f'reseed{seed_range}')
-            #for i in range(0, seed_range):
+            # log.info(f'reseed{seed_range}')
+            # for i in range(0, seed_range):
             #    ind1 = self.deap_generate_individual()
             #    rem_idx = -(i + 1)
             #    log.info(f'reseed rem {pop[rem_idx]}')
@@ -359,9 +386,9 @@ class BeamNGProblem(Problem):
         self._get_evaluator().evaluate(all_members)
         log.info('----warmup completed')
 
-    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual],  dict_already_done ):
+    def pre_evaluate_members_binary_search(self, individuals: List[BeamNGIndividual], dict_already_done):
 
-        all_members = list(itertools.chain(*[(individuals.m1, individuals.m2) ]))
+        all_members = list(itertools.chain(*[(individuals.m1, individuals.m2)]))
         log.info('----evaluation of two members ')
         result = self._get_evaluator().evaluate_binary_search(all_members, dict_already_done)
         log.info('----evaluation of two members completed')
