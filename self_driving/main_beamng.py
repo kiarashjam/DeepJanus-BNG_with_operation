@@ -18,7 +18,6 @@ from self_driving.beamng_config import BeamNGConfig
 from datetime import datetime
 
 start_time = datetime.now()
-print(start_time)
 config = BeamNGConfig()
 
 # problem = BeamNGProblem(config, SmartArchive(config.ARCHIVE_THRESHOLD))

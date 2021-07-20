@@ -175,8 +175,6 @@ class BeamNGProblem(Problem):
         for whole_data in dicts:
             amounts = []
             statuses = []
-            print(whole_data)
-            print(type(whole_data))
             for status in whole_data.values():
                 if status:
                     statuses.append("success")

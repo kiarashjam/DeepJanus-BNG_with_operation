@@ -39,7 +39,6 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
     def evaluate_binary_search(self, members: List[BeamNGMember],dict_already_done):
         result_of_test = {}
         for member in members:
-            print(member.illumination)
             counter = 20
             attempt = 0
             if member.mutation_type == "MUT_FOG":
@@ -145,10 +144,8 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     log.info(f'{member} BeamNG evaluation start')
                 if attempt > 2:
                     time.sleep(5)
-                sim , successful_member = self._run_simulation(member)
+                sim, successful_member = self._run_simulation(member)
                 if sim.info.success:
-                    # Config.EXECTIME = Config.EXECTIME + sim.states[-1].timer
-                    # print("Execution time: ", Config.EXECTIME)
                     break
 
             member.distance_to_boundary = sim.min_oob_distance()
@@ -216,9 +213,6 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                     print("border boundary failure")
                     successful_member = False
                     break
-                # if last_state.damage:
-                #     print("accident failure")
-                #     break
                 img = vehicle_state_reader.sensors['cam_center']['colour'].convert('RGB')
                 steering_angle, throttle = predict.predict(img, last_state)
                 self.vehicle.control(throttle=throttle, steering=steering_angle, brake=0)

@@ -58,10 +58,6 @@ def initial_pool_generator(config, problem):
 
     while good_members_found < config.POOLSIZE:  # 40:
         path = storage.get_path_by_index(good_members_found + 1)
-        # if path.exists():
-        #     print('member already exists', path)
-        #     good_members_found += 1
-        #     continue
         attempts += 1
         print(f'attempts {attempts} good {good_members_found} looking for {path}')
         member = problem.generate_random_member()

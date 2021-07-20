@@ -10,9 +10,7 @@ ListOfPoints = List[Point]
 
 def _calc_cost_discrete(u: AngleLength, v: AngleLength):
     delta_angle, delta_len = np.subtract(u, v)
-    #print(delta_angle)
     delta_angle = np.abs((delta_angle + 180) % 360 - 180)
-    #print(str(delta_angle))
     eps_angle = 0.3
     eps_len = 0.2
     if delta_angle < eps_angle and delta_len < eps_len:
@@ -67,9 +65,6 @@ def _iterative_levenshtein_dist_angle(s: ListOfAngleLength, t: ListOfAngleLength
             dist[row][col] = min(dist[row - 1][col] + 1,  # deletion
                                  dist[row][col - 1] + 1,  # insertion
                                  dist[row - 1][col - 1] + cost)  # substitution
-    # for r in range(rows):
-    #     print(dist[r])
-
     return dist[row][col]
 
 
@@ -100,9 +95,6 @@ def _calc_dist_angle(points: ListOfPoints) -> ListOfAngleLength:
 def iterative_levenshtein(s: ListOfPoints, t: ListOfPoints):
     s_da = _calc_dist_angle(s)
     t_da = _calc_dist_angle(t)
-    #for i in range(len(s_da)):
-        #if np.abs(np.subtract(s_da[i][0], t_da[i][0])) > 10:
-            #print(str(s_da[i])+" "+str(t_da[i]))
     return _iterative_levenshtein_dist_angle(s_da, t_da)
 
 

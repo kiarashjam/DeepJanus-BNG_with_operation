@@ -132,6 +132,3 @@ if __name__ == '__main__':
         sim1 = SimulationData('/'.join(s)).load()
         if len(sim1.states) == 0:
             print(sim1.name)
-    # sim2 = SimulationData('group1/sim_road12_round2').load()
-    # print(sim1.max_oob_distance())
-    # print(sim2.max_oob_distance())
