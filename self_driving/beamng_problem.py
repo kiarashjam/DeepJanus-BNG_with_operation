@@ -250,6 +250,45 @@ class BeamNGProblem(Problem):
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
 
+        elif self.config.MUTATION_TYPE == 'MUT_RAIN_WHOLE':
+            result.fog_density = 0
+            result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
+                                                     self.config.NUMBER_OF_DROP_RAIN_threshold_max)
+            result.size_of_drop = random.randint(self.config.SIZE_OF_DROP_threshold_min,
+                                                 self.config.SIZE_OF_DROP_threshold_max)
+            result.wet_foam_density = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+
+        elif self.config.MUTATION_TYPE == 'MUT_STORM':
+            result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
+                                                self.config.FOG_DENSITY_threshold_for_generating_seed_max)
+            result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
+                                                     self.config.NUMBER_OF_DROP_RAIN_threshold_max)
+            result.size_of_drop = random.randint(self.config.SIZE_OF_DROP_threshold_min,
+                                                 self.config.SIZE_OF_DROP_threshold_max)
+            result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
+                                                     self.config.WET_FOAM_threshold_max)
+            result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
+                                                       self.config.WET_RIPPLE_threshold_max)
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+
+        elif self.config.MUTATION_TYPE == 'MUT_WHOLE_WET_FLOOR':
+            result.fog_density = 0
+            result.number_drop_rain = 0
+            result.size_of_drop = 0
+            result.wet_foam_density = random.randint(self.config.WET_FOAM_threshold_min,
+                                                     self.config.WET_FOAM_threshold_max)
+            result.wet_ripple_density = random.randint(self.config.WET_RIPPLE_threshold_min,
+                                                       self.config.WET_RIPPLE_threshold_max)
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+
         elif self.config.MUTATION_TYPE == 'MUT_DROP_SIZE':
             result.fog_density = 0
             result.wet_foam_density = 0
@@ -258,7 +297,7 @@ class BeamNGProblem(Problem):
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.size_of_drop = random.randint(self.config.SIZE_OF_DROP_threshold_min,
                                                      self.config.SIZE_OF_DROP_threshold_max)
-            result.number_drop_rain = 0
+            result.number_drop_rain = 10000
             result.size_of_drop = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0

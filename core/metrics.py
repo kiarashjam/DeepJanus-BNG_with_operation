@@ -39,6 +39,14 @@ def get_radius_seed(solution: List[Individual]):
             mutation_type = "changing the height of the bump "
         elif i.seed.mutation_type == 'MUT_CONTROL_POINTS':
             mutation_type = "changing the shape of the road"
+        elif i.seed.mutation_type == 'MUT_RAIN_WHOLE':
+            mutation_type = "changing the number and size of the rain drops in rain"
+        elif i.seed.mutation_type == 'MUT_STORM':
+            mutation_type = "changing the number of drops and size of the rain drops,amount of  fog density," \
+                            " amount of foam in the wet floor , amount of ripple in the wet floor"
+        elif i.seed.mutation_type == 'MUT_WHOLE_WET_FLOOR':
+            mutation_type = "changing the amount of foam and ripple in the wet floor"
+
 
         # fog distance
         fog_avg = (i.m1.fog_density + i.m2.fog_density) / 2

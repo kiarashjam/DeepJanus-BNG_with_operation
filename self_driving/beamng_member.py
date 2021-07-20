@@ -117,8 +117,20 @@ class BeamNGMember(Member):
             return self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount < self.config.NUMBER_OF_DROP_RAIN_threshold_max
         elif self.mutation_type == 'MUT_DROP_SIZE':
             return self.config.SIZE_OF_DROP_threshold_min < amount < self.config.SIZE_OF_DROP_threshold_max
+        elif self.mutation_type == 'MUT_RAIN_WHOLE':
+            return self.config.SIZE_OF_DROP_threshold_min < amount[0] < self.config.SIZE_OF_DROP_threshold_max and \
+                   self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[1] < self.config.NUMBER_OF_DROP_RAIN_threshold_max
+        elif self.mutation_type == 'MUT_STORM':
+            return self.config.FOG_DENSITY_threshold_min < amount[0] < self.config.FOG_DENSITY_threshold_max and \
+                   self.config.SIZE_OF_DROP_threshold_min < amount[1] < self.config.SIZE_OF_DROP_threshold_max and \
+                   self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[2] < self.config.NUMBER_OF_DROP_RAIN_threshold_max and \
+                   self.config.WET_FOAM_threshold_min < amount[3] < self.config.WET_FOAM_threshold_max and \
+                   self.config.WET_RIPPLE_threshold_min < amount[4] < self.config.WET_RIPPLE_threshold_max
+        elif self.mutation_type == 'MUT_WHOLE_WET_FLOOR':
+            return self.config.WET_FOAM_threshold_min < amount[0] < self.config.WET_FOAM_threshold_max and \
+                   self.config.WET_RIPPLE_threshold_min < amount[1] < self.config.WET_RIPPLE_threshold_max
         elif self.mutation_type == 'MUT_WET_FOAM':
-            return Config.WET_FOAM_threshold_min < amount < Config.WET_FOAM_threshold_max
+            return self.config.WET_FOAM_threshold_min < amount < self.config.WET_FOAM_threshold_max
         elif self.mutation_type == 'MUT_WET_RIPPLE':
             return self.config.WET_RIPPLE_threshold_min < amount < self.config.WET_RIPPLE_threshold_max
         elif self.mutation_type == 'MUT_ILLUMINATION':
@@ -129,7 +141,6 @@ class BeamNGMember(Member):
                 if distance < 5:
                     return True
             return False
-
             # return self.problem.config.ADDING_OBSTACLE_min < amount < self.problem.config.ADDING_OBSTACLE_max
         elif self.mutation_type == 'MUT_BUMP':
             return self.config.NUMBER_BUMP_threshold_min < amount < self.config.NUMBER_BUMP_threshold_max
@@ -166,14 +177,6 @@ class BeamNGMember(Member):
                                       ((self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
         distances = fog_distances + rain_distance + size_drop__distance + foam_distance + illumination_distance + \
                     ripple_distance + bump_distance + road_shape_distance + obstacle_distance
-
-        # if self.mutation_type == 'MUT_FOG':
-        #     if self.sample_nodes == other.sample_nodes:
-        #         # the distance of two identical road is zero
-        #         assert road_shape_distance == 0
-        #         # distance between two roads with the same shape but with different fog levels f1 and f2, should be fog difference
-        #         assert distances == fog_distances
-        #         print("two assertion in distances passed")
 
         return distances
 
@@ -213,7 +216,24 @@ class BeamNGMember(Member):
             FogMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                        max_amount=int(self.config.MUTATION_EXTENT),
                        discrete_value=self.config.MUTATION_FOG_PRECISE).mutate()
-            self.distance_to_boundary = None
+        elif self.config.MUTATION_TYPE == 'MUT_RAIN_WHOLE':
+            WholeRainMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                             max_amount=int(self.config.MUTATION_EXTENT),
+                             discrete_value_number_of_drop=self.config.MUTATION_RAIN_PRECISE,
+                             discrete_value_size_of_drop=self.config.MUTATION_SIZE_OF_DROP_PRECISE).mutate()
+        elif self.config.MUTATION_TYPE == 'MUT_STORM':
+            StormMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                         max_amount=int(self.config.MUTATION_EXTENT),
+                         discrete_value_fog=self.config.MUTATION_FOG_PRECISE,
+                         discrete_value_number_of_drop=self.config.MUTATION_RAIN_PRECISE,
+                         discrete_value_size_of_drop=self.config.MUTATION_SIZE_OF_DROP_PRECISE,
+                         discrete_value_foam=self.config.MUTATION_FOAM_PRECISE,
+                         discrete_value_ripple=self.config.MUTATION_RIPPLE_PRECISE).mutate()
+        elif self.config.MUTATION_TYPE == 'MUT_WHOLE_WET_FLOOR':
+            WholeWetFloorMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                         max_amount=int(self.config.MUTATION_EXTENT),
+                         discrete_value_foam=self.config.MUTATION_FOAM_PRECISE,
+                         discrete_value_ripple=self.config.MUTATION_RIPPLE_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_RAIN':
             RainMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                         max_amount=int(self.config.MUTATION_EXTENT),
@@ -369,6 +389,91 @@ class RainMutator:
                 if new_amount != self.operation.number_drop_rain:
                     self.operation.number_drop_rain = new_amount
                     break
+class WholeRainMutator:
+    def __init__(self, operation, min_amount, max_amount, discrete_value_number_of_rain, discrete_value_size_of_drop):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+        self.discrete_value_number_of_rain = discrete_value_number_of_rain
+        self.discrete_value_size_of_drop = discrete_value_size_of_drop
+
+    def mutate(self):
+        while True:
+            new_amount = []
+            temp = random.randint(self.min_amount, self.max_amount)
+            distance_mutant_value_number_of_drop = temp * self.discrete_value_number_of_rain
+            distance_mutant_value_size_of_drop = temp * self.discrete_value_size_of_drop
+            new_amount.append(self.operation.number_drop_rain + distance_mutant_value_number_of_drop)
+            new_amount.append(self.operation.size_of_drop + distance_mutant_value_size_of_drop)
+            if self.operation.is_valid(new_amount):
+                if new_amount[0] != self.operation.number_drop_rain:
+                    self.operation.number_drop_rain = new_amount[0]
+                    if new_amount[1] != self.operation.size_of_drop:
+                        self.operation.size_of_drop = new_amount[1]
+                        break
+class StormMutator:
+    def __init__(self, operation, min_amount, max_amount,discrete_fog, discrete_value_number_of_rain,
+                 discrete_value_size_of_drop, discrete_foam, discrete_ripple):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+        self.discrete_value_number_of_rain = discrete_value_number_of_rain
+        self.discrete_value_size_of_drop = discrete_value_size_of_drop
+        self.discrete_fog = discrete_fog
+        self.discrete_foam = discrete_foam
+        self.discrete_ripple = discrete_ripple
+
+    def mutate(self):
+        while True:
+            new_amount = []
+            temp = random.randint(self.min_amount, self.max_amount)
+            distance_mutant_fog = temp * self.discrete_fog
+            distance_mutant_value_number_of_drop = temp * self.discrete_value_number_of_rain
+            distance_mutant_value_size_of_drop = temp * self.discrete_value_size_of_drop
+            distance_mutant_foam = temp * self.discrete_foam
+            distance_mutant_ripple = temp * self.discrete_ripple
+            new_amount.append(self.operation.fog_density + distance_mutant_fog)
+            new_amount.append(self.operation.number_drop_rain + distance_mutant_value_number_of_drop)
+            new_amount.append(self.operation.size_of_drop + distance_mutant_value_size_of_drop)
+            new_amount.append(self.operation.wet_foam_density + distance_mutant_foam)
+            new_amount.append(self.operation.wet_ripple_density + distance_mutant_ripple)
+            if self.operation.is_valid(new_amount):
+                if new_amount[0] != self.operation.fog_density:
+                    self.operation.fog_density = new_amount[0]
+                    if new_amount[1] != self.operation.number_drop_rain:
+                        self.operation.number_drop_rain = new_amount[1]
+                        if new_amount[2] != self.operation.size_of_drop:
+                            self.operation.size_of_drop = new_amount[2]
+                            if new_amount[3] != self.operation.wet_foam_density:
+                                self.operation.wet_foam_density = new_amount[3]
+                                if new_amount[4] != self.operation.wet_ripple_density:
+                                    self.operation.wet_ripple_density = new_amount[4]
+                                    break
+class WholeWetFloorMutator:
+    def __init__(self, operation, min_amount, max_amount,discrete_fog, discrete_value_number_of_rain,
+                 discrete_value_size_of_drop, discrete_foam, discrete_ripple):
+        self.operation = operation
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+        self.discrete_foam = discrete_foam
+        self.discrete_ripple = discrete_ripple
+
+    def mutate(self):
+        while True:
+            new_amount = []
+            temp = random.randint(self.min_amount, self.max_amount)
+            distance_mutant_foam = temp * self.discrete_foam
+            distance_mutant_ripple = temp * self.discrete_ripple
+            new_amount.append(self.operation.wet_foam_density + distance_mutant_foam)
+            new_amount.append(self.operation.wet_ripple_density + distance_mutant_ripple)
+            if self.operation.is_valid(new_amount):
+                if new_amount[0] != self.operation.wet_foam_density:
+                    self.operation.wet_foam_density = new_amount[3]
+                    if new_amount[1] != self.operation.wet_ripple_density:
+                        self.operation.wet_ripple_density = new_amount[4]
+                        break
+
+
 
 class SizeDropMutator:
     def __init__(self, operation, min_amount, max_amount, discrete_value):

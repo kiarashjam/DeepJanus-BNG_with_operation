@@ -49,6 +49,27 @@ class BeamNGOperations:
     def change_fog_amount(self, amount_of_fog):
         default_weather()
         modification_weather(amount_of_fog, "MUT_FOG")
+    def change_whole_rain_amount(self, number_drop_rain, size_of_drop):
+        amounts = []
+        default_weather()
+        amounts.append(number_drop_rain)
+        amounts.append(size_of_drop)
+        modification_weather(amounts, "MUT_RAIN_WHOLE")
+    def change_storm_amount(self, fog, number_drop_rain, size_of_drop, foam, ripple):
+        amounts = []
+        default_weather()
+        amounts.append(fog)
+        amounts.append(number_drop_rain)
+        amounts.append(size_of_drop)
+        amounts.append(foam)
+        amounts.append(ripple)
+        modification_weather(amounts, "MUT_STORM")
+    def change_whole_wet_floor_amount(self, foam, ripple):
+        amounts = []
+        default_weather()
+        amounts.append(foam)
+        amounts.append(ripple)
+        modification_weather(amounts, "MUT_WHOLE_WET_FLOOR")
 
     def change_rain_amount(self, amount_of_rain):
         default_weather()
@@ -139,7 +160,7 @@ def modification_weather(amount, type_operation):
                 json_version[i]["nodes"] = [[-1000, -1000, -27.9, 1000, 5, 0, 0, 1],
                                             [1000, 1000, -27.9, 1000, 5, 0, 0, 1]]
             i = i + 1
-    if type_operation == "MUT_WET_RIPPLE":
+    elif type_operation == "MUT_WET_RIPPLE":
         while i < len(json_version):
             if json_version[i]["class"] == "river":
                 json_version[i]["overallRippleMagnitude"] = amount
@@ -147,7 +168,7 @@ def modification_weather(amount, type_operation):
                                             [1000, 1000, -27.9, 1000, 5, 0, 0, 1]]
 
             i = i + 1
-    if type_operation == "MUT_RAIN":
+    elif type_operation == "MUT_RAIN":
         while i < len(json_version):
             if json_version[i]["class"] == "LevelInfo":
                 json_version[i]["fogDensity"] = 0.02
@@ -162,7 +183,52 @@ def modification_weather(amount, type_operation):
                 json_version[i]["sunScale"] = [0.686275, 0.686275, 0.686275, 1]
                 json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
             i = i + 1
-    if type_operation == "MUT_DROP_SIZE":
+    elif type_operation == "MUT_DROP_SIZE":
+        while i < len(json_version):
+            if json_version[i]["class"] == "LevelInfo":
+                json_version[i]["fogDensity"] = 0.02
+            elif json_version[i]["class"] == "Precipitation":
+                json_version[i]["numDrops"] = amount[0]
+                json_version[i]["dropSize"] = amount[1]
+            elif json_version[i]["class"] == "CloudLayer":
+                json_version[i]["coverage"] = 1
+            elif json_version[i]["class"] == "ScatterSky":
+                json_version[i]["shadowSoftness"] = 1
+                json_version[i]["colorize"] = [0.427451, 0.427451, 0.427451, 1]
+                json_version[i]["ambientScale"] = [0.545098, 0.545098, 0.54902, 1]
+                json_version[i]["sunScale"] = [0.686275, 0.686275, 0.686275, 1]
+                json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
+            i = i + 1
+    elif type_operation == "MUT_STORM":
+        while i < len(json_version):
+            if json_version[i]["class"] == "LevelInfo":
+                json_version[i]["fogDensity"] = amount[0]
+            elif json_version[i]["class"] == "Precipitation":
+                json_version[i]["numDrops"] = amount[1]
+                json_version[i]["dropSize"] = amount[2]
+            elif json_version[i]["class"] == "CloudLayer":
+                json_version[i]["coverage"] = 1
+            elif json_version[i]["class"] == "ScatterSky":
+                json_version[i]["shadowSoftness"] = 1
+                json_version[i]["colorize"] = [0.427451, 0.427451, 0.427451, 1]
+                json_version[i]["ambientScale"] = [0.545098, 0.545098, 0.54902, 1]
+                json_version[i]["sunScale"] = [0.686275, 0.686275, 0.686275, 1]
+                json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
+            elif json_version[i]["class"] == "river":
+                json_version[i]["overallFoamOpacity"] = amount[3]
+                json_version[i]["overallRippleMagnitude"] = amount[4]
+                json_version[i]["nodes"] = [[-1000, -1000, -27.9, 1000, 5, 0, 0, 1],
+                                            [1000, 1000, -27.9, 1000, 5, 0, 0, 1]]
+            i = i + 1
+    elif type_operation == "MUT_WHOLE_WET_FLOOR":
+        while i < len(json_version):
+            if json_version[i]["class"] == "river":
+                json_version[i]["overallFoamOpacity"] = amount[0]
+                json_version[i]["overallRippleMagnitude"] = amount[1]
+                json_version[i]["nodes"] = [[-1000, -1000, -27.9, 1000, 5, 0, 0, 1],
+                                            [1000, 1000, -27.9, 1000, 5, 0, 0, 1]]
+            i = i + 1
+    elif type_operation == "MUT_RAIN_WHOLE":
         while i < len(json_version):
             if json_version[i]["class"] == "LevelInfo":
                 json_version[i]["fogDensity"] = 0.02
@@ -179,7 +245,7 @@ def modification_weather(amount, type_operation):
                 json_version[i]["fogScale"] = [0.756863, 0.760784, 0.760784, 1]
             i = i + 1
 
-    if type_operation == "MUT_FOG":
+    elif type_operation == "MUT_FOG":
         while i < len(json_version):
             if json_version[i]["class"] == "LevelInfo":
                 json_version[i]["fogDensity"] = amount

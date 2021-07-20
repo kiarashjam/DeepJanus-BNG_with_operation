@@ -46,7 +46,7 @@ class BeamNGIndividual(Individual):
         self.sparseness = evaluate_sparseness(self, self.archive)
 
         stop = timeit.default_timer()
-        print('Time to sparseness: '+ str(stop - start)+ 'archive len: '+ str(len(self.archive)))
+        print('Time to sparseness: ' + str(stop - start) + 'archive len: ' + str(len(self.archive)))
 
         self.m1.evaluate()
         self.m2.evaluate()
@@ -85,14 +85,15 @@ class BeamNGIndividual(Individual):
         return np.mean([i1_posi.distance(i2_posi), i1_nega.distance(i2_nega)])
 
     def is_not_equal(self):
-        if (self.m1.control_nodes == self.m2.control_nodes and self.m1.fog_density == self.m2.fog_density
-            and self.m1.number_drop_rain == self.m2.number_drop_rain
-            and self.m1.size_of_drop == self.m2.size_of_drop
-            and self.m1.wet_ripple_density == self.m2.wet_ripple_density
-            and self.m1.wet_foam_density == self.m2.wet_foam_density
-            and self.m1.illumination == self.m2.illumination
-            and self.m1.position_of_obstacle == self.m2.position_of_obstacle
-            and self.m1.number_of_bump == self.m2.number_of_bump):
+        if (self.m1.control_nodes == self.m2.control_nodes
+                and self.m1.fog_density == self.m2.fog_density
+                and self.m1.number_drop_rain == self.m2.number_drop_rain
+                and self.m1.size_of_drop == self.m2.size_of_drop
+                and self.m1.wet_ripple_density == self.m2.wet_ripple_density
+                and self.m1.wet_foam_density == self.m2.wet_foam_density
+                and self.m1.illumination == self.m2.illumination
+                and self.m1.position_of_obstacle == self.m2.position_of_obstacle
+                and self.m1.number_of_bump == self.m2.number_of_bump):
             return False
         else:
             return True
@@ -125,11 +126,11 @@ class BeamNGIndividual(Individual):
         condition = False
         while not condition:
             road_to_mutate.mutate()
-            #if self.m1.distance(self.m2) != 0.0:
+            # if self.m1.distance(self.m2) != 0.0:
             if self.is_not_equal():
                 condition = True
         self.members_distance = None
         log.info(f'mutated {road_to_mutate}')
-        
+
     def get_members(self):
         return self.m1, self.m2

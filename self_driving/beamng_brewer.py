@@ -56,10 +56,9 @@ class BeamNGBrewer:
         self.illumination = member.illumination
         self.type_operation = member.mutation_type
         self.surrounding_type = member.surrounding_type
-        self.surrounding_amount= member.surrounding_amount
+        self.surrounding_amount = member.surrounding_amount
         self.angles = member.angles
         self.highest_angles = member.highest_angles
-
 
     def setup_vehicle(self) -> Vehicle:
         assert self.vehicle is None
@@ -70,6 +69,7 @@ class BeamNGBrewer:
         assert self.camera is None
         self.camera = BeamNGCamera(self.beamng, 'brewer_camera')
         return self.camera
+
     def setup_default(self):
         operations.default()
 
@@ -79,8 +79,16 @@ class BeamNGBrewer:
     def setup_rain(self, amount):
         operations.change_rain_amount(amount)
 
+    def setup_whole_rain(self, number_drop_rain, size_of_drop):
+        operations.change_whole_rain_amount(number_drop_rain, size_of_drop)
+
+    def setup_storm(self, fog, number_drop_rain, size_of_drop, foam, ripple):
+        operations.change_storm_amount(fog, number_drop_rain, size_of_drop, foam, ripple)
+    def setup_whole_wet_floor(self, foam, ripple):
+        operations.change_storm_amount(foam, ripple)
+
     def setup_size_of_drop(self, amount):
-        operations.size_of_drop(amount)
+        operations.change_size_of_drop_amount(amount)
 
     def setup_wet_foam(self, amount):
         operations.change_foam_amount(amount)
@@ -97,21 +105,23 @@ class BeamNGBrewer:
         #               "height": random.uniform(1, 2)}
         # i = 30
         # while i < amount:
-        self.beamng.create_bump(name="bump" ,rot=(0, 0, 0, 1), width=7, length=10, height=amount, pos=(0, 10, self.road_nodes[0][2]), upper_length= 1, upper_width = 5,)
-            # i = i + 30
+        self.beamng.create_bump(name="bump", rot=(0, 0, 0, 1), width=7, length=10, height=amount,
+                                pos=(0, 10, self.road_nodes[0][2]), upper_length=1, upper_width=5, )
+        # i = i + 30
 
     def setup_adding_obstacle(self, amount):
         i = 0
         cube1 = ProceduralCube(name='cube1', pos=(amount), rot=None,
                                size=(1, 1, 10))
         self.scenario.add_procedural_mesh(cube1)
+
     def setup_surrounding(self):
         ## checking the surrounding
 
         if len(self.surrounding_type) > 0:
             reserved_points = [(0, 0, 0)]
             for operation in self.surrounding_type:
-                print("the operation "+str(operation)+" is loading....")
+                print("the operation " + str(operation) + " is loading....")
                 if operation == 'Trees':
                     j = 0
                     while j < self.surrounding_amount["Trees_amount"]:
@@ -160,7 +170,8 @@ class BeamNGBrewer:
                             reserved_points.append(rocks_position)
                             rocks_object = StaticObject(name="rocks" + "_" + str(j),
                                                         pos=(rocks_position), rot=(0, 0, 0), scale=(1, 1, 1),
-                                                        shape='/levels/tig/art/shapes/rocks/wca_rock'+str(random.randint(1,11))+'.dae')
+                                                        shape='/levels/tig/art/shapes/rocks/wca_rock' + str(
+                                                            random.randint(1, 11)) + '.dae')
                             self.scenario.add_object(rocks_object)
                             j = j + 1
                 elif operation == 'Cabin':
@@ -184,8 +195,11 @@ class BeamNGBrewer:
                         if out_road and not_close_to_other_object:
                             reserved_points.append(cabin_position)
                             cabin_object = StaticObject(name="cabin" + "_" + str(j),
-                                                        pos=(cabin_position[0], cabin_position[1], cabin_position[2]+1), rot=(0, 0, 0), scale=(1, 1, 1),
-                                                        shape='/levels/tig/art/shapes/buildings/cabin'+str(random.choice([1, 2]))+'.dae')
+                                                        pos=(
+                                                        cabin_position[0], cabin_position[1], cabin_position[2] + 1),
+                                                        rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/buildings/cabin' + str(
+                                                            random.choice([1, 2])) + '.dae')
                             self.scenario.add_object(cabin_object)
                             j = j + 1
                 elif operation == 'House':
@@ -209,8 +223,11 @@ class BeamNGBrewer:
                         if out_road and not_close_to_other_object:
                             reserved_points.append(house_position)
                             house_object = StaticObject(name="house" + "_" + str(j),
-                                                        pos=(house_position[0], house_position[1], house_position[2]+1), rot=(0, 0, 0), scale=(1, 1, 1),
-                                                        shape='/levels/tig/art/shapes/buildings/house'+str(random.choice([1, 2, 3, 4]))+'.dae')
+                                                        pos=(
+                                                        house_position[0], house_position[1], house_position[2] + 1),
+                                                        rot=(0, 0, 0), scale=(1, 1, 1),
+                                                        shape='/levels/tig/art/shapes/buildings/house' + str(
+                                                            random.choice([1, 2, 3, 4])) + '.dae')
                             self.scenario.add_object(house_object)
                             j = j + 1
 
@@ -220,6 +237,13 @@ class BeamNGBrewer:
             self.setup_fog(self.fog_density)
         elif self.type_operation == "MUT_RAIN":
             self.setup_rain(self.number_drop_rain)
+        elif self.type_operation == "MUT_RAIN_WHOLE":
+            self.setup_whole_rain(self.number_drop_rain, self.size_of_drop)
+        elif self.type_operation == "MUT_STORM":
+            self.setup_storm(self.fog_density, self.number_drop_rain,
+                             self.size_of_drop, self.wet_foam_density, self.wet_ripple_density)
+        elif self.type_operation == "MUT_WHOLE_WET_FLOOR":
+            self.setup_storm(self.wet_foam_density, self.wet_ripple_density)
         elif self.type_operation == "MUT_DROP_SIZE":
             self.setup_size_of_drop(self.size_of_drop)
         elif self.type_operation == "MUT_WET_FOAM":
