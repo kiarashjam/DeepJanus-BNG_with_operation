@@ -53,7 +53,7 @@ class Config:
     FOG_DENSITY_threshold_max = 1
     WET_FOAM_threshold_max = 30
     NUMBER_OF_DROP_RAIN_threshold_max = 100000
-    SIZE_OF_DROP_threshold_max = 10
+    SIZE_OF_DROP_threshold_max = 1
     WET_RIPPLE_threshold_max = 700
     NUMBER_BUMP_threshold_max = 3
     ADDING_OBSTACLE_max = 100
@@ -82,7 +82,7 @@ class Config:
 
         self.MUTATION_FOG_PRECISE = 0.015
         self.MUTATION_RAIN_PRECISE = 10
-        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.2
+        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.1
         self.MUTATION_FOAM_PRECISE = 2
         self.MUTATION_RIPPLE_PRECISE = 10
         self.MUTATION_OBSTACLE_PRECISE = 0.1
