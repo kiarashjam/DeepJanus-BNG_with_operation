@@ -22,8 +22,8 @@ class BeamNGMember(Member):
     """A class representing a road returned by the RoadGenerator."""
     counter = 0
 
-    def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int,
-                 road_bbox: RoadBoundingBox, fog_density, number_drop_rain, size_of_drop, wet_foam_density, wet_ripple_density,
+    def __init__(self, control_nodes: Tuple4F, sample_nodes: Tuple4F, num_spline_nodes: int, road_bbox: RoadBoundingBox,
+                 fog_density, number_drop_rain, size_of_drop, wet_foam_density, wet_ripple_density,
                  number_of_bump, position_of_obstacle, illumination, mutation_type, angles, highest_angles):
 
         super().__init__()
@@ -91,7 +91,7 @@ class BeamNGMember(Member):
         res = BeamNGMember([tuple(t) for t in dict['control_nodes']],
                            [tuple(t) for t in dict['sample_nodes']],
                            dict['num_spline_nodes'], road_bbox, dict['fog_density'], dict['number_drop_rain'],
-                           dict['size_of_drop'],
+                           0,
                            dict['wet_foam_density'], dict['wet_ripple_density'], dict['number_of_bump'],
                            dict['position_of_obstacle'], dict['illumination'], dict['mutation_type'], 0, 0)
         res.distance_to_boundary = dict['distance_to_boundary']
@@ -109,6 +109,8 @@ class BeamNGMember(Member):
 
     def clear_evaluation(self):
         self.distance_to_boundary = None
+    def is_valid_multiple(self, amount):
+        return self.config.FOG_DENSITY_threshold_min < amount < self.config.FOG_DENSITY_threshold_max
 
     def is_valid(self, amount):
         if self.mutation_type == 'MUT_FOG':
@@ -118,17 +120,11 @@ class BeamNGMember(Member):
         elif self.mutation_type == 'MUT_DROP_SIZE':
             return self.config.SIZE_OF_DROP_threshold_min < amount < self.config.SIZE_OF_DROP_threshold_max
         elif self.mutation_type == 'MUT_RAIN_WHOLE':
-            return self.config.SIZE_OF_DROP_threshold_min < amount[0] < self.config.SIZE_OF_DROP_threshold_max and \
-                   self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[1] < self.config.NUMBER_OF_DROP_RAIN_threshold_max
+            return self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[0] < self.config.NUMBER_OF_DROP_RAIN_threshold_max and self.config.SIZE_OF_DROP_threshold_min < amount[1] < self.config.SIZE_OF_DROP_threshold_max
         elif self.mutation_type == 'MUT_STORM':
-            return self.config.FOG_DENSITY_threshold_min < amount[0] < self.config.FOG_DENSITY_threshold_max and \
-                   self.config.SIZE_OF_DROP_threshold_min < amount[1] < self.config.SIZE_OF_DROP_threshold_max and \
-                   self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[2] < self.config.NUMBER_OF_DROP_RAIN_threshold_max and \
-                   self.config.WET_FOAM_threshold_min < amount[3] < self.config.WET_FOAM_threshold_max and \
-                   self.config.WET_RIPPLE_threshold_min < amount[4] < self.config.WET_RIPPLE_threshold_max
+            return self.config.FOG_DENSITY_threshold_min < amount[0] < self.config.FOG_DENSITY_threshold_max and  self.config.SIZE_OF_DROP_threshold_min < amount[2] < self.config.SIZE_OF_DROP_threshold_max and self.config.NUMBER_OF_DROP_RAIN_threshold_min < amount[1] < self.config.NUMBER_OF_DROP_RAIN_threshold_max and self.config.WET_FOAM_threshold_min < amount[3] < self.config.WET_FOAM_threshold_max and self.config.WET_RIPPLE_threshold_min < amount[4] < self.config.WET_RIPPLE_threshold_max
         elif self.mutation_type == 'MUT_WHOLE_WET_FLOOR':
-            return self.config.WET_FOAM_threshold_min < amount[0] < self.config.WET_FOAM_threshold_max and \
-                   self.config.WET_RIPPLE_threshold_min < amount[1] < self.config.WET_RIPPLE_threshold_max
+            return self.config.WET_FOAM_threshold_min < amount[0] < self.config.WET_FOAM_threshold_max and self.config.WET_RIPPLE_threshold_min < amount[1] < self.config.WET_RIPPLE_threshold_max
         elif self.mutation_type == 'MUT_WET_FOAM':
             return self.config.WET_FOAM_threshold_min < amount < self.config.WET_FOAM_threshold_max
         elif self.mutation_type == 'MUT_WET_RIPPLE':
@@ -147,6 +143,10 @@ class BeamNGMember(Member):
         elif self.mutation_type == 'MUT_CONTROL_POINTS':
             return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
                     self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+        elif self.mutation_type == 'MUT_FOG_WITH_CONTROL_POINTS':
+            return (RoadPolygon.from_nodes(self.sample_nodes).is_valid() and
+                    self.road_bbox.contains(RoadPolygon.from_nodes(self.control_nodes[1:-1])))
+
 
     def normalize(self, amount, max, min):
         value = (amount - min) / (max - min)
@@ -160,7 +160,7 @@ class BeamNGMember(Member):
         rain_distance = self.normalize(abs(self.number_drop_rain - other.number_drop_rain),
                                        self.config.NUMBER_OF_DROP_RAIN_threshold_max,
                                        self.config.NUMBER_OF_DROP_RAIN_threshold_min)
-        size_drop__distance = self.normalize(abs(self.size_of_drop - other.size_of_drop),
+        size_drop_distance = self.normalize(abs(self.size_of_drop - other.size_of_drop),
                                        self.config.SIZE_OF_DROP_threshold_max,
                                        self.config.SIZE_OF_DROP_threshold_min)
         foam_distance = self.normalize(abs(self.wet_foam_density - other.wet_foam_density),
@@ -172,11 +172,10 @@ class BeamNGMember(Member):
                                          self.config.WET_RIPPLE_threshold_max, self.config.WET_RIPPLE_threshold_min)
         bump_distance = self.normalize(abs(self.number_of_bump - other.number_of_bump),
                                        self.config.NUMBER_BUMP_threshold_max, self.config.NUMBER_BUMP_threshold_min)
-        road_shape_distance = iterative_levenshtein(self.sample_nodes, other.sample_nodes)
+        road_shape_distance = iterative_levenshtein(self.sample_nodes, other.sample_nodes) / 1 + iterative_levenshtein(self.sample_nodes, other.sample_nodes)
         obstacle_distance = math.sqrt(((self.position_of_obstacle[0] - other.position_of_obstacle[0]) ** 2) +
                                       ((self.position_of_obstacle[1] - other.position_of_obstacle[1]) ** 2))
-        distances = fog_distances + rain_distance + size_drop__distance + foam_distance + illumination_distance + \
-                    ripple_distance + bump_distance + road_shape_distance + obstacle_distance
+        distances = fog_distances + rain_distance + size_drop_distance + foam_distance + illumination_distance + ripple_distance + bump_distance + road_shape_distance + obstacle_distance
 
         return distances
 
@@ -219,13 +218,13 @@ class BeamNGMember(Member):
         elif self.config.MUTATION_TYPE == 'MUT_RAIN_WHOLE':
             WholeRainMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                              max_amount=int(self.config.MUTATION_EXTENT),
-                             discrete_value_number_of_drop=self.config.MUTATION_RAIN_PRECISE,
+                             discrete_value_number_of_rain=self.config.MUTATION_RAIN_PRECISE,
                              discrete_value_size_of_drop=self.config.MUTATION_SIZE_OF_DROP_PRECISE).mutate()
         elif self.config.MUTATION_TYPE == 'MUT_STORM':
             StormMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
                          max_amount=int(self.config.MUTATION_EXTENT),
                          discrete_value_fog=self.config.MUTATION_FOG_PRECISE,
-                         discrete_value_number_of_drop=self.config.MUTATION_RAIN_PRECISE,
+                         discrete_value_number_of_rain=self.config.MUTATION_RAIN_PRECISE,
                          discrete_value_size_of_drop=self.config.MUTATION_SIZE_OF_DROP_PRECISE,
                          discrete_value_foam=self.config.MUTATION_FOAM_PRECISE,
                          discrete_value_ripple=self.config.MUTATION_RIPPLE_PRECISE).mutate()
@@ -266,7 +265,16 @@ class BeamNGMember(Member):
         elif self.config.MUTATION_TYPE == 'MUT_CONTROL_POINTS':
             RoadMutator(self, lower_bound=-int(self.config.MUTATION_EXTENT),
                         upper_bound=int(self.config.MUTATION_EXTENT)).mutate()
+        elif self.config.MUTATION_TYPE == 'MUT_FOG_WITH_CONTROL_POINTS':
+            print(self.fog_density)
+            RoadMutator(self, lower_bound=-int(self.config.MUTATION_EXTENT),
+                        upper_bound=int(self.config.MUTATION_EXTENT)).mutate()
+            FogMutator(self, min_amount=-int(self.config.MUTATION_EXTENT),
+                       max_amount=int(self.config.MUTATION_EXTENT),
+                       discrete_value=self.config.MUTATION_FOG_PRECISE).mutate()
+            print(self.fog_density)
         self.distance_to_boundary = None
+
         return self
 
     def __repr__(self):
@@ -363,10 +371,16 @@ class FogMutator:
             temp = random.randint(self.min_amount, self.max_amount)
             distance_mutant_value = temp * self.discrete_value
             new_amount = self.operation.fog_density + distance_mutant_value
-            if self.operation.is_valid(new_amount):
-                if new_amount != self.operation.fog_density:
-                    self.operation.fog_density = new_amount
-                    break
+            if self.operation.mutation_type == "MUT_FOG":
+                if self.operation.is_valid(new_amount):
+                    if new_amount != self.operation.fog_density:
+                        self.operation.fog_density = new_amount
+                        break
+            if self.operation.mutation_type == "MUT_FOG_WITH_CONTROL_POINTS":
+                if self.operation.is_valid_multiple(new_amount):
+                    if new_amount != self.operation.fog_density:
+                        self.operation.fog_density = new_amount
+                        break
 
     def mutate_binary_search(self, amount_of_fog):
         self.operation.fog_density = amount_of_fog

@@ -95,9 +95,7 @@ class BeamNGProblem(Problem):
         # Generate final report at the end of the last iteration.
         # if idx + 1 == self.config.NUM_GENERATIONS:
         if (len(self.archive) > 0):
-            fog, rain, size_of_drop, foam, ripple, illumination, bump, position, shape_road, radius, type_operation, \
-            fog_avg, rain_avg, size_of_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, \
-            angles = get_radius_seed(self.archive)
+            fog, rain, size_of_drop, foam, ripple, illumination, bump, position, shape_road, radius, type_operation, fog_avg, rain_avg, size_of_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, angles = get_radius_seed(self.archive)
             report = {
                 'archive_len': len(self.archive),
                 'initial population time': str(time_records[0]),
@@ -112,7 +110,7 @@ class BeamNGProblem(Problem):
                 'ripple_average_amount': ripple_avg,
                 'bump_average_amount': bump_avg,
                 'position_obstacle_average_amount': obstacle_avg,
-                'illumintaion_average_amount': illumination_avg,
+                'illumination_average_amount': illumination_avg,
                 'normalize_distance_fog': fog,
                 'normalize_distance_rain': rain,
                 'normalize_distance_size_of_drop': size_of_drop,
@@ -154,6 +152,9 @@ class BeamNGProblem(Problem):
             elif ind.m1.mutation_type == "MUT_ILLUMINATION":
                 successful_array.append(ind.m1.illumination)
                 failure_array.append(ind.m2.illumination)
+            elif ind.m1.mutation_type == "MUT_DROP_SIZE":
+                successful_array.append(ind.m1.size_of_drop)
+                failure_array.append(ind.m2.size_of_drop)
 
         report = {"amount for successful": successful_array,
                   "amount for failure": failure_array,
@@ -218,8 +219,7 @@ class BeamNGProblem(Problem):
             i = i + 1
         result.angles = array_angles
         result.highest_angles = max(array_angles)
-
-        if self.config.MUTATION_TYPE == 'MUT_FOG':
+        if self.config.MUTATION_TYPE == 'MUT_FOG' or self.config.MUTATION_TYPE == 'MUT_FOG_WITH_CONTROL_POINTS':
             if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":
                 result.fog_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
@@ -247,19 +247,17 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-
         elif self.config.MUTATION_TYPE == 'MUT_RAIN_WHOLE':
             result.fog_density = 0
             result.number_drop_rain = random.randint(self.config.NUMBER_OF_DROP_RAIN_threshold_min,
                                                      self.config.NUMBER_OF_DROP_RAIN_threshold_max)
-            result.size_of_drop = random.randint(self.config.SIZE_OF_DROP_threshold_min,
+            result.size_of_drop = random.uniform(self.config.SIZE_OF_DROP_threshold_min,
                                                  self.config.SIZE_OF_DROP_threshold_max)
             result.wet_foam_density = 0
             result.wet_ripple_density = 0
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-
         elif self.config.MUTATION_TYPE == 'MUT_STORM':
             result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
                                                 self.config.FOG_DENSITY_threshold_for_generating_seed_max)
@@ -274,7 +272,6 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-
         elif self.config.MUTATION_TYPE == 'MUT_WHOLE_WET_FLOOR':
             result.fog_density = 0
             result.number_drop_rain = 0
@@ -286,7 +283,6 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-
         elif self.config.MUTATION_TYPE == 'MUT_DROP_SIZE':
             result.fog_density = 0
             result.wet_foam_density = 0
@@ -301,7 +297,6 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-
         elif self.config.MUTATION_TYPE == 'MUT_WET_FOAM':
             result.fog_density = 0
             if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER":

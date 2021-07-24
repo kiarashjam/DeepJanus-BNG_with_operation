@@ -33,11 +33,10 @@ def distance(road1, road2, config):
                                       config.WET_RIPPLE_threshold_max, config.WET_RIPPLE_threshold_min)
     bump_distance = road1.normalize(abs(road1.number_of_bump - road2.number_of_bump), config.NUMBER_BUMP_threshold_max,
                                     config.NUMBER_BUMP_threshold_min)
-    road_shape_distance = iterative_levenshtein(road1.sample_nodes, road2.sample_nodes)
+    road_shape_distance = iterative_levenshtein(road1.sample_nodes, road2.sample_nodes) / 1 + iterative_levenshtein(road1.sample_nodes, road2.sample_nodes)
     obstacle_distance = math.sqrt(((road1.position_of_obstacle[0] - road2.position_of_obstacle[0]) ** 2) +
                                   ((road1.position_of_obstacle[1] - road2.position_of_obstacle[1]) ** 2))
-    distances = fog_distances + rain_distance + size_drop_distance + foam_distance + illumination_distance + \
-                ripple_distance + bump_distance + road_shape_distance + obstacle_distance
+    distances = fog_distances + rain_distance + size_drop_distance + foam_distance + illumination_distance + ripple_distance + bump_distance + road_shape_distance + obstacle_distance
     return distances
 
 

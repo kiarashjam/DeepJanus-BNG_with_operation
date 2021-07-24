@@ -42,10 +42,12 @@ def get_radius_seed(solution: List[Individual]):
         elif i.seed.mutation_type == 'MUT_RAIN_WHOLE':
             mutation_type = "changing the number and size of the rain drops in rain"
         elif i.seed.mutation_type == 'MUT_STORM':
-            mutation_type = "changing the number of drops and size of the rain drops,amount of  fog density," \
-                            " amount of foam in the wet floor , amount of ripple in the wet floor"
+            mutation_type = "changing the number of drops and size of the rain drops,amount of  fog density, amount of foam in the wet floor , amount of ripple in the wet floor"
         elif i.seed.mutation_type == 'MUT_WHOLE_WET_FLOOR':
             mutation_type = "changing the amount of foam and ripple in the wet floor"
+        elif i.seed.mutation_type == 'MUT_FOG_WITH_CONTROL_POINTS':
+            mutation_type = "changing the amount of fog  and road shape"
+
 
 
         # fog distance
@@ -113,12 +115,10 @@ def get_radius_seed(solution: List[Individual]):
     illumination_radius = normalization(illumination_avg, Config.ILLUMINATION_AMOUNT_threshold_max,
                                         Config.ILLUMINATION_AMOUNT_threshold_min)
     # average normalize  distance of whole system the operation plus road shape
-    road_shape_radius = np.mean(distances_road_shape)
+    road_shape_radius = np.mean(distances_road_shape / 1 + distances_road_shape)
     highest_angle = np.mean(angles)
     radius = road_shape_radius
-    return fog_radius, rain_radius,size_drop_avg, foam_radius, ripple_radius, illumination_radius, bump_radius, \
-           obstacle_radius, road_shape_radius, radius, mutation_type, fog_avg, rain_avg, size_drop_avg, foam_avg, ripple_avg, \
-           bump_avg, obstacle_avg, illumination_avg, highest_angle
+    return fog_radius, rain_radius,size_drop_avg, foam_radius, ripple_radius, illumination_radius, bump_radius, obstacle_radius, road_shape_radius, radius, mutation_type, fog_avg, rain_avg, size_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, highest_angle
 
 
 def normalization(value, max, min):

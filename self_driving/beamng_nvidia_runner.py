@@ -82,8 +82,8 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                             break
                     log.info(f'{member} BeamNG evaluation completed')
             elif member.mutation_type == "MUT_WET_FOAM":
-                if member.wet_ripple_density in dict_already_done:
-                    result_of_test.update({member.wet_ripple_density: dict_already_done[member.wet_ripple_density]})
+                if member.wet_foam_density in dict_already_done:
+                    result_of_test.update({member.wet_foam_density: dict_already_done[member.wet_foam_density]})
                 else:
                     while True:
                         attempt += 1
@@ -97,11 +97,10 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim, successful_member = self._run_simulation(member)
-                        result_of_test.update({member.wet_ripple_density: successful_member})
+                        result_of_test.update({member.wet_foam_density: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
-
             elif member.mutation_type == "MUT_WET_RIPPLE":
                 if member.wet_ripple_density in dict_already_done:
                     result_of_test.update({member.wet_ripple_density: dict_already_done[member.wet_ripple_density]})
@@ -122,7 +121,46 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
-
+            elif member.mutation_type == "MUT_DROP_SIZE":
+                if member.size_of_drop in dict_already_done:
+                    result_of_test.update({member.size_of_drop: dict_already_done[member.size_of_drop]})
+                else:
+                    while True:
+                        attempt += 1
+                        if attempt == counter:
+                            raise Exception('Exhausted attempts')
+                        if attempt > 1:
+                            log.info(f'RETRYING TO run simulation {attempt}')
+                            self._close()
+                        else:
+                            log.info(f'{member} BeamNG evaluation start')
+                        if attempt > 2:
+                            time.sleep(5)
+                        sim, successful_member = self._run_simulation(member)
+                        result_of_test.update({member.size_of_drop : successful_member})
+                        if sim.info.success:
+                            break
+                    log.info(f'{member} BeamNG evaluation completed')
+            elif member.mutation_type == "MUT_RAIN":
+                if member.number_drop_rain in dict_already_done:
+                    result_of_test.update({member.number_drop_rain: dict_already_done[member.number_drop_rain]})
+                else:
+                    while True:
+                        attempt += 1
+                        if attempt == counter:
+                            raise Exception('Exhausted attempts')
+                        if attempt > 1:
+                            log.info(f'RETRYING TO run simulation {attempt}')
+                            self._close()
+                        else:
+                            log.info(f'{member} BeamNG evaluation start')
+                        if attempt > 2:
+                            time.sleep(5)
+                        sim, successful_member = self._run_simulation(member)
+                        result_of_test.update({member.number_drop_rain : successful_member})
+                        if sim.info.success:
+                            break
+                    log.info(f'{member} BeamNG evaluation completed')
         return result_of_test
 
     def evaluate(self, members: List[BeamNGMember]):

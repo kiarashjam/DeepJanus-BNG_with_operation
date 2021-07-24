@@ -188,8 +188,8 @@ def modification_weather(amount, type_operation):
             if json_version[i]["class"] == "LevelInfo":
                 json_version[i]["fogDensity"] = 0.02
             elif json_version[i]["class"] == "Precipitation":
-                json_version[i]["numDrops"] = amount[0]
-                json_version[i]["dropSize"] = amount[1]
+                json_version[i]["numDrops"] = 10000
+                json_version[i]["dropSize"] = amount
             elif json_version[i]["class"] == "CloudLayer":
                 json_version[i]["coverage"] = 1
             elif json_version[i]["class"] == "ScatterSky":
@@ -233,8 +233,8 @@ def modification_weather(amount, type_operation):
             if json_version[i]["class"] == "LevelInfo":
                 json_version[i]["fogDensity"] = 0.02
             elif json_version[i]["class"] == "Precipitation":
-                json_version[i]["numDrops"] = 10000
-                json_version[i]["dropSize"] = amount
+                json_version[i]["numDrops"] = amount[0]
+                json_version[i]["dropSize"] = amount[1]
             elif json_version[i]["class"] == "CloudLayer":
                 json_version[i]["coverage"] = 1
             elif json_version[i]["class"] == "ScatterSky":

@@ -8,13 +8,15 @@ from pathlib import Path
 
 time_columns = ["Initial population time", "Evaluation process time", "Whole process time",
                 "Every seed duration"]
-fog_columns =["Seed id",  "Fog density of successful version", "Fog density of failure version"]
-avg_std_columns = ["Standard deviation of fog density", "Average fog density",  "max failure fog density",
+fog_columns = ["Seed id", "Fog density of successful version", "Fog density of failure version"]
+avg_std_columns = ["Standard deviation of fog density", "Average fog density", "max failure fog density",
                    "min failure fog density"]
+full_columns= ["run id", "number_of_solution", "average", "name of individual", "succcess", "failure", "average of members"]
+
 
 mypath = "data"
 onlyfiles = [f for f in listdir(mypath)]
-matchers = ['experiments_20210708154512']
+matchers = ['experiments_20210722205627']
 matching = [s for s in onlyfiles if any(xs in s for xs in matchers)]
 
 distances = []
@@ -25,7 +27,6 @@ fog_density = []
 
 def time_consuming(json_data, i):
     for section in json_data:
-        # print(section)
         if section == "archive_len":
             archive_len = json_data[section]
         elif section == "initial population time":
@@ -42,10 +43,10 @@ def time_consuming(json_data, i):
 
 def produce_csv(list_of_data, column, name_of_file, path):
     df = pd.DataFrame(list_of_data, columns=column)
-    csv_path = Path(path +"csv")
+    csv_path = Path(path + "csv")
     csv_path.mkdir(parents=True, exist_ok=True)
     producing_plot(df, path, name_of_file)
-    df.to_csv(str(csv_path) +"/"+ name_of_file + ".csv")
+    df.to_csv(str(csv_path) + "/" + name_of_file + ".csv")
 
 
 def producing_plot(df, path, name_of_file):
@@ -63,48 +64,48 @@ def producing_plot(df, path, name_of_file):
                                       int(df["Evaluation process time"][i].split(":")[1]))
         while i < len(df["Every seed duration"][0]):
             every_seed_time_in_minutes.append(int(df["Every seed duration"][0][i].split(":")[0]) * 60 +
-                                               int(df["Every seed duration"][0][i].split(":")[1]))
+                                              int(df["Every seed duration"][0][i].split(":")[1]))
             i = i + 1
         plt.figure(figsize=(12, 5))
-        plt.bar(range(0,i),every_seed_time_in_minutes)
+        plt.bar(range(0, i), every_seed_time_in_minutes)
         plt.xlabel('Generation id')
         plt.ylabel('Whole process time')
         plt.title("time to process per generation")
         plot_path = Path(path + "plots")
         plot_path.mkdir(parents=True, exist_ok=True)
         plt.savefig(str(plot_path) + "/bar_whole_time_generation_id" + ".png", dpi=400)
-        plt.show()
-    elif name_of_file == "fog_density_details":
+        # plt.show()
+    # elif name_of_file == "fog_density_details":
+    #
+    #     successful_list = []
+    #     failure_list = []
+    #
+    #     print(df["Fog density of successful version"])
+    #
+    #     failure = df["Fog density of failure version"]
+    #     print(type(failure))
+    #
+    #     plt.figure(figsize=(12, 5))
+    #     plt.scatter(df["Seed id"], df["Fog density of successful version"], label='Successful member')
+    #     plt.scatter(df["Seed id"], df["Fog density of failure version"], label='Failure member')
+    #     plt.xlabel('fog density amount')
+    #     plt.ylabel('name of individual')
+    #     plt.title("fog density falure and succesful version")
+    #     plot_path = Path(path + "plots")
+    #     plot_path.mkdir(parents=True, exist_ok=True)
+    #     plt.savefig(str(plot_path) + "/line_two_member_fog" + ".png", dpi=400)
+        # plt.show()
 
-        successful_list = []
-        failure_list = []
-
-        print(df["Fog density of successful version"])
-
-        failure = df["Fog density of failure version"]
-        print(type(failure))
-
-        plt.figure(figsize=(12, 5))
-        plt.scatter(df["Seed id"], df["Fog density of successful version"], label='Successful member')
-        plt.scatter(df["Seed id"], df["Fog density of failure version"], label='Failure member')
-        plt.xlabel('fog density amount')
-        plt.ylabel('name of individual')
-        plt.title("fog density falure and succesful version")
-        plot_path = Path(path + "plots")
-        plot_path.mkdir(parents=True, exist_ok=True)
-        plt.savefig(str(plot_path) + "/line_two_member_fog" + ".png", dpi=400)
-        plt.show()
-
-    elif name_of_file == "whole_fog_information":
-        plt.figure(figsize=(12, 5))
-        plt.plot(df["Generation id"], df["Standard deviation of fog density"])
-        plt.xlabel('Generation id')
-        plt.ylabel('Standard deviation of fog density')
-        plt.title("standard deviation per generation")
-        plot_path = Path(path + "plots")
-        plot_path.mkdir(parents=True, exist_ok=True)
-        plt.savefig(str(plot_path) + "/line_std_generation_id" + ".png", dpi=400)
-        plt.show()
+    # elif name_of_file == "whole_fog_information":
+    #     plt.figure(figsize=(12, 5))
+    #     plt.plot(df["Generation id"], df["Standard deviation of fog density"])
+    #     plt.xlabel('Generation id')
+    #     plt.ylabel('Standard deviation of fog density')
+    #     plt.title("standard deviation per generation")
+    #     plot_path = Path(path + "plots")
+    #     plot_path.mkdir(parents=True, exist_ok=True)
+    #     plt.savefig(str(plot_path) + "/line_std_generation_id" + ".png", dpi=400)
+    #     # plt.show()
 
 
 if __name__ == '__main__':
@@ -155,7 +156,7 @@ if __name__ == '__main__':
                 columns_json.append(section)
             first_data = [i, number_of_solution, average_fog]
             time_data.append([initial_population_time, evaluation_population_time, whole_process_time,
-                               every_evaluation_time])
+                              every_evaluation_time])
 
             mypath_ind = mypath + "/" + experiment + "/exp/" + index + "/population_binary_search"
             files_ind = [f for f in listdir(mypath_ind)]
@@ -165,30 +166,42 @@ if __name__ == '__main__':
                 json_ind_path = mypath + "/" + experiment + "/exp/" + index + "/population_binary_search/" + ind
                 f2 = open(json_ind_path, )
                 data2 = json.load(f2)
-                temp1 = data2["m1"]["fog_density"]
-                temp2 = data2["m2"]["fog_density"]
+                if data2["m1"]["mutation_type"] == "MUT_FOG":
+                    temp1 = data2["m1"]["fog_density"]
+                    temp2 = data2["m2"]["fog_density"]
+                elif data2["m1"]["mutation_type"] == "MUT_DROP_SIZE":
+                    temp1 = data2["m1"]["size_of_drop"]
+                    temp2 = data2["m2"]["size_of_drop"]
+                elif data2["m1"]["mutation_type"] == "MUT_WET_FOAM":
+                    temp1 = data2["m1"]["wet_foam_density"]
+                    temp2 = data2["m2"]["wet_foam_density"]
+                elif data2["m1"]["mutation_type"] == "MUT_WET_RIPPLE":
+                    temp1 = data2["m1"]["wet_ripple_density"]
+                    temp2 = data2["m2"]["wet_ripple_density"]
+                elif data2["m1"]["mutation_type"] == "MUT_ILLUMINATION":
+                    temp1 = data2["m1"]["illumination"]
+                    temp2 = data2["m2"]["illumination"]
                 if temp1 > temp2:
                     fog_density.append(
                         [i, number_of_solution, average_fog, data2["name"], temp1, temp2, abs(temp2 + temp1) / 2])
                 else:
                     fog_density.append(
                         [i, number_of_solution, average_fog, data2["name"], temp2, temp1, abs(temp2 + temp1) / 2])
-
             main_distance.append(distances)
             i = i + 1
         i = 0
         fog_amount = []
         fog_failures_array = []
-        while i < len(success_member_fog_amount):
-            fog_amount.append([i, success_member_fog_amount[i], failure_member_fog_amount[i]])
-            fog_failures_array.append(failure_member_fog_amount[i])
+        for ind in fog_density:
+            fog_amount.append([ind[0], ind[5], ind[4]])
+            fog_failures_array.append(ind[4])
             i = i + 1
 
-        produce_csv(time_data, time_columns, "time_information", path_of_experiment)
+        # produce_csv(time_data, time_columns, "time_information", path_of_experiment)
         produce_csv(fog_amount, fog_columns, "fog_density_details", path_of_experiment)
-        produce_csv([[np.std(fog_failures_array, axis=0), np.mean(fog_failures_array) , np.max(fog_failures_array),
+        produce_csv(fog_density,full_columns, "all_individuals", path_of_experiment)
+        produce_csv([[np.std(fog_failures_array, axis=0), np.mean(fog_failures_array), np.max(fog_failures_array),
                       np.min(fog_failures_array)]], avg_std_columns, "std_avg_details", path_of_experiment)
-        
 
         # dframe = pd.DataFrame(fog_density, columns=fog_columns)
         # run_id = dframe["Generation id"].unique()

@@ -233,7 +233,7 @@ class BeamNGBrewer:
 
     def bring_up(self):
         self.setup_default()
-        if self.type_operation == "MUT_FOG":
+        if self.type_operation == "MUT_FOG" or self.type_operation == "MUT_FOG_WITH_CONTROL_POINTS":
             self.setup_fog(self.fog_density)
         elif self.type_operation == "MUT_RAIN":
             self.setup_rain(self.number_drop_rain)
@@ -257,7 +257,7 @@ class BeamNGBrewer:
         if self.camera:
             self.scenario.add_camera(self.camera.camera, self.camera.name)
         # setup the surrounding
-        self.setup_surrounding()
+        # self.setup_surrounding()
 
         ## addiing the obstacle operator
         if self.type_operation == "MUT_OBSTACLE":

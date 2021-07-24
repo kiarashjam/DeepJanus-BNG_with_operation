@@ -50,16 +50,14 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.fog_density = middle
                     print("one success one failure")
                     counter = counter + 1
-                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] \
-                        and result[pop[i].m1.fog_density] == True:
+                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density] == True:
                     print("both are the same")
                     min_amount = middle
                     pop[i].m1.fog_density = min_amount
                     middle = (min_amount + max_amount) / 2
                     pop[i].m2.fog_density = middle
                     counter = counter + 1
-                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density]\
-                        and result[pop[i].m1.fog_density]==False:
+                elif result[pop[i].m1.fog_density] == result[pop[i].m2.fog_density] and result[pop[i].m1.fog_density]==False:
                     min_amount = config.FOG_DENSITY_threshold_min
                     max_amount = config.FOG_DENSITY_threshold_max
                     middle = (max_amount+ min_amount) / 2
@@ -81,16 +79,14 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.size_of_drop = middle
                     print("one success one failure")
                     counter = counter + 1
-                elif result[pop[i].m1.size_of_drop] == result[pop[i].m2.size_of_drop] and\
-                        result[pop[i].m1.size_of_drop] == True:
+                elif result[pop[i].m1.size_of_drop] == result[pop[i].m2.size_of_drop] and result[pop[i].m1.size_of_drop] == True:
                     print("both are the same")
                     min_amount = middle
                     pop[i].m1.size_of_drop = min_amount
                     middle = (min_amount + max_amount) / 2
                     pop[i].m2.size_of_drop = middle
                     counter = counter + 1
-                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] \
-                        and result[pop[i].m1.wet_foam_density] == False:
+                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] and result[pop[i].m1.wet_foam_density] == False:
                     min_amount = config.WET_FOAM_threshold_min
                     max_amount = config.WET_FOAM_threshold_max
                     middle = (max_amount + min_amount) / 2
@@ -113,16 +109,14 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.wet_foam_density = middle
                     print("one success one failure")
                     counter = counter + 1
-                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] and\
-                        result[pop[i].m1.wet_foam_density] == True:
+                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] and result[pop[i].m1.wet_foam_density] == True:
                     print("both are the same")
                     min_amount = middle
                     pop[i].m1.wet_foam_density = min_amount
                     middle = (min_amount + max_amount) / 2
                     pop[i].m2.wet_foam_density = middle
                     counter = counter + 1
-                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density] \
-                        and result[pop[i].m1.wet_foam_density] == False:
+                elif result[pop[i].m1.wet_foam_density] == result[pop[i].m2.wet_foam_density]  and result[pop[i].m1.wet_foam_density] == False:
                     min_amount = config.WET_FOAM_threshold_min
                     max_amount = config.WET_FOAM_threshold_max
                     middle = (max_amount + min_amount) / 2
@@ -145,16 +139,14 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.wet_ripple_density = middle
                     print("one success one failure")
                     counter = counter + 1
-                elif result[pop[i].m1.wet_ripple_density] == result[pop[i].m2.wet_ripple_density] \
-                        and result[pop[i].m1.wet_ripple_density] == True:
+                elif result[pop[i].m1.wet_ripple_density] == result[pop[i].m2.wet_ripple_density]  and result[pop[i].m1.wet_ripple_density] == True:
                     print("both are the same")
                     min_amount = middle
                     pop[i].m1.wet_ripple_density = min_amount
                     middle = (min_amount + max_amount) / 2
                     pop[i].m2.wet_ripple_density = middle
                     counter = counter + 1
-                elif result[pop[i].m1.wet_ripple_density] == result[pop[i].m2.wet_ripple_density]\
-                        and result[pop[i].m1.wet_ripple_density] == False:
+                elif result[pop[i].m1.wet_ripple_density] == result[pop[i].m2.wet_ripple_density] and result[pop[i].m1.wet_ripple_density] == False:
                     min_amount = config.WET_RIPPLE_threshold_min
                     max_amount = config.WET_RIPPLE_threshold_max
                     middle = (max_amount+ min_amount) / 2
@@ -176,16 +168,14 @@ def main(problem: Problem = None,start_time=None, seed=None):
                     pop[i].m2.illumination = middle
                     print("one success one failure")
                     counter = counter + 1
-                elif result[pop[i].m1.illumination] == result[pop[i].m2.illumination]\
-                        and result[pop[i].m1.illumination] == True:
+                elif result[pop[i].m1.illumination] == result[pop[i].m2.illumination] and result[pop[i].m1.illumination] == True:
                     print("both are the same")
                     min_amount = middle
                     pop[i].m1.illumination = min_amount
                     middle = (min_amount + max_amount) / 2
                     pop[i].m2.illumination = middle
                     counter = counter + 1
-                elif result[pop[i].m1.illumination] == result[pop[i].m2.illumination]\
-                        and result[pop[i].m1.illumination] == False:
+                elif result[pop[i].m1.illumination] == result[pop[i].m2.illumination] and result[pop[i].m1.illumination] == False:
                     min_amount = 0
                     max_amount = 1
                     middle = (max_amount + min_amount) / 2
