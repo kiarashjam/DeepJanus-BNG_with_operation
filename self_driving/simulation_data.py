@@ -4,6 +4,7 @@ import uuid
 from collections import namedtuple
 from pathlib import Path
 from typing import List
+import numpy as np
 
 from core import folders
 from self_driving.beamng_road_imagery import BeamNGRoadImagery
@@ -110,6 +111,12 @@ class SimulationData:
 
     def min_oob_distance(self) -> float:
         return min(state.oob_distance for state in self.states)
+
+    def mean_oob_distance(self):
+        all_distances = []
+        for state in self.states:
+            all_distances.append(state.oob_distance)
+        return np.mean(all_distances)
 
     def start(self):
         self.info.success = None

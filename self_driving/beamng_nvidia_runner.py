@@ -35,8 +35,37 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
             raise Exception(f'File {self.model_file} does not exist!')
         self.model = None
 
+    def evaluate_hill_climbing(self, members: List[BeamNGMember]):
+        counter = 20
+        attempt = 0
+        if members[1].mutation_type == "MUT_FOG_DROP_SIZE":
+            print("nvidia fog  = " +str(members[1].fog_density))
+            print("nvidia size  = " + str(members[1].size_of_drop))
+        elif members[1].mutation_type == "MUT_RAIN_WHOLE":
+            print("nvidia numbner drop  = " +str(members[1].number_drop_rain))
+            print("nvidia size  = " + str(members[1].size_of_drop))
+        while True:
+            attempt += 1
+            if attempt == counter:
+                raise Exception('Exhausted attempts')
+            if attempt > 1:
+                log.info(f'RETRYING TO run simulation {attempt}')
+                self._close()
+            else:
+                log.info(f'{members[1]} BeamNG evaluation start')
+            if attempt > 2:
+                time.sleep(5)
+            sim, status = self._run_simulation(members[1])
+            if sim.info.success:
+                break
+            log.info(f'{members[1]} BeamNG evaluation completed')
+            members[1].distance_to_boundary = sim.min_oob_distance()
+        # return status, sim.min_oob_distance() # TODO: decomment it
+        return status, sim.mean_oob_distance()
 
-    def evaluate_binary_search(self, members: List[BeamNGMember],dict_already_done):
+
+
+    def evaluate_binary_search(self, members: List[BeamNGMember], dict_already_done):
         result_of_test = {}
         for member in members:
             counter = 20
@@ -57,7 +86,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim, successful_member = self._run_simulation(member)
-                        result_of_test.update({member.fog_density : successful_member})
+                        result_of_test.update({member.fog_density: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
@@ -76,7 +105,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                             log.info(f'{member} BeamNG evaluation start')
                         if attempt > 2:
                             time.sleep(5)
-                        sim , successful_member = self._run_simulation(member)
+                        sim, successful_member = self._run_simulation(member)
                         result_of_test.update({member.illumination: successful_member})
                         if sim.info.success:
                             break
@@ -117,7 +146,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim, successful_member = self._run_simulation(member)
-                        result_of_test.update({member.wet_ripple_density : successful_member})
+                        result_of_test.update({member.wet_ripple_density: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
@@ -137,7 +166,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim, successful_member = self._run_simulation(member)
-                        result_of_test.update({member.size_of_drop : successful_member})
+                        result_of_test.update({member.size_of_drop: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
@@ -157,7 +186,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                         if attempt > 2:
                             time.sleep(5)
                         sim, successful_member = self._run_simulation(member)
-                        result_of_test.update({member.number_drop_rain : successful_member})
+                        result_of_test.update({member.number_drop_rain: successful_member})
                         if sim.info.success:
                             break
                     log.info(f'{member} BeamNG evaluation completed')
@@ -221,7 +250,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
                                                      fog_density=member.fog_density,
                                                      illumination=member.illumination,
                                                      number_drop_rain=member.number_drop_rain,
-                                                     size_of_drop= member.size_of_drop,
+                                                     size_of_drop=member.size_of_drop,
                                                      wet_foam_density=member.wet_foam_density,
                                                      wet_ripple_density=member.wet_ripple_density)
 
@@ -271,7 +300,7 @@ class BeamNGNvidiaOob(BeamNGEvaluator):
 
             self.end_iteration()
 
-        return sim_data_collector.simulation_data , successful_member
+        return sim_data_collector.simulation_data, successful_member
 
     def end_iteration(self):
         try:

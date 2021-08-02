@@ -81,6 +81,8 @@ class BeamNGBrewer:
 
     def setup_whole_rain(self, number_drop_rain, size_of_drop):
         operations.change_whole_rain_amount(number_drop_rain, size_of_drop)
+    def setup_fog_drop_size(self, fog, size_of_drop):
+        operations.change_fog_drop_size_amount(fog, size_of_drop)
 
     def setup_storm(self, fog, number_drop_rain, size_of_drop, foam, ripple):
         operations.change_storm_amount(fog, number_drop_rain, size_of_drop, foam, ripple)
@@ -237,13 +239,15 @@ class BeamNGBrewer:
             self.setup_fog(self.fog_density)
         elif self.type_operation == "MUT_RAIN":
             self.setup_rain(self.number_drop_rain)
-        elif self.type_operation == "MUT_RAIN_WHOLE":
+        elif self.type_operation == "MUT_RAIN_WHOLE" or self.type_operation == "MUT_RAIN_WITH_CONTROL_POINTS":
             self.setup_whole_rain(self.number_drop_rain, self.size_of_drop)
+        elif self.type_operation == "MUT_FOG_DROP_SIZE":
+            self.setup_fog_drop_size(self.fog_density, self.size_of_drop)
         elif self.type_operation == "MUT_STORM":
             self.setup_storm(self.fog_density, self.number_drop_rain,
                              self.size_of_drop, self.wet_foam_density, self.wet_ripple_density)
         elif self.type_operation == "MUT_WHOLE_WET_FLOOR":
-            self.setup_storm(self.wet_foam_density, self.wet_ripple_density)
+            self.setup_storm(self.fog_density, self.number_drop_rain, self.size_of_drop, self.wet_foam_density, self.wet_ripple_density)
         elif self.type_operation == "MUT_DROP_SIZE":
             self.setup_size_of_drop(self.size_of_drop)
         elif self.type_operation == "MUT_WET_FOAM":
@@ -272,7 +276,7 @@ class BeamNGBrewer:
         self.beamng.load_scenario(self.scenario)
         self.beamng.start_scenario()
         ## changing illumination operator
-        if self.type_operation == "MUT_ILLUMINATION":
+        if self.type_operation == "MUT_ILLUMINATION" or self.type_operation == "MUT_ILLUMINATION_WITH_CONTROL_POINTS":
             # operations.default()
             self.setup_changing_illumination(self.illumination)
 

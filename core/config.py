@@ -6,6 +6,8 @@ class Config:
     NSGA2 = "NSGA2"
     BINARY_SEARCH = "BINARY_SEARCH"
     Failure_Finder = "FAILURE_FINDER"
+    HILL_CLIMBING = "HILL_CLIMBING"
+    STOCHASTIC_HILL_CLIMBING = "STOCHASTIC_HILL_CLIMBING"
 
     SEG_LENGTH = 25
     NUM_SPLINE_NODES = 10
@@ -15,6 +17,8 @@ class Config:
     MUT_CONTROL_POINTS = 'MUT_CONTROL_POINTS'
     MUT_FOG = 'MUT_FOG'
     MUT_FOG_WITH_CONTROL_POINTS = "MUT_FOG_WITH_CONTROL_POINTS"
+    MUT_ILLUMINATION_WITH_CONTROL_POINTS = "MUT_ILLUMINATION_WITH_CONTROL_POINTS"
+    MUT_RAIN_WITH_CONTROL_POINTS = "MUT_RAIN_WITH_CONTROL_POINTS"
     MUT_RAIN = 'MUT_RAIN'
     MUT_RAIN_WHOLE = "MUT_RAIN_WHOLE"
     MUT_STORM = "MUT_STORM"
@@ -25,6 +29,7 @@ class Config:
     MUT_ILLUMINATION = 'MUT_ILLUMINATION'
     MUT_OBSTACLE = 'MUT_OBSTACLE'
     MUT_BUMP = 'MUT_BUMP'
+    MUT_FOG_DROP_SIZE ='MUT_FOG_DROP_SIZE'
 
     # surrounding operation
 
@@ -48,51 +53,66 @@ class Config:
 
     # threshold_max
     FOG_DENSITY_threshold_max = 1
-    WET_FOAM_threshold_max = 20
+    WET_FOAM_threshold_max = 40
     NUMBER_OF_DROP_RAIN_threshold_max = 100000
-    SIZE_OF_DROP_threshold_max = 1
+    SIZE_OF_DROP_threshold_max = 0.5
     WET_RIPPLE_threshold_max = 700
     NUMBER_BUMP_threshold_max = 3
     ADDING_OBSTACLE_max = 100
     ILLUMINATION_AMOUNT_threshold_max = 1
 
     # threshold for generating the seed
-    FOG_DENSITY_threshold_for_generating_seed_max = 0.1
+    FOG_DENSITY_threshold_for_generating_seed_max = 0.5
     FOG_DENSITY_threshold_for_generating_seed_min = 0
+
+
+
+
 
     def __init__(self, ):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
-        self.POOLSIZE = 10
-        self.POPSIZE = 4
-        self.NUM_GENERATIONS = 10
-
-        self.NUM_ITERATIONS_BINARY_SEARCH = 6
-        self.FAILURE_FINDER_PRECISE = 10
-
+        self.POOLSIZE = 12
+        self.POPSIZE = 12
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
-        self.MUTATION_EXTENT = 8
-        self.ARCHIVE_THRESHOLD = 35.0
 
-        self.MUTATION_FOG_PRECISE = 0.015
-        self.MUTATION_RAIN_PRECISE = 10
-        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.1
-        self.MUTATION_FOAM_PRECISE = 2
-        self.MUTATION_RIPPLE_PRECISE = 10
+        # for binary search
+        self.NUM_ITERATIONS_BINARY_SEARCH = 5
+
+        # for failure finder
+        self.FAILURE_FINDER_PRECISE = 10
+
+
+
+        self.MUTATION_EXTENT = 8
+
+        # for NSGA2
+        self.NUM_GENERATIONS = 10
+        self.ARCHIVE_THRESHOLD = 35.0
+        self.MUTATION_FOG_PRECISE = 0.03
+        self.MUTATION_RAIN_PRECISE = 1000
+        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.02
+        self.MUTATION_FOAM_PRECISE = 3
+        self.MUTATION_RIPPLE_PRECISE = 70
         self.MUTATION_OBSTACLE_PRECISE = 0.1
         self.MUTATION_OBSTACLE_AXIS = 'y'
         self.MUTATION_BUMP_PRECISE = 0.1
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
-        self.MUTATION_TYPE = Config.MUT_DROP_SIZE
-        self.SEARCH_ALGORITHM = Config.NSGA2
+        self.MUTATION_TYPE = Config.MUT_RAIN_WHOLE
+        self.SEARCH_ALGORITHM = Config.STOCHASTIC_HILL_CLIMBING
+
+
+
+
+
         self.SURROUNDING = []
         self.Surrounding_amount = Config.Surrounding_amount
-        self.FRONTIER = 0.2
+        self.FRONTIER = 1
 
-        self.FRONTIER_ILLUMINATION_MAX = 0.6
-        self.FRONTIER_ILLUMINATION_MIN = 0.3
+        self.FRONTIER_ILLUMINATION_MAX = 1
+        self.FRONTIER_ILLUMINATION_MIN = 0
 
         self.K_SD = 0.01
 
@@ -102,16 +122,17 @@ class Config:
         self.keras_model_file = 'self-driving-car-4600.h5'
         # self.keras_model_file = 'fog_added.h5'
         # self.keras_model_file = 'fog_foam_added.h5'
+        # self.keras_model_file = 'fog_foam_dropsize_added.h5'
+        # self.keras_model_file = 'fog_foam_dropsize_ripple_added.h5'
 
         # self.generator_name = Config.GEN_RANDOM
         # self.generator_name = Config.GEN_RANDOM_SEEDED
         # self.generator_name = Config.GEN_SEQUENTIAL_SEEDED
         # self.generator_name = Config.GEN_RANDOM
         self.generator_name = Config.GEN_DIVERSITY
-
         # self.seed_folder = 'population_HQ1'
-        self.seed_folder = 'initial_pool'
 
+        self.seed_folder = 'initial_pool'
         self.initial_population_folder = "initial_population"
 
         self.RUNTIME = 36000

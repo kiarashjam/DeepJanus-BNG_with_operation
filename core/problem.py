@@ -32,6 +32,9 @@ class Problem:
     def binary_save_data(self, pop: List[Individual], time):
         raise NotImplemented()
 
+    def hill_climbing_save_data(self, pop: List[Individual]):
+        raise NotImplemented()
+
     def member_class(self):
         raise NotImplemented()
 
@@ -45,4 +48,7 @@ class Problem:
         pass
 
     def pre_evaluate_members_binary_search(self, individuals: List[Individual], i):
+        pass
+
+    def pre_evaluate_members_hill_climbing(self, individuals: List[Individual]):
         pass
