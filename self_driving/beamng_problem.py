@@ -161,7 +161,7 @@ class BeamNGProblem(Problem):
 
         BeamNGIndividualSetStore(gen_path.joinpath('population')).save(pop)
         BeamNGIndividualSetStore(gen_path.joinpath('archive')).save(self.archive)
-    def hill_climbing_save_data(self, pop: List[BeamNGIndividual]):
+    def hill_climbing_save_data(self, pop: List[BeamNGIndividual], type, dictionaries_of_steps, process_time):
 
         self.experiment_path.mkdir(parents=True, exist_ok=True)
         self.experiment_path.joinpath('config.json').write_text(json.dumps(self.config.__dict__))
@@ -175,16 +175,29 @@ class BeamNGProblem(Problem):
                 dict.update({i:{"fog":ind.m2.fog_density,"drop_size":ind.m2.size_of_drop}})
                 i = i + 1
             elif ind.m1.mutation_type == "MUT_RAIN_WHOLE":
-                dict.update({i:{"number of drop":ind.m2.number_drop_rain,"drop_size":ind.m2.size_of_drop}})
+                dict.update({i:{"number of drop":ind.m1.number_drop_rain,"drop_size":ind.m1.size_of_drop}})
                 i = i + 1
             elif ind.m1.mutation_type == "MUT_STORM":
                 dict.update({i:{"fog":ind.m2.fog_density, "number of drop":ind.m2.number_drop_rain,
                                 "drop_size":ind.m2.size_of_drop, "foam density":ind.m2.wet_foam_density,
                                 "ripple density":ind.m2.wet_ripple_density}})
                 i = i + 1
+        print(dict)
+        report = {"frontiers": dict,
+                  "time": str(process_time)}
 
-        report = {"frontiers": dict}
-        gen_path.joinpath('report.json').write_text(json.dumps(report))
+        if type == "random":
+            gen_path.joinpath('random_steps_report.json').write_text(json.dumps(dictionaries_of_steps))
+            gen_path.joinpath('random_report.json').write_text(json.dumps(report))
+        elif type == "simulated_annealing":
+            gen_path.joinpath('simulated_annealing__steps_report.json').write_text(json.dumps(dictionaries_of_steps))
+            gen_path.joinpath('simulated_annealing_report.json').write_text(json.dumps(report))
+        elif type == "stochastic":
+            gen_path.joinpath('stochastic_report.json').write_text(json.dumps(report))
+            gen_path.joinpath('stochastic_steps_report.json').write_text(json.dumps(dictionaries_of_steps))
+        elif type == "exhaustive":
+            gen_path.joinpath('exhaustive_report.json').write_text(json.dumps(report))
+            gen_path.joinpath('exhaustive_steps_report.json').write_text(json.dumps(dictionaries_of_steps))
         BeamNGIndividualSetStore(gen_path.joinpath('population_binary_search')).save(pop)
 
     def binary_save_data(self, pop: List[BeamNGIndividual], times_of_process):
@@ -289,8 +302,8 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
-        if self.config.MUTATION_TYPE == 'MUT_FOG_DROP_SIZE':
-            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER" or result.config.SEARCH_ALGORITHM == "HILL_CLIMBING":
+        elif self.config.MUTATION_TYPE == 'MUT_FOG_DROP_SIZE':
+            if result.config.SEARCH_ALGORITHM == "BINARY_SEARCH" or result.config.SEARCH_ALGORITHM == "FAILURE_FINDER" or result.config.SEARCH_ALGORITHM == "EXHAUSTIVE_HILL_CLIMBING":
                 result.fog_density = 0
             elif result.config.SEARCH_ALGORITHM == "NSGA2":
                 result.fog_density = random.uniform(self.config.FOG_DENSITY_threshold_for_generating_seed_min,
@@ -302,6 +315,18 @@ class BeamNGProblem(Problem):
             result.number_of_bump = 0
             result.position_of_obstacle = (0, 0, 0)
             result.illumination = 0
+        elif self.config.MUTATION_TYPE == 'MUT_FAILURE_FINDER':
+            result.fog_density = 0
+            result.wet_foam_density = 0
+            result.number_drop_rain = 0
+            result.size_of_drop = 0
+            result.wet_ripple_density = 0
+            result.number_of_bump = 0
+            result.position_of_obstacle = (0, 0, 0)
+            result.illumination = 0
+            result.failure_finder_amount = 0
+            result.failure_finder_type = self.config.FAILURE_FINDER_TYPE
+            result.failure_finder_class = self.config.FAILURE_FINDER_CLASS
         elif self.config.MUTATION_TYPE == 'MUT_RAIN':
             result.fog_density = 0
             result.wet_foam_density = 0
