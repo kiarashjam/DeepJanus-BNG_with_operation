@@ -8,9 +8,10 @@ path = Path(os.path.abspath(__file__))
 sys.path.append(str(path.parent))
 sys.path.append(str(path.parent.parent))
 
+
 from self_driving.beamng_problem import BeamNGProblem
-from core import binary_search, failure_finder, exhaustive_hill_climbing, nsga2, random_hill_climbing, stochastic_hill_climbing
-from core.archive_impl import GreedyArchive, SmartArchive, AllInArchive
+from core import binary_search , failure_finder, exhaustive_hill_climbing, nsga2, random_walk, stochastic_hill_climbing,simulated_annealing
+from core.archive_impl import GreedyArchive, SmartArchive , AllInArchive
 from self_driving.beamng_config import BeamNGConfig
 from datetime import datetime
 
@@ -29,12 +30,17 @@ if __name__ == '__main__':
         binary_search.main(problem, start_time)
     elif config.SEARCH_ALGORITHM == "FAILURE_FINDER":
         failure_finder.main(problem, start_time)
-    elif config.SEARCH_ALGORITHM == "HILL_CLIMBING":
+    elif config.SEARCH_ALGORITHM == "EXHAUSTIVE_HILL_CLIMBING":
         exhaustive_hill_climbing.main(problem, start_time)
-    elif config.SEARCH_ALGORITHM == "RANDOM_HILL_CLIMBING":
-        random_hill_climbing.main(problem, start_time)
+    elif config.SEARCH_ALGORITHM == "RANDOM_WALK":
+        random_walk.main(problem, start_time)
     elif config.SEARCH_ALGORITHM == "STOCHASTIC_HILL_CLIMBING":
         stochastic_hill_climbing.main(problem, start_time)
+    elif config.SEARCH_ALGORITHM == "SIMULATED_ANNEALING":
+        random_walk.main(problem, datetime.now())
+        simulated_annealing.main(problem, datetime.now())
+        stochastic_hill_climbing.main(problem, datetime.now())
+        # exhaustive_hill_climbing.main(problem, datetime.now())
     print('done')
 
 

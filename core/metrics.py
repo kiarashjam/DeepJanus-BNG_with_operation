@@ -11,15 +11,20 @@ def get_radius_seed(solution: List[Individual]):
     if len(solution) == 0:
         return None
     distances_fog = list()
+    fog_amount = list()
     distances_rain = list()
+    rain_amount = list()
     distances_size_of_drop = list()
+    drop_size_amount = list()
     distances_foam = list()
+    foam_amount = list()
     distances_ripple = list()
+    ripple_amount = list()
     distances_obstacle = list()
     distances_bump = list()
     distances_illumination = list()
+    illumination_amount = list()
     distances_road_shape = list()
-    angles = list()
     for i in solution:
         if i.seed.mutation_type == 'MUT_FOG':
             mutation_type = "changing the fog density"
@@ -47,27 +52,56 @@ def get_radius_seed(solution: List[Individual]):
             mutation_type = "changing the amount of foam and ripple in the wet floor"
         elif i.seed.mutation_type == 'MUT_FOG_WITH_CONTROL_POINTS':
             mutation_type = "changing the amount of fog  and road shape"
+        elif i.seed.mutation_type == 'MUT_RAIN_WITH_CONTROL_POINTS':
+            mutation_type = "changing the amount of rain drop ,and size of the drop  ,and road shape"
+        elif i.seed.mutation_type == 'MUT_ILLUMINATION_WITH_CONTROL_POINTS':
+            mutation_type = "changing the illumination ,and road shape"
+
 
 
 
         # fog distance
         fog_avg = (i.m1.fog_density + i.m2.fog_density) / 2
         distances_fog.append(fog_avg)
+        if i.m1.fog_density >= i.m2.fog_density:
+            fog_amount.append(i.m1.fog_density)
+        else:
+            fog_amount.append(i.m2.fog_density)
         # rain distance
         rain_avg = (i.m1.number_drop_rain + i.m2.number_drop_rain) / 2
         distances_rain.append(rain_avg)
+        if i.m1.number_drop_rain >= i.m2.number_drop_rain:
+            rain_amount.append(i.m1.number_drop_rain)
+        else:
+            rain_amount.append(i.m2.number_drop_rain)
         # size of the drop
         size_drop_avg = (i.m1.size_of_drop + i.m2.size_of_drop) / 2
         distances_size_of_drop.append(size_drop_avg)
+        if i.m1.size_of_drop >= i.m2.size_of_drop:
+            drop_size_amount.append(i.m1.size_of_drop)
+        else:
+            drop_size_amount.append(i.m2.size_of_drop)
         # foam distance
         foam_avg = (i.m1.wet_foam_density + i.m2.wet_foam_density) / 2
         distances_foam.append(foam_avg)
+        if i.m1.wet_foam_density >= i.m2.wet_foam_density:
+            foam_amount.append(i.m1.wet_foam_density)
+        else:
+            foam_amount.append(i.m2.wet_foam_density)
         # ripple distance
         ripple_avg = (i.m1.wet_ripple_density + i.m2.wet_ripple_density) / 2
         distances_ripple.append(ripple_avg)
+        if i.m1.wet_ripple_density >= i.m2.wet_ripple_density:
+            ripple_amount.append(i.m1.wet_ripple_density)
+        else:
+            ripple_amount.append(i.m2.wet_ripple_density)
         # illumination distance
         illumination_avg = (i.m1.illumination + i.m2.illumination) / 2
         distances_illumination.append(illumination_avg)
+        if i.m1.illumination >= i.m2.illumination:
+            illumination_amount.append(i.m1.illumination)
+        else:
+            illumination_amount.append(i.m2.illumination)
         # obstacle_avg = (i.m1.position_of_obstacle + i.m2.position_of_obstacle) / 2
         obstacle_avg = 0
         distances_obstacle.append(obstacle_avg)
@@ -78,9 +112,6 @@ def get_radius_seed(solution: List[Individual]):
         oob_input = i.members_by_sign()[0]
         dist = oob_input.distance(i.seed)
         distances_road_shape.append(dist)
-        # the highest angle
-        angles.append(i.m1.highest_angles)
-        angles.append(i.m2.highest_angles)
     # average normalize  distance of fog
     fog_avg = np.mean(distances_fog)
     fog_radius = normalization(fog_avg, Config.FOG_DENSITY_threshold_max,
@@ -115,10 +146,11 @@ def get_radius_seed(solution: List[Individual]):
     illumination_radius = normalization(illumination_avg, Config.ILLUMINATION_AMOUNT_threshold_max,
                                         Config.ILLUMINATION_AMOUNT_threshold_min)
     # average normalize  distance of whole system the operation plus road shape
-    road_shape_radius = np.mean(distances_road_shape / 1 + distances_road_shape)
-    highest_angle = np.mean(angles)
-    radius = road_shape_radius
-    return fog_radius, rain_radius,size_drop_avg, foam_radius, ripple_radius, illumination_radius, bump_radius, obstacle_radius, road_shape_radius, radius, mutation_type, fog_avg, rain_avg, size_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, highest_angle
+    road_shape_avg = np.mean(distances_road_shape )
+    road_shape_radius = np.mean(distances_road_shape ) / (1 + np.mean(distances_road_shape))
+    radius = fog_radius + rain_radius + drop_size_radius + foam_radius + ripple_radius + illumination_radius +\
+             bump_radius + obstacle_radius + road_shape_radius
+    return fog_radius, rain_radius, drop_size_radius, foam_radius, ripple_radius, illumination_radius, bump_radius, obstacle_radius, road_shape_radius, radius, mutation_type, fog_avg, rain_avg, size_drop_avg, foam_avg, ripple_avg, bump_avg, obstacle_avg, illumination_avg, road_shape_avg, np.mean(foam_amount),np.mean(rain_amount), np.mean(drop_size_amount), np.mean(foam_amount), np.mean(ripple_amount), np.mean(illumination_amount)
 
 
 def normalization(value, max, min):

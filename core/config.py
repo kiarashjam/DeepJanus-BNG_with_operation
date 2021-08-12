@@ -6,8 +6,10 @@ class Config:
     NSGA2 = "NSGA2"
     BINARY_SEARCH = "BINARY_SEARCH"
     Failure_Finder = "FAILURE_FINDER"
-    HILL_CLIMBING = "HILL_CLIMBING"
+    EXHAUSTIVE_HILL_CLIMBING = "EXHAUSTIVE_HILL_CLIMBING"
     STOCHASTIC_HILL_CLIMBING = "STOCHASTIC_HILL_CLIMBING"
+    RANDOM_WALK = "RANDOM_HILL_CLIMBING"
+    SIMULATED_ANNEALING = "SIMULATED_ANNEALING"
 
     SEG_LENGTH = 25
     NUM_SPLINE_NODES = 10
@@ -30,6 +32,7 @@ class Config:
     MUT_OBSTACLE = 'MUT_OBSTACLE'
     MUT_BUMP = 'MUT_BUMP'
     MUT_FOG_DROP_SIZE ='MUT_FOG_DROP_SIZE'
+    MUT_FAILURE_FINDER = "MUT_FAILURE_FINDER"
 
     # surrounding operation
 
@@ -66,14 +69,20 @@ class Config:
     FOG_DENSITY_threshold_for_generating_seed_min = 0
 
 
+    ##
+
+    FAILURE_FINDER_AMOUNT_threshold_max = 1
+    FAILURE_FINDER_AMOUNT_threshold_min = 0
+
+
 
 
 
     def __init__(self, ):
         self.experiment_name = 'exp'
         self.fitness_weights = (1.0, -1.0)
-        self.POOLSIZE = 12
-        self.POPSIZE = 12
+        self.POOLSIZE = 10
+        self.POPSIZE = 10
         self.RESEED_UPPER_BOUND = int(self.POPSIZE * 0.1)
 
 
@@ -91,8 +100,8 @@ class Config:
         self.NUM_GENERATIONS = 10
         self.ARCHIVE_THRESHOLD = 35.0
         self.MUTATION_FOG_PRECISE = 0.03
-        self.MUTATION_RAIN_PRECISE = 1000
-        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.02
+        self.MUTATION_RAIN_PRECISE = 2000
+        self.MUTATION_SIZE_OF_DROP_PRECISE = 0.04
         self.MUTATION_FOAM_PRECISE = 3
         self.MUTATION_RIPPLE_PRECISE = 70
         self.MUTATION_OBSTACLE_PRECISE = 0.1
@@ -101,9 +110,9 @@ class Config:
         self.MUTATION_ILLUMINATION_PRECISE = 0.1
 
         self.MUTATION_TYPE = Config.MUT_RAIN_WHOLE
-        self.SEARCH_ALGORITHM = Config.STOCHASTIC_HILL_CLIMBING
+        self.SEARCH_ALGORITHM = Config.SIMULATED_ANNEALING
 
-
+        self.EVALUATION_AMOUNT = 1
 
 
 
@@ -113,6 +122,8 @@ class Config:
 
         self.FRONTIER_ILLUMINATION_MAX = 1
         self.FRONTIER_ILLUMINATION_MIN = 0
+        self.FAILURE_FINDER_CLASS = "LevelInfo"
+        self.FAILURE_FINDER_TYPE = "fogDensity"
 
         self.K_SD = 0.01
 

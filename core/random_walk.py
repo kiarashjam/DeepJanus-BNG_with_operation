@@ -20,7 +20,7 @@ def generate_base_solution(type):
         return [1000, 0.02]
     elif type == "MUT_STORM":
         return [0, 1000, 0.01, 0, 0]
-
+dictionary_of_steps = {}
 
 def evaluate(solution, base, pop, problem):
     if pop.m1.mutation_type == "MUT_FOG_DROP_SIZE":
@@ -50,7 +50,7 @@ def evaluate(solution, base, pop, problem):
     return result, distances
 
 
-def mutate_solution(base, pop, problem, base_distance):
+def mutate_solution(base, pop, problem):
     if pop.m1.mutation_type == "MUT_FOG_DROP_SIZE":
         choice = random.choice(["first", "second"])
         if choice == "first":
@@ -116,12 +116,15 @@ def main(problem: Problem = None, start_time=None, seed=None):
     start2 = datetime.now()
     i = 0
     every_evaluation_time = []
-    first_distance = 100
-    base_amount = generate_base_solution(pop[i].m1.mutation_type)
+    steps = 0
     while i < len(pop):
+        base_amount = generate_base_solution(pop[i].m1.mutation_type)
+        steps = 0
+        dictionary_of_steps.update({"run_id = "+str(i)+ " , steps = "+str(steps):base_amount})
         while True:
-            best_result, status, temp = mutate_solution(base_amount, pop[i], problem, first_distance)
-            first_distance = temp
+            steps = steps + 1
+            best_result, status, temp = mutate_solution(base_amount, pop[i], problem)
+            dictionary_of_steps.update({"run_id = " + str(i) + " , steps = " + str(steps): best_result})
             if pop[i].m1.mutation_type == "MUT_FOG_DROP_SIZE":
                 pop[i].m1.fog_density = best_result[0]
                 pop[i].m1.size_of_drop = best_result[1]
@@ -151,4 +154,6 @@ def main(problem: Problem = None, start_time=None, seed=None):
             base_amount = best_result
         i = i + 1
         base_amount = [0, 0]
-    problem.hill_climbing_save_data(pop)
+    # // TODO: change to only pop
+    whole_process_time = datetime.now() - start_process_time
+    problem.hill_climbing_save_data(pop,"random", dictionary_of_steps, whole_process_time)

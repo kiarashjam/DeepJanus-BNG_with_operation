@@ -32,6 +32,9 @@ def main(problem: Problem = None,start_time=None, seed=None):
 
         dict_already_done = {0: True}
         counter = 0
+        if config.MUTATION_TYPE == "MUT_FAILURE_FINDER":
+            pop[i].m1.failure_finder_amount = config.FAILURE_FINDER_AMOUNT_threshold_min
+            pop[i].m2.failure_finder_amount = config.FAILURE_FINDER_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE
         if config.MUTATION_TYPE == "MUT_ILLUMINATION":
             pop[i].m1.illumination = config.ILLUMINATION_AMOUNT_threshold_min
             pop[i].m2.illumination = config.ILLUMINATION_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE
@@ -55,6 +58,13 @@ def main(problem: Problem = None,start_time=None, seed=None):
                                          (config.ILLUMINATION_AMOUNT_threshold_max  / config.FAILURE_FINDER_PRECISE)
                 if pop[i].m2.illumination > config.ILLUMINATION_AMOUNT_threshold_max  :
                     pop[i].m2.illumination = config.ILLUMINATION_AMOUNT_threshold_max
+            elif config.MUTATION_TYPE == "MUT_FAILURE_FINDER":
+                pop[i].m1.failure_finder_amount = pop[i].m1.failure_finder_amount + \
+                                        (config.FAILURE_FINDER_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE)
+                pop[i].m2.failure_finder_amount = pop[i].m2.failure_finder_amount + \
+                                        (config.FAILURE_FINDER_AMOUNT_threshold_max / config.FAILURE_FINDER_PRECISE)
+                if pop[i].m2.failure_finder_amount > config.FAILURE_FINDER_AMOUNT_threshold_max:
+                    pop[i].m2.failure_finder_amount = config.FAILURE_FINDER_AMOUNT_threshold_max
             elif config.MUTATION_TYPE == "MUT_FOG":
                 pop[i].m1.fog_density = pop[i].m1.fog_density +\
                                         (config.FOG_DENSITY_threshold_max / config.FAILURE_FINDER_PRECISE)

@@ -53,24 +53,15 @@ def evaluate(solution, base, pop, problem):
     return result, distances
 
 
-def mutate_solution(base, pop, problem):
+def mutate_solution(base, pop, problem , run_id):
+    steps = 0
     if pop.m1.mutation_type == "MUT_FOG_DROP_SIZE":
-        choice = random.choice(["first", "second"])
-        if choice == "first":
-            new_amount = [base[0] + problem.config.MUTATION_FOG_PRECISE, base[1]]
-            attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
-        elif choice == "second":
-            new_amount = [base[0], base[1] + problem.config.MUTATION_SIZE_OF_DROP_PRECISE]
-            attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
-        # if attempt_distance <= base_distance:
-        print("next generation chosen")
-        return choice ,new_amount, attempt_success, attempt_distance
-
-    elif pop.m1.mutation_type == "MUT_RAIN_WHOLE":
-        stack = ["1000,0.02"]
+        stack = ["0,0.02"]
+        dictionary_of_steps = {"run id = " + str(run_id) + " , step = " + str(steps): str(stack[0])}
         parent_list = {}
-        parent_distances = {"1000,0.02": 100}
+        parent_distances = {"0,0.02": 100}
         while True:
+            steps = steps + 1
             choice = random.choice(["first", "second"])
             parent_value = stack[-1]
             base0, base1 = parent_value.split(",")
@@ -79,16 +70,104 @@ def mutate_solution(base, pop, problem):
             print(parent_distances)
             print(stack)
             if parent_value in parent_list.keys():
-                list_of_child =  parent_list[parent_value]
+                list_of_child = parent_list[parent_value]
                 if len(list_of_child) == 2:
                     stack.pop()
-                    if  len(stack) == 0:
-                        return 0, "stop", 0 , True
+                    if len(stack) == 0:
+                        return 0, "stop", 0, True, dictionary_of_steps
                         break
 
                 else:
                     if choice in list_of_child:
                         print("same choice")
+                        steps = steps - 1
+                    else:
+                        if choice == "first":
+                            new_amount = [base[0] + problem.config.MUTATION_FOG_PRECISE, base[1]]
+                            if str(new_amount[0]) + "," + str(new_amount[1]) in parent_distances:
+                                attempt_distance = parent_distances[str(new_amount[0]) + "," + str(new_amount[1])]
+                            else:
+                                attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
+                                parent_distances.update(
+                                    {str(new_amount[0]) + "," + str(new_amount[1]): attempt_distance})
+                                dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                                    new_amount[0]) + "," + str(new_amount[1]) + "distance = " + str(attempt_distance)})
+                                if attempt_success == False:
+                                    print(attempt_success)
+                                    return new_amount, attempt_success, attempt_distance, False, dictionary_of_steps
+                        elif choice == "second":
+                            new_amount = [base[0], base[1] + problem.config.MUTATION_SIZE_OF_DROP_PRECISE]
+                            if str(new_amount[0]) + "," + str(new_amount[1]) in parent_distances:
+                                attempt_distance = parent_distances[str(new_amount[0]) + "," + str(new_amount[1])]
+                            else:
+                                attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
+                                parent_distances.update(
+                                    {str(new_amount[0]) + "," + str(new_amount[1]): attempt_distance})
+                                dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                                    new_amount[0]) + "," + str(new_amount[1]) + "distance = " + str(attempt_distance)})
+                                if attempt_success == False:
+                                    print(attempt_success)
+                                    return new_amount, attempt_success, attempt_distance, False, dictionary_of_steps
+                        parent_list[parent_value].append(choice)
+                        if attempt_distance <= parent_distances[parent_value]:
+                            stack.append(str(new_amount[0]) + "," + str(new_amount[1]))
+
+                            print("***************************************")
+                            print(stack)
+            else:
+                if choice == "first":
+                    new_amount = [base[0] + problem.config.MUTATION_FOG_PRECISE, base[1]]
+                    if str(new_amount[0]) + "," + str(new_amount[1]) in parent_distances:
+                        attempt_distance = parent_distances[str(new_amount[0]) + "," + str(new_amount[1])]
+                    else:
+                        attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
+                        parent_distances.update({str(new_amount[0]) + "," + str(new_amount[1]): attempt_distance})
+                        dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                            new_amount[0]) + "," + str(new_amount[1]) + "distance = " + str(attempt_distance)})
+                        if attempt_success == False:
+                            print(attempt_success)
+                            return new_amount, attempt_success, attempt_distance, False, dictionary_of_steps
+                elif choice == "second":
+                    new_amount = [base[0], base[1] + problem.config.MUTATION_SIZE_OF_DROP_PRECISE]
+                    attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
+                    parent_distances.update({str(new_amount[0]) + "," + str(new_amount[1]): attempt_distance})
+                    dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                        new_amount[0]) + "," + str(new_amount[1]) + "distance = " + str(attempt_distance)})
+                    if attempt_success == False:
+                        print(attempt_success)
+                        return new_amount, attempt_success, attempt_distance, False, dictionary_of_steps
+                parent_list.update({parent_value: []})
+                parent_list[parent_value].append(choice)
+                if attempt_distance <= parent_distances[parent_value]:
+                    stack.append(str(new_amount[0]) + "," + str(new_amount[1]))
+                    print(stack)
+
+    elif pop.m1.mutation_type == "MUT_RAIN_WHOLE":
+        stack = ["1000,0.02"]
+        dictionary_of_steps = {"run id = "+str(run_id) + " , step = "+ str(steps): str(stack[0])}
+        parent_list = {}
+        parent_distances = {"1000,0.02": 100}
+        while True:
+            steps = steps + 1
+            choice = random.choice(["first", "second"])
+            parent_value = stack[-1]
+            base0, base1 = parent_value.split(",")
+            base = [float(base0), float(base1)]
+            print(parent_list)
+            print(parent_distances)
+            print(stack)
+            if parent_value in parent_list.keys():
+                list_of_child = parent_list[parent_value]
+                if len(list_of_child) == 2:
+                    stack.pop()
+                    if  len(stack) == 0:
+                        return 0, "stop", 0, True, dictionary_of_steps
+                        break
+
+                else:
+                    if choice in list_of_child:
+                        print("same choice")
+                        steps =steps - 1
                     else:
                         if choice == "first":
                             new_amount = [base[0] + problem.config.MUTATION_RAIN_PRECISE, base[1]]
@@ -97,9 +176,11 @@ def mutate_solution(base, pop, problem):
                             else:
                                 attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
                                 parent_distances.update({str(new_amount[0])+","+str(new_amount[1]): attempt_distance})
+                                dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                                    new_amount[0]) + "," + str(new_amount[1])+ "distance = "+ str(attempt_distance)})
                                 if attempt_success == False:
                                     print(attempt_success)
-                                    return new_amount, attempt_success, attempt_distance, False
+                                    return new_amount, attempt_success, attempt_distance, False ,dictionary_of_steps
                         elif choice == "second":
                             new_amount = [base[0], base[1] + problem.config.MUTATION_SIZE_OF_DROP_PRECISE]
                             if str(new_amount[0])+","+str(new_amount[1]) in  parent_distances:
@@ -107,12 +188,15 @@ def mutate_solution(base, pop, problem):
                             else:
                                 attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
                                 parent_distances.update({str(new_amount[0])+","+str(new_amount[1]): attempt_distance})
+                                dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                                    new_amount[0]) + "," + str(new_amount[1])+ "distance = "+ str(attempt_distance)})
                                 if attempt_success == False:
                                     print(attempt_success)
-                                    return new_amount, attempt_success, attempt_distance, False
+                                    return new_amount, attempt_success, attempt_distance, False , dictionary_of_steps
                         parent_list[parent_value].append(choice)
                         if attempt_distance <= parent_distances[parent_value]:
                             stack.append(str(new_amount[0]) +","+ str(new_amount[1]))
+
                             print("***************************************")
                             print(stack)
             else:
@@ -123,21 +207,24 @@ def mutate_solution(base, pop, problem):
                     else:
                         attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
                         parent_distances.update({str(new_amount[0])+","+str(new_amount[1]): attempt_distance})
+                        dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                            new_amount[0]) + "," + str(new_amount[1])+ "distance = "+ str(attempt_distance)})
                         if attempt_success == False:
                             print(attempt_success)
-                            return new_amount, attempt_success, attempt_distance, False
+                            return new_amount, attempt_success, attempt_distance, False , dictionary_of_steps
                 elif choice == "second":
                     new_amount = [base[0], base[1] + problem.config.MUTATION_SIZE_OF_DROP_PRECISE]
                     attempt_success, attempt_distance = evaluate(new_amount, base, pop, problem)
                     parent_distances.update({str(new_amount[0])+","+str(new_amount[1]): attempt_distance})
+                    dictionary_of_steps.update({"run id = " + str(run_id) + " , step = " + str(steps): str(
+                        new_amount[0]) + "," + str(new_amount[1])+ "distance = "+ str(attempt_distance)})
                     if attempt_success == False:
                         print(attempt_success)
-                        return new_amount, attempt_success, attempt_distance, False
+                        return new_amount, attempt_success, attempt_distance, False , dictionary_of_steps
                 parent_list.update({parent_value: []})
                 parent_list[parent_value].append(choice)
                 if attempt_distance <= parent_distances[parent_value]:
                     stack.append(str(new_amount[0]) +","+ str(new_amount[1]))
-                    print("***************************************")
                     print(stack)
 
 
@@ -184,9 +271,31 @@ def main(problem: Problem = None, start_time=None, seed=None):
     i = 0
     every_evaluation_time = []
     first_distance = 100
-    base_amount = generate_base_solution(pop[i].m1.mutation_type)
+
     while i < len(pop):
-        best_result, status, temp, not_found = mutate_solution(base_amount, pop[i], problem)
+        base_amount = generate_base_solution(pop[i].m1.mutation_type)
+        if pop[i].m1.mutation_type == "MUT_FOG_DROP_SIZE":
+            pop[i].m1.fog_density = base_amount[0]
+            pop[i].m1.size_of_drop = base_amount[1]
+            pop[i].m2.fog_density = base_amount[0]
+            pop[i].m2.size_of_drop = base_amount[1]
+        elif pop[i].m1.mutation_type == "MUT_RAIN_WHOLE":
+            pop[i].m1.number_drop_rain = base_amount[0]
+            pop[i].m1.size_of_drop = base_amount[1]
+            pop[i].m2.number_drop_rain = base_amount[0]
+            pop[i].m2.size_of_drop = base_amount[1]
+        elif pop[i].m1.mutation_type == "MUT_STORM":
+            pop[i].m1.fog_density = base_amount[0]
+            pop[i].m1.number_drop_rain = base_amount[1]
+            pop[i].m1.size_of_drop = base_amount[2]
+            pop[i].m1.wet_foam_density = base_amount[3]
+            pop[i].m1.wet_ripple_density = base_amount[4]
+            pop[i].m2.fog_density = base_amount[0]
+            pop[i].m2.number_drop_rain = base_amount[1]
+            pop[i].m2.size_of_drop = base_amount[2]
+            pop[i].m2.wet_foam_density = base_amount[3]
+            pop[i].m2.wet_ripple_density = base_amount[4]
+        best_result, status, temp, not_found , dictionary = mutate_solution(base_amount, pop[i], problem , i )
         if not_found:
             print("not found............")
             if pop[i].m1.mutation_type == "MUT_RAIN_WHOLE":
@@ -219,5 +328,5 @@ def main(problem: Problem = None, start_time=None, seed=None):
             print("the status is  = " + str(status))
             print("new base result = " + str(best_result) + "the count is  = " + str(i))
         i = i + 1
-        base_amount = [0, 0]
-    problem.hill_climbing_save_data(pop)
+    whole_process_time = datetime.now() - start_process_time
+    problem.hill_climbing_save_data(pop,"stochastic", dictionary, whole_process_time)
